@@ -307,7 +307,7 @@
 	</VEF.Abilities.AbilityDef>
 
 	<AbilityDef ParentName="DMS_AddHediffSelfBase">
-		<abilityClass>Psycast</abilityClass>
+		<!--<abilityClass>Psycast</abilityClass>-->
 		<defName>DMST_Camouflage</defName>
 		<label>Psychic Camouflage</label>
 		<description>Blend into the environment by activating morphic camouflage using psychic power combined with special weaving cloak.</description>
@@ -332,8 +332,8 @@
     	</verbProperties>
 		<statBases>
 			<Ability_Duration>45</Ability_Duration>
-			<Ability_EntropyGain>30</Ability_EntropyGain>
-      		<Ability_PsyfocusCost>0.06</Ability_PsyfocusCost>
+			<!--<Ability_EntropyGain>30</Ability_EntropyGain>
+      		<Ability_PsyfocusCost>0.06</Ability_PsyfocusCost>-->
 		</statBases>
 	</AbilityDef>
 
