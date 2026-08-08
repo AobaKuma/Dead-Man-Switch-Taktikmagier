@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Patch>
 
+	<!--
+		Swap in the ammo-less construct gun. Without this the player's own summoned turret
+		spawns with an empty magazine and cannot fire until someone hauls .22LR to it - see the
+		long explanation in 1.6/CE/Defs/Militarmagier_Guns_CE.xml.
+	-->
+	<Operation Class="PatchOperationReplace">
+		<xpath>Defs/ThingDef[defName="DMST_Turret_Sentry"]/building/turretGunDef</xpath>
+		<value>
+			<turretGunDef>DMST_Gun_SentryConstruct</turretGunDef>
+		</value>
+	</Operation>
+
     <Operation Class="PatchOperationAdd">
 		<xpath>Defs/ThingDef[defName="DMST_Turret_Sentry"]/statBases</xpath>
 		<value>

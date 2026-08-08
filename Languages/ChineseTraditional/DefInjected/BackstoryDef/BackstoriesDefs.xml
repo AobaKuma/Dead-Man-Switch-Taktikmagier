@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!-- ==================== 童年 ==================== -->
+
+	<DMST_MagierChild01.title>避難所孩童</DMST_MagierChild01.title>
+	<DMST_MagierChild01.titleShort>避難者</DMST_MagierChild01.titleShort>
+	<DMST_MagierChild01.description>[PAWN_nameDef]的童年是在阿尼瑪主星的深層避難所裡度過的。那裡的天花板按時震動，大人們會出聲數著間隔。[PAWN_pronoun]學會判讀砲擊，就像別的孩子學會判讀天氣。</DMST_MagierChild01.description>
+
+	<DMST_MagierChild02.title>血脈受監護者</DMST_MagierChild02.title>
+	<DMST_MagierChild02.titleShort>受監護者</DMST_MagierChild02.titleShort>
+	<DMST_MagierChild02.description>在[PAWN_nameDef]大到足以理解「血脈」是什麼之前，砲火就已經帶走了[PAWN_possessive]家族大半的人。僅存的親人被登記造冊、遷移安置到各處並由法師塔出資撫養。</DMST_MagierChild02.description>
+
+	<DMST_MagierChild03.title>靶場跑腿</DMST_MagierChild03.title>
+	<DMST_MagierChild03.titleShort>跑腿</DMST_MagierChild03.titleShort>
+	<DMST_MagierChild03.description>[PAWN_nameDef]在實彈靶場邊上長大，靠著在射擊線之間傳遞彈殼與通訊紙條賺零用錢。早在被允許碰槍之前，[PAWN_pronoun]就已經能單憑槍聲叫出武器的名字。</DMST_MagierChild03.description>
+
+	<DMST_MagierChild04.title>預備役施法者</DMST_MagierChild04.title>
+	<DMST_MagierChild04.titleShort>預備役</DMST_MagierChild04.titleShort>
+	<DMST_MagierChild04.description>[PAWN_nameDef]出生自天外人佔領的一處城邦；[PAWN_pronoun]自從展現出優秀的靈能親和性後便被全額補助學費上了學並成為一位預備役士官。</DMST_MagierChild04.description>
+
+	<DMST_MagierChild05.title>殘骸拾荒者</DMST_MagierChild05.title>
+	<DMST_MagierChild05.titleShort>拾荒者</DMST_MagierChild05.titleShort>
+	<DMST_MagierChild05.description>[PAWN_nameDef]的童年是在別人的報廢裝備上度過的，從燒毀的骨架裡撬出沖壓零件，論斤秤兩地賣掉。[PAWN_pronoun]因此清楚一台機器是怎麼組起來的——更有用的是，清楚它會從哪裡散開。</DMST_MagierChild05.description>
+
+	<!-- ==================== 成年 ==================== -->
+
+	<DMST_Magier01.title>退役醫務兵</DMST_Magier01.title>
+	<DMST_Magier01.titleShort>醫務兵</DMST_Magier01.titleShort>
+	<DMST_Magier01.description>[PAWN_nameDef]曾在軍中擔任醫務兵，直到一次重傷提早結束了[PAWN_possessive]的軍旅生涯。</DMST_Magier01.description>
+
+	<DMST_Magier02.title>戰列軍術士</DMST_Magier02.title>
+	<DMST_Magier02.titleShort>軍術士</DMST_Magier02.titleShort>
+	<DMST_Magier02.description>[PAWN_nameDef]的服役生涯都待在戰列步兵單位，與同齡的戰術施法者們為服務的國家獻出鮮血。</DMST_Magier02.description>
+
+	<DMST_Magier03.title>突擊工兵</DMST_Magier03.title>
+	<DMST_Magier03.titleShort>工兵</DMST_Magier03.titleShort>
+	<DMST_Magier03.description>[PAWN_nameDef]受訓的內容是把結構拆開——來得及就用炸藥，來不及就用赤裸的靈能。破牆與癱瘓火力點對[PAWN_objective]來說早已是本能。</DMST_Magier03.description>
+
+	<DMST_Magier04.title>破門軍術士</DMST_Magier04.title>
+	<DMST_Magier04.titleShort>破門手</DMST_Magier04.titleShort>
+	<DMST_Magier04.description>有好幾年，[PAWN_nameDef]都是第一個進門的人。閃光、兩步、在裡面的人恢復視力之前把槍抬起來。這套教範並不複雜，而且不原諒任何猶豫。</DMST_Magier04.description>
+
+	<DMST_Magier05.title>構裝體匠人</DMST_Magier05.title>
+	<DMST_Magier05.titleShort>匠人</DMST_Magier05.titleShort>
+	<DMST_Magier05.description>[PAWN_nameDef]這場仗打得相當間接：把心靈熵凝成水晶，再套上手邊任何能用的沖壓零件。[PAWN_possessive]的班上學會用還站著的構裝體數量，來判斷戰況好壞。</DMST_Magier05.description>
+
+	<DMST_Magier06.title>反機械專員</DMST_Magier06.title>
+	<DMST_Magier06.titleShort>反機械</DMST_Magier06.titleShort>
+	<DMST_Magier06.description>[PAWN_nameDef]被部署在機械體突破的方向上，把磁場線扭成脈衝，讓整支編隊癱在原地。從來沒有人為此道謝，因為從來沒有人看見[PAWN_pronoun]阻止掉的那場仗。</DMST_Magier06.description>
+
+	<DMST_Magier07.title>長哨</DMST_Magier07.title>
+	<DMST_Magier07.titleShort>守哨者</DMST_Magier07.titleShort>
+	<DMST_Magier07.description>[PAWN_nameDef]獨自駐守觀測所的時間，長到任何未經強化的士兵都撐不住，只能一班接一班地強迫自己的大腦保持清醒。神經熱累積了下來，不跟任何人說話的習慣也是。</DMST_Magier07.description>
+
+	<DMST_Magier08.title>光學迷彩斥候</DMST_Magier08.title>
+	<DMST_Magier08.titleShort>幽靈</DMST_Magier08.titleShort>
+	<DMST_Magier08.description>頭盔與斗篷齊備時，[PAWN_nameDef]能走進那些自認為固若金湯的陣地。[PAWN_pronoun]回報看到的東西，偶爾順手清掉其中一部分，而且從沒被人看見在做這兩件事的任何一件。</DMST_Magier08.description>
+
+	<DMST_Magier09.title>隨扈軍術士</DMST_Magier09.title>
+	<DMST_Magier09.titleShort>隨扈</DMST_Magier09.titleShort>
+	<DMST_Magier09.description>[PAWN_nameDef]被指派保護一名參謀軍官，實務上就是得站得夠近，近到能在一瞬間與[PAWN_objective]交換位置。[PAWN_pronoun]這麼做過兩次。那位軍官兩次都活了下來。</DMST_Magier09.description>
+
+</LanguageData>

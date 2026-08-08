@@ -1,40 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Patch>
 
-    <Operation Class="PatchOperationAddModExtension">
-		<xpath>Defs/PawnKindDef[defName="DMST_Taktikmagier"]</xpath>
-			<value>
-				<li Class="CombatExtended.LoadoutPropertiesExtension">
-					<primaryMagazineCount>
-						<min>3</min>
-						<max>5</max>
-					</primaryMagazineCount>
-					<sidearms>
-						<li>
-							<sidearmMoney>
-								<min>100</min>
-								<max>250</max>
-							</sidearmMoney>
-							<weaponTags>
-								<li>CE_Sidearm_Melee</li>
-							</weaponTags>
-						</li>
-						<li>
-							<sidearmMoney>
-								<min>200</min>
-								<max>400</max>
-							</sidearmMoney>
-							<weaponTags>
-								<li>DMS_MechWeaponLight</li>
-							</weaponTags>
-							<magazineCount>
-								<min>1</min>
-								<max>2</max>
-							</magazineCount>
-						</li>
-					</sidearms>
-				</li>
-		    </value>
+	<!--
+		CE loadouts for all three magier tiers. The xpath matches every kind at once - the
+		magazine counts scale with rank via the separate operations below rather than by
+		duplicating the whole extension three times.
+	-->
+	<Operation Class="PatchOperationAddModExtension">
+		<xpath>Defs/PawnKindDef[defName="DMST_Magier_Adept" or defName="DMST_Taktikmagier" or defName="DMST_Magier_Veteran"]</xpath>
+		<value>
+			<li Class="CombatExtended.LoadoutPropertiesExtension">
+				<primaryMagazineCount>
+					<min>3</min>
+					<max>5</max>
+				</primaryMagazineCount>
+				<sidearms>
+					<li>
+						<sidearmMoney>
+							<min>100</min>
+							<max>250</max>
+						</sidearmMoney>
+						<weaponTags>
+							<li>CE_Sidearm_Melee</li>
+						</weaponTags>
+					</li>
+					<li>
+						<sidearmMoney>
+							<min>200</min>
+							<max>400</max>
+						</sidearmMoney>
+						<weaponTags>
+							<li>DMS_MechWeaponLight</li>
+						</weaponTags>
+						<magazineCount>
+							<min>1</min>
+							<max>2</max>
+						</magazineCount>
+					</li>
+				</sidearms>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Adept carries less: still on trainee scales of issue. -->
+	<Operation Class="PatchOperationReplace">
+		<xpath>Defs/PawnKindDef[defName="DMST_Magier_Adept"]/modExtensions/li[@Class="CombatExtended.LoadoutPropertiesExtension"]/primaryMagazineCount</xpath>
+		<value>
+			<primaryMagazineCount>
+				<min>2</min>
+				<max>3</max>
+			</primaryMagazineCount>
+		</value>
+	</Operation>
+
+	<!-- Veteran carries a full combat load. -->
+	<Operation Class="PatchOperationReplace">
+		<xpath>Defs/PawnKindDef[defName="DMST_Magier_Veteran"]/modExtensions/li[@Class="CombatExtended.LoadoutPropertiesExtension"]/primaryMagazineCount</xpath>
+		<value>
+			<primaryMagazineCount>
+				<min>5</min>
+				<max>8</max>
+			</primaryMagazineCount>
+		</value>
 	</Operation>
 
 </Patch>

@@ -3,7 +3,7 @@
 	<HediffDef ParentName="PsycastHediffBase">
 		<defName>DMST_QuickDraw</defName>
 		<label>quick draw</label>
-		<description>quick draw.</description>
+		<description>Reflex-driven aiming and firing. The body is snapping the weapon up and pulling the trigger far faster than deliberate aim allows - and hitting anything specific is largely a matter of luck.</description>
 		<isBad>false</isBad>
 		<stages>
 			<li>
@@ -15,11 +15,18 @@
 		</stages>
 	</HediffDef>
 
+	<!--
+		Upkeep bookkeeping for sustained turret constructs. Hediff_Focus builds its stage at
+		runtime from the live constructs it tracks, so it deliberately declares no <stages>.
+		Construct pawns are not tracked here - VPE's own IMinHeatGiver registry handles those.
+	-->
 	<HediffDef>
-		<defName>DMS_PsycastFocus</defName>
-		<label>focus</label>
-		<description>focus.</description>
+		<defName>DMST_PsycastFocus</defName>
+		<label>sustained constructs</label>
+		<description>The caster is holding constructs together with a continuous thread of psychic power. Each sustained construct raises the minimum psychic entropy they can settle down to, and that capacity is returned as soon as the construct is destroyed.</description>
 		<hediffClass>Militarmagier.Hediff_Focus</hediffClass>
 		<isBad>false</isBad>
+		<everCurableByItem>false</everCurableByItem>
+		<scenarioCanAdd>false</scenarioCanAdd>
 	</HediffDef>
 </Defs>

@@ -1,0 +1,16 @@
+# Visual Studio / MSBuild artefacts inside the source tree.
+# These must never ship in the Workshop package - bin/Debug alone pulls in 100+ copies of the
+# game's and Unity's assemblies.
+.source/.vs/
+.source/**/.vs/
+.source/**/bin/
+.source/**/obj/
+*.user
+*.suo
+*.userprefs
+
+# Krita working files for the preview art
+*.kra
+*.kra~
+
+# Build output that IS shipped stays tracked - do not ignore 1.6/Assemblies/

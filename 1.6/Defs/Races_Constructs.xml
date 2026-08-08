@@ -95,6 +95,15 @@
 			</soundCallIntervalRange>
 		</race>
 		<modExtensions>
+			<!--
+				Minimum psychic entropy this construct costs its summoner while alive. Read by
+				Pawn_ConstructWeaponUsable.MinHeat, which overrides VPE's hard-coded 20 and is
+				registered automatically by CompBreakLink. Do NOT also register this pawn on
+				Hediff_Focus - that would charge the caster twice.
+			-->
+			<li Class="Militarmagier.ConstructHeatExtension">
+				<heat>50</heat>
+			</li>
 			<li Class="Fortified.MechWeaponExtension">
 				<EnableWeaponFilter>true</EnableWeaponFilter>
 				<UsableWeaponTags>

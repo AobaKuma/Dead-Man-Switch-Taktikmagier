@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Defs>
+	<!--
+		All defNames in this mod use the DMST_ prefix (Dead Man's Switch - Taktikmagier).
+		DMS_ belongs to the Core mod - do not reuse it here.
+
+		=== A NOTE ON AI FIELDS (chance / isPositive) ===
+		VEF hands abilities to the AI through a postfix on Pawn.TryGetAttackVerb: any ability
+		with AutoCast true that CanHitTarget(enemy) is thrown into a weighted lottery against
+		the pawn's normal weapon verb, weighted by <chance> (weapon weight is 1).
+
+		AbilityDef.chance defaults to 1 and targetCount defaults to 1, so EVERY ability is
+		opted in by default - this is why VPE explicitly writes <chance>0</chance> on dozens of
+		its own defs. Two consequences worth remembering when editing this file:
+
+		  * A non-zero chance means the ability REPLACES shooting for that attack. Anything that
+		    is not a genuine attack should be <chance>0</chance>.
+		  * isPositive is unset by default, and Ability.AICanUseOn only filters by faction when
+		    it IS set. Leave it unset on a friendly ability and enemy magiers will happily cast
+		    it on the player's colonists.
+
+		Self / Location / item-targeted abilities can never satisfy CanHitTarget(enemyPawn), so
+		the AI cannot reach them through this path at all. Those are driven instead by
+		Militarmagier.JobGiver_TaktikmagierCombat - see Patches/AI_ThinkTree.xml.
+
+		=== A NOTE ON ENTROPY SCALING (entropyGainStatFactors) ===
+		Every psycast here scales its neural heat by VPE_PsyfocusCostFactor:
+
+		    entropy = entropyGain * (PsyfocusCostFactor * value)
+
+		VPE_PsyfocusCostFactor has defaultBaseValue 1, and Hediff_PsycastAbilities subtracts
+		0.01 per psycast stat upgrade point - so this is a no-op for an unoptimised caster and
+		gives back roughly 1% heat per point spent. VPE exposes entropyGainStatFactors but does
+		not use it on any of its own 150 abilities; the Militaermagier path is explicitly about
+		refining basic spells for efficiency and frequency, so letting optimisation points pay
+		back in neural heat as well as psyfocus is on-theme for this path specifically.
+	-->
+
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
-		<defName>DMS_Flash</defName>
-		<label>Assault flash</label>
-		<description>透過引導靈能震動空間來產生爆發性的定向強光與噪音，其威力足以使扇形波及範圍內的生物與機械傳感器短暫失明，這經常被用於針對施法者的戰鬥，並輔以槍械在對方失明時給上致命一擊。</description>
+		<defName>DMST_Flash</defName>
+		<label>assault flash</label>
+		<description>Channelled psychic power shakes the air into a burst of directional light and noise, fierce enough to blind living eyes and machine sensors alike within the cone. Magiers lean on it constantly in close engagements, following the flash with gunfire while the enemy is still blind.</description>
 		<iconPath>Abilities/Militarmagier/flashlight</iconPath>
 		<range>10.9</range>
 		<radius>12</radius>
 		<castTime>15</castTime>
+		<!-- Ability_Flash converts durationTime directly into stun ticks. -->
 		<durationTime>300</durationTime>
 		<cooldownTime>3600</cooldownTime>
 		<abilityClass>Militarmagier.Ability_Flash</abilityClass>
 		<targetMode>Location</targetMode>
+		<!-- Driven by JobGiver_TaktikmagierCombat, never by the attack-verb lottery. -->
+		<chance>0</chance>
+		<isPositive>false</isPositive>
 		<modExtensions>
 			<li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
 				<path>DMST_Militarmagier</path>
@@ -19,21 +59,29 @@
 				<order>1</order>
 				<psyfocusCost>0.05</psyfocusCost>
 				<entropyGain>25</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
 		</modExtensions>
 	</VEF.Abilities.AbilityDef>
 
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
-		<defName>DMS_Repel</defName>
+		<defName>DMST_Repel</defName>
 		<label>repel</label>
-		<description>repel.</description>
+		<description>A shockwave of raw psychic force rolls outward from the caster, throwing everyone nearby off their feet and away. It deals no wounds, but a magier pinned in melee can buy several seconds of open ground with it.</description>
 		<iconPath>Abilities/Militarmagier/push</iconPath>
 		<radius>5.9</radius>
 		<castTime>15</castTime>
+		<!-- Ability_Repel converts durationTime directly into stun ticks. -->
 		<durationTime>300</durationTime>
 		<cooldownTime>3600</cooldownTime>
 		<abilityClass>Militarmagier.Ability_Repel</abilityClass>
 		<targetMode>Self</targetMode>
+		<!-- Driven by JobGiver_TaktikmagierCombat, never by the attack-verb lottery. -->
+		<chance>0</chance>
+		<isPositive>false</isPositive>
 		<hasAoE>true</hasAoE>
 		<targetingParametersForAoE>
 			<canTargetPawns>true</canTargetPawns>
@@ -47,25 +95,40 @@
 				<order>2</order>
 				<psyfocusCost>0.04</psyfocusCost>
 				<entropyGain>25</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
+			<!--
+				Visual/audio layer only: DMST_RepelShockWave carries 0 damage, so this explosion
+				never stuns by itself. The knockback and stun both come from Ability_Repel.
+			-->
 			<li Class="VEF.Abilities.AbilityExtension_Explosion">
 				<explosionRadius>5.9</explosionRadius>
 				<onCaster>true</onCaster>
-				<explosionDamageDef>RepelShockWave</explosionDamageDef>
+				<explosionDamageDef>DMST_RepelShockWave</explosionDamageDef>
 			</li>
 		</modExtensions>
 	</VEF.Abilities.AbilityDef>
 
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
-		<defName>DMS_Swap</defName>
-		<label>Transposition</label>
-		<description>swap.</description>
+		<defName>DMST_Swap</defName>
+		<label>transposition</label>
+		<description>The magier and a chosen target trade places instantly. Used to pull a wounded squadmate out of a firing line, or to drop the magier's own guns exactly where they are needed.</description>
 		<iconPath>Abilities/Militarmagier/swap</iconPath>
 		<range>18.9</range>
 		<castTime>120</castTime>
 		<cooldownTime>1200</cooldownTime>
 		<abilityClass>Militarmagier.Ability_Swap</abilityClass>
 		<targetMode>Pawn</targetMode>
+		<!--
+			Pawn-targeted, so the AI CAN reach this one. Zero it out: a raider swapping into the
+			middle of the colony instead of shooting is not a trade the AI can evaluate, and a
+			non-zero chance would make it happen instead of attacking.
+		-->
+		<chance>0</chance>
+		<isPositive>false</isPositive>
 		<modExtensions>
 			<li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
 				<path>DMST_Militarmagier</path>
@@ -73,20 +136,27 @@
 				<order>1</order>
 				<psyfocusCost>0.02</psyfocusCost>
 				<entropyGain>10</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
 		</modExtensions>
 	</VEF.Abilities.AbilityDef>
 
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
-		<defName>DMS_ConstructTurret</defName>
+		<defName>DMST_ConstructTurret</defName>
 		<label>assemble turret construct</label>
-		<description>將施術者的少量心靈熵轉化為形而上的水晶，並以標準生產的沖壓零件作為骨架來組裝成一個臨時的自動砲塔。該砲塔透過注入的能量來維持其索敵與開火，並在被摧毀時爆炸。</description>
+		<description>A little of the caster's psychic entropy is crystallised into metaphysical matter and framed around a stamped component to assemble a temporary automatic turret. The injected energy keeps it acquiring and firing, and it detonates when destroyed.</description>
 		<iconPath>Abilities/Militarmagier/summonTurret</iconPath>
 		<range>8.9</range>
 		<castTime>180</castTime>
 		<cooldownTime>1200</cooldownTime>
 		<needsTicking>true</needsTicking>
 		<abilityClass>VEF.Abilities.Ability_Blank</abilityClass>
+		<!-- Item-targeted, so unreachable by the attack-verb lottery. Explicit anyway. -->
+		<chance>0</chance>
+		<isPositive>true</isPositive>
 		<targetingParameters>
 			<canTargetItems>true</canTargetItems>
 			<mapObjectTargetsMustBeAutoAttackable>false</mapObjectTargetsMustBeAutoAttackable>
@@ -102,11 +172,15 @@
 				<order>1</order>
 				<psyfocusCost>0.01</psyfocusCost>
 				<entropyGain>5</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
+			<!-- Upkeep heat lives on DMST_Turret_Sentry's ConstructHeatExtension. -->
 			<li Class="Militarmagier.AbilityExtension_Construct">
 				<constructDef>DMST_Turret_Sentry</constructDef>
 				<costDef>ComponentStamped</costDef>
-				<heat>50</heat>
 			</li>
 			<li Class="VEF.Abilities.AbilityExtension_FleckOnTarget">
 				<fleckDefs>
@@ -126,18 +200,23 @@
 	</VEF.Abilities.AbilityDef>
 
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
-		<defName>DMS_ConstructPawn</defName>
+		<defName>DMST_ConstructPawn</defName>
 		<label>assemble gargoyle construct</label>
-		<description>將施術者的少量心靈熵轉化為形而上的水晶，並以標準生產的沖壓零件作為骨架組裝成機械構裝體。施術者對於構裝體有著完全的控制並能夠使役其操作槍械作為火力支援。當核心水晶被擊毀後，所佔用的心靈熵容量會返還。</description>
+		<description>A little of the caster's psychic entropy is crystallised into metaphysical matter and framed around a stamped component to assemble a mechanical construct. The magier holds complete control over it and can have it carry and fire a weapon as supporting fire. When its core crystal is destroyed the entropy capacity it occupied is returned.</description>
 		<iconPath>Abilities/Militarmagier/summonMech</iconPath>
 		<range>8.9</range>
-		<castTime>60</castTime>
-		<cooldownTime>1200</cooldownTime>
-		<abilityClass>VEF.Abilities.Ability_Blank</abilityClass>
-		<targetMode>Pawn</targetMode>
 		<castTime>360</castTime>
+		<cooldownTime>1200</cooldownTime>
 		<needsTicking>true</needsTicking>
 		<showUndrafted>true</showUndrafted>
+		<abilityClass>VEF.Abilities.Ability_Blank</abilityClass>
+		<!-- Item-targeted, so unreachable by the attack-verb lottery. Explicit anyway. -->
+		<chance>0</chance>
+		<isPositive>true</isPositive>
+		<!--
+			No <targetMode> here: when targetingParameters is present VEF skips the targetMode
+			switch entirely, so declaring both leaves a contradictory (unused) mode on the def.
+		-->
 		<targetingParameters>
 			<canTargetItems>true</canTargetItems>
 			<mapObjectTargetsMustBeAutoAttackable>false</mapObjectTargetsMustBeAutoAttackable>
@@ -150,14 +229,18 @@
 			<li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
 				<path>DMST_Militarmagier</path>
 				<level>3</level>
-				<order>1</order>
+				<order>2</order>
 				<psyfocusCost>0.01</psyfocusCost>
 				<entropyGain>5</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
+			<!-- Upkeep heat lives on DMST_Construct_Gargoyle's ConstructHeatExtension. -->
 			<li Class="Militarmagier.AbilityExtension_ConstructPawn">
 				<constructDef>DMST_Construct_Gargoyle</constructDef>
 				<costDef>ComponentStamped</costDef>
-				<heat>50</heat>
 			</li>
 			<li Class="VEF.Abilities.AbilityExtension_FleckOnTarget">
 				<fleckDefs>
@@ -179,20 +262,27 @@
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
 		<defName>DMST_QuickDraw</defName>
 		<label>quick draw</label>
-		<description>透過電流的直接刺激來使身體透過反射動作來在片刻間完成槍械的瞄準與開火，這種被稱為槍鬥術的近距離射擊技巧能夠有效的對威脅做出快速反應，也經常被直接用來進行近身格鬥。</description>
+		<description>Direct electrical stimulation drives the body through aiming and firing on reflex alone. This close-quarters shooting technique - gun-fighting, as the magiers call it - lets a caster answer a sudden threat almost instantly, and is often used at knife range. Speed comes at the cost of any real accuracy.</description>
 		<iconPath>Abilities/Militarmagier/quickdraw</iconPath>
 		<castTime>0</castTime>
 		<durationTime>300</durationTime>
 		<cooldownTime>600</cooldownTime>
 		<abilityClass>VEF.Abilities.Ability_Blank</abilityClass>
 		<targetMode>Self</targetMode>
+		<!-- Driven by JobGiver_TaktikmagierCombat, never by the attack-verb lottery. -->
+		<chance>0</chance>
+		<isPositive>true</isPositive>
 		<modExtensions>
 			<li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
 				<path>DMST_Militarmagier</path>
 				<level>3</level>
-				<order>2</order>
+				<order>3</order>
 				<psyfocusCost>0.01</psyfocusCost>
 				<entropyGain>10</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
 			<li Class="VEF.Abilities.AbilityExtension_Hediff">
 				<hediff>DMST_QuickDraw</hediff>
@@ -202,14 +292,17 @@
 
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
 		<defName>DMST_EmpBurst</defName>
-		<label>emp burst</label>
-		<description>引導靈能扭曲周圍的磁場線來憑空製造出一個巨大的電磁脈衝，能夠有效的使範圍內的敵人受到EMP以及磁場干擾所導致的嚴重不適。</description>
+		<label>EMP burst</label>
+		<description>Psychic power twists the surrounding magnetic field into a large electromagnetic pulse out of nothing, leaving everything in range reeling from the EMP and the field distortion that follows it.</description>
 		<iconPath>Abilities/Militarmagier/empBurst</iconPath>
 		<castTime>60</castTime>
 		<cooldownTime>3600</cooldownTime>
 		<abilityClass>VEF.Abilities.Ability_Explode</abilityClass>
 		<radius>14.9</radius>
 		<targetMode>Self</targetMode>
+		<!-- Driven by JobGiver_TaktikmagierCombat, never by the attack-verb lottery. -->
+		<chance>0</chance>
+		<isPositive>false</isPositive>
 		<modExtensions>
 			<li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
 				<path>DMST_Militarmagier</path>
@@ -217,6 +310,10 @@
 				<order>1</order>
 				<psyfocusCost>0.01</psyfocusCost>
 				<entropyGain>10</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
 			<li Class="VEF.Abilities.AbilityExtension_Explosion">
 				<explosionRadius>14.9</explosionRadius>
@@ -231,7 +328,7 @@
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
 		<defName>DMST_FieldAid</defName>
 		<label>field aid</label>
-		<description>透過刺激患者傷口的皮膚組織增生來封閉開放性創口，被用於在交戰中為重傷的同伴或自身快速止血。這是一個非常講求施術者技巧的施法，但同時也是每一個軍術士在訓練時都被要求熟練掌握的基本施法。</description>
+		<description>Skin tissue around a wound is driven to overgrow and seal the opening, used to stop bleeding fast on a badly hurt squadmate - or on the caster. It demands real technique, and every magier is drilled on it until it is second nature.</description>
 		<iconPath>Abilities/Militarmagier/heal</iconPath>
 		<range>3.9</range>
 		<castTime>300</castTime>
@@ -242,6 +339,13 @@
 			<canTargetBuildings>false</canTargetBuildings>
 			<canTargetSelf>true</canTargetSelf>
 		</targetingParameters>
+		<!--
+			Pawn-targeted, so the AI CAN reach this one. Without isPositive an enemy magier
+			cheerfully field-aids the colonists it is meant to be shooting; chance 0 keeps it
+			out of the attack-verb lottery entirely.
+		-->
+		<chance>0</chance>
+		<isPositive>true</isPositive>
 		<modExtensions>
 			<li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
 				<path>DMST_Militarmagier</path>
@@ -249,6 +353,23 @@
 				<order>2</order>
 				<psyfocusCost>0.04</psyfocusCost>
 				<entropyGain>20</entropyGain>
+				<!--
+					The only ability here marked psychic. VPE's flag does two things: it refuses
+					targets whose PsychicSensitivity is 0 ("Ineffective") and it shows the target's
+					sensitivity while aiming. Field aid closes wounds by psychically driving tissue
+					to overgrow, so it has nothing to work with on a psychically deaf target -
+					mechanoids, or a pawn whose sensitivity has been zeroed out.
+
+					The rest of the path is deliberately NOT psychic: the flash is real light and
+					noise (the description calls out machine sensors), repel is a physical
+					shockwave, EMP is a magnetic field, and transposition is a skip effect - VPE
+					does not mark its own skip psycasts either.
+				-->
+				<psychic>true</psychic>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
 			<li Class="Militarmagier.AbilityExtension_Heal">
 				<tendQualityRange>0.4~0.8</tendQualityRange>
@@ -259,12 +380,15 @@
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
 		<defName>DMST_ForceWake</defName>
 		<label>force wake</label>
-		<description>透過靈能干涉來強制大腦保持清醒意識並潛意識的用樂觀情緒催眠自己，這對於那些在戰場上高度警惕的施術者們執行長時間任務時十分有用。但頻繁的使用可能會累積大量神經熱而適得其反。</description>
+		<description>Psychic interference holds the brain awake and hypnotises the subconscious into optimism. Invaluable for magiers running long watches at high alert, though leaning on it too often piles up neural heat and turns against the caster.</description>
 		<iconPath>Abilities/Militarmagier/forceWake</iconPath>
 		<castTime>120</castTime>
 		<cooldownTime>1200</cooldownTime>
 		<abilityClass>VEF.Abilities.Ability_Blank</abilityClass>
 		<targetMode>Self</targetMode>
+		<!-- Out-of-combat utility; nothing should ever autocast it. -->
+		<chance>0</chance>
+		<isPositive>true</isPositive>
 		<modExtensions>
 			<li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
 				<path>DMST_Militarmagier</path>
@@ -272,6 +396,10 @@
 				<order>1</order>
 				<psyfocusCost>0.04</psyfocusCost>
 				<entropyGain>14</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
 			<li Class="Militarmagier.AbilityExtension_Calm">
 				<thought>DMST_ForceWake</thought>
@@ -282,12 +410,15 @@
 	<VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
 		<defName>DMST_Demolish</defName>
 		<label>demolish</label>
-		<description>透過對事物構造的了解，軍術士們能夠直接操作零件的位置來甚至在分子層面上斷開纏結的分子鏈，以此來達到將物體解體的能力。這項技巧被廣泛用於爆炸物拆除與癱瘓精密設備，並對建築與砲塔這樣的靜態物體來說非常合適。</description>
+		<description>Understanding how a thing is put together lets a magier reach in and move its parts directly, breaking tangled molecular chains apart at their weakest points. Widely used for clearing explosives and disabling precision equipment, and well suited to static targets like structures and turrets. Sturdier work is left badly damaged rather than taken apart.</description>
 		<iconPath>Abilities/Militarmagier/demolish</iconPath>
 		<range>10.9</range>
 		<castTime>90</castTime>
 		<cooldownTime>1200</cooldownTime>
 		<abilityClass>VEF.Abilities.Ability_Blank</abilityClass>
+		<!-- Buildings only, so unreachable by the attack-verb lottery. Explicit anyway. -->
+		<chance>0</chance>
+		<isPositive>false</isPositive>
 		<targetingParameters>
 			<canTargetPawns>false</canTargetPawns>
 		</targetingParameters>
@@ -298,6 +429,10 @@
 				<order>2</order>
 				<psyfocusCost>0.04</psyfocusCost>
 				<entropyGain>10</entropyGain>
+				<!-- See the entropy note at the top of this file. -->
+				<entropyGainStatFactors>
+					<VPE_PsyfocusCostFactor>1</VPE_PsyfocusCostFactor>
+				</entropyGainStatFactors>
 			</li>
 			<li Class="Militarmagier.AbilityExtension_Destroy">
 				<destroyPoints>800</destroyPoints>
@@ -306,11 +441,17 @@
 		</modExtensions>
 	</VEF.Abilities.AbilityDef>
 
+	<!--
+		Granted by the magier cloak, not by the psycast path.
+
+		Invisibility itself is left at vanilla PsychicInvisibility behaviour, matching the core
+		mod's DMS_Camouflage: firing does NOT reveal the caster; only taking damage, burning,
+		being downed or a disruptor flash forces them visible.
+	-->
 	<AbilityDef ParentName="DMS_AddHediffSelfBase">
-		<!--<abilityClass>Psycast</abilityClass>-->
 		<defName>DMST_Camouflage</defName>
-		<label>Psychic Camouflage</label>
-		<description>Blend into the environment by activating morphic camouflage using psychic power combined with special weaving cloak.</description>
+		<label>psychic camouflage</label>
+		<description>Blend into the environment by activating morphic camouflage using psychic power combined with a special weaving cloak. Requires both the magier helmet and the magier cloak to be worn - neither piece can sustain the field on its own.</description>
 		<iconPath>UI/Ability/Camouflage</iconPath>
 		<aiCanUse>true</aiCanUse>
 		<showPsycastEffects Inherit="False">True</showPsycastEffects>
@@ -324,16 +465,24 @@
 				<psychic>True</psychic>
 			</li>
 			<li Class="CompProperties_AbilityFleckOnTarget">
-        		<fleckDef>PsycastPsychicEffect</fleckDef>
-      		</li>
+				<fleckDef>PsycastPsychicEffect</fleckDef>
+			</li>
+			<!--
+				Enforces the two-piece set the helmet and cloak descriptions both promise.
+				Gates CanCast, not just the gizmo, so AI raiders are held to it as well.
+			-->
+			<li Class="Militarmagier.CompProperties_AbilityRequireApparel">
+				<requiredApparel>
+					<li>DMST_Apparel_MagierHelmet</li>
+					<li>DMST_Apparel_MagierCloak</li>
+				</requiredApparel>
+			</li>
 		</comps>
 		<verbProperties>
-      		<verbClass Inherit="False">Verb_CastPsycast</verbClass>
-    	</verbProperties>
+			<verbClass Inherit="False">Verb_CastPsycast</verbClass>
+		</verbProperties>
 		<statBases>
 			<Ability_Duration>45</Ability_Duration>
-			<!--<Ability_EntropyGain>30</Ability_EntropyGain>
-      		<Ability_PsyfocusCost>0.06</Ability_PsyfocusCost>-->
 		</statBases>
 	</AbilityDef>
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!-- {0} = label of the required cost item, e.g. "component" -->
+	<DMST_ConstructNeedsCost>Must target {0} to assemble a construct.</DMST_ConstructNeedsCost>
+
+	<!-- {0} = label of the missing apparel piece, e.g. "magier helmet" -->
+	<DMST_CamouflageNeedsApparel>Requires {0} to be worn.</DMST_CamouflageNeedsApparel>
+
+</LanguageData>

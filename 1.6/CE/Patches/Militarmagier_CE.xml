@@ -2,35 +2,35 @@
 <Patch>
 
 <Operation Class="PatchOperationReplace">
-		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMS_Flash"]/range</xpath>
+		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMST_Flash"]/range</xpath>
 		<value>
 			<range>15</range>
 		</value>
 </Operation>
 
 <Operation Class="PatchOperationReplace">
-		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMS_Repel"]/radius</xpath>
+		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMST_Repel"]/radius</xpath>
 		<value>
 			<radius>8</radius>
 		</value>
 </Operation>
 
 <Operation Class="PatchOperationReplace">
-		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMS_Repel"]/modExtensions/li[@Class="VEF.Abilities.AbilityExtension_Explosion"]/explosionRadius</xpath>
+		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMST_Repel"]/modExtensions/li[@Class="VEF.Abilities.AbilityExtension_Explosion"]/explosionRadius</xpath>
 		<value>
 			<explosionRadius>8</explosionRadius>
 		</value>
 </Operation>
 
 <Operation Class="PatchOperationReplace">
-		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMS_Swap"]/range</xpath>
+		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMST_Swap"]/range</xpath>
 		<value>
 			<range>24</range>
 		</value>
 </Operation>
 
 <Operation Class="PatchOperationReplace">
-		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMS_ConstructTurret" or defName="DMS_ConstructPawn"]/range</xpath>
+		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMST_ConstructTurret" or defName="DMST_ConstructPawn"]/range</xpath>
 		<value>
 			<range>12</range>
 		</value>
@@ -57,7 +57,6 @@
 		</value>
 </Operation>
 
-
 <Operation Class="PatchOperationReplace">
 		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMST_Demolish"]/range</xpath>
 		<value>
@@ -65,5 +64,17 @@
 		</value>
 </Operation>
 
+<!--
+	Field aid was the one ability left on its vanilla range while every other one here was
+	stretched for CE's longer engagement distances (flash 10.9->15, transposition 18.9->24,
+	both constructs 8.9->12, demolish 10.9->17.5). At 3.9 the caster has to stand practically
+	on top of a casualty, which in CE means standing in the same fire that put them down.
+-->
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/VEF.Abilities.AbilityDef[defName="DMST_FieldAid"]/range</xpath>
+		<value>
+			<range>6</range>
+		</value>
+</Operation>
 
 </Patch>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!-- {0} = 所需材料的標籤，例如「沖壓零件」 -->
+	<DMST_ConstructNeedsCost>必須以{0}作為目標才能組裝構裝體。</DMST_ConstructNeedsCost>
+
+	<!-- {0} = 缺少的裝備標籤，例如「軍術士頭盔」 -->
+	<DMST_CamouflageNeedsApparel>需要穿戴{0}。</DMST_CamouflageNeedsApparel>
+
+</LanguageData>

@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
+  <!--
+    Cosmetic only. defaultDamage is 0, so the explosion Ability_Repel fires never stuns by
+    itself - it exists for the effecter and the sound. The knockback and the actual stun are
+    applied in Ability_Repel.Cast.
+  -->
   <DamageDef ParentName="StunBase">
-    <defName>RepelShockWave</defName>
+    <defName>DMST_RepelShockWave</defName>
     <label>repel shock wave</label>
     <workerClass>DamageWorker</workerClass>
     <deathMessage>{0} has been shocked to death.</deathMessage>
     <harmsHealth>false</harmsHealth>
     <defaultDamage>0</defaultDamage>
     <explosionSnowMeltAmount>0</explosionSnowMeltAmount>
-    <explosionCenterEffecter>RepelShockWave</explosionCenterEffecter>
+    <explosionCenterEffecter>DMST_RepelShockWave</explosionCenterEffecter>
     <soundExplosion>Explosion_Stun</soundExplosion>
   </DamageDef>
 
   <EffecterDef>
-    <defName>RepelShockWave</defName>
+    <defName>DMST_RepelShockWave</defName>
     <children>
       <li>
         <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-        <fleckDef>Fleck_RepelShockwave</fleckDef>
+        <fleckDef>DMST_Fleck_RepelShockwave</fleckDef>
         <burstCount>1</burstCount>
         <spawnLocType>OnSource</spawnLocType>
         <absoluteAngle>true</absoluteAngle>
@@ -28,7 +33,7 @@
   </EffecterDef>
 
   <FleckDef ParentName="FleckBase">
-    <defName>Fleck_RepelShockwave</defName>
+    <defName>DMST_Fleck_RepelShockwave</defName>
     <altitudeLayer>MoteOverheadLow</altitudeLayer>
     <fadeInTime>0.04</fadeInTime>
     <fadeOutTime>0.1</fadeOutTime>

@@ -3,8 +3,13 @@
 	<name>The Dead Man's Switch - Taktikmagier</name>
 	<modIconPath IgnoreIfNoMatchingField="True">UI/NaraLogo</modIconPath>
   	<author>AobaKuma ,Bill Doors, KV4EX</author>
+	<!--
+		1.5 is deliberately not listed. LoadFolders.xml only declares a <v1.6> node, and when a
+		LoadFolders.xml exists but has no entry for the running version RimWorld loads nothing at
+		all from the mod - not even the root folder. Re-adding 1.5 here requires a <v1.5> node in
+		LoadFolders.xml and a 1.5/ folder with its own Assemblies build.
+	-->
     <supportedVersions>
-		<li>1.5</li>
 		<li>1.6</li>
 	</supportedVersions>
 	<packageId>Aoba.DeadManSwitch.Taktikmagier</packageId>

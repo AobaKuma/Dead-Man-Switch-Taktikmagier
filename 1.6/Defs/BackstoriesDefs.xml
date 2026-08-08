@@ -1,28 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <!-- TODO -->
+  <!--
+    Backstories for the Militaermagier career, drawn from the setting already established
+    elsewhere in this mod:
+
+      * Anima Prime - a world thick with psycasters and mired in brutal war. It fought the
+        Colonization Fleet and lost; advanced gunpowder weaponry wiped out bloodline after
+        bloodline of talented casters.
+      * The absorption - the surviving bloodlines were taken into the Fleet rather than
+        destroyed. Militaermagier now serve under the flag that broke their homeworld. This is
+        why a psycaster tradition appears inside DMS_Army at all.
+      * The Militaermagier answer - stop chasing lethal miracles, refine the fundamentals for
+        efficiency and frequency, and let the rifle do the killing.
+      * The Colonization Forces / Colonization Fleet - an AI-run military meritocracy where
+        anyone willing to fight can find a place. Core translates DMS_Army as 武裝殖民艦隊.
+      * The Mage Tower - the institution that catalogues surviving bloodlines and pays to raise
+        them.
+      * "Offworlders" (天外人) - what an Anima Prime native calls the Fleet. Kept as the
+        in-world, ground-level term in MagierChild04 rather than naming the Fleet outright;
+        the path description is where the connection is spelled out.
+
+    NOTE ON TRANSLATION: the Traditional Chinese file is the author's own wording and is the
+    source of truth for these four - MagierChild02, MagierChild04, Magier01 and Magier02.
+    The English here was rewritten to match it, not the other way round. Keep them in step.
+
+    All of these carry spawnCategories DMST_Magier, which DMST_MagierBase declares in its
+    backstoryCategories. Both slots are covered here so the category is self-sufficient;
+    FleetChild is kept alongside it in the pawnkind for variety.
+  -->
+
   <BackstoryDef Name="DMST_BaseBackstory" Abstract="true">
-    <slot>Adulthood</slot>
     <spawnCategories>
       <li>DMST_Magier</li>
     </spawnCategories>
-    <requiredWorkTags>
-      <li>Violent</li>
-    </requiredWorkTags>
     <bodyTypeMale>Male</bodyTypeMale>
     <bodyTypeFemale>Female</bodyTypeFemale>
   </BackstoryDef>
 
-  <BackstoryDef ParentName="DMST_BaseBackstory">
+  <BackstoryDef Name="DMST_ChildBackstory" ParentName="DMST_BaseBackstory" Abstract="true">
+    <slot>Childhood</slot>
+  </BackstoryDef>
+
+  <BackstoryDef Name="DMST_AdultBackstory" ParentName="DMST_BaseBackstory" Abstract="true">
+    <slot>Adulthood</slot>
+    <requiredWorkTags>
+      <li>Violent</li>
+    </requiredWorkTags>
+  </BackstoryDef>
+
+  <!-- ==================== CHILDHOOD ==================== -->
+
+  <BackstoryDef ParentName="DMST_ChildBackstory">
+    <defName>DMST_MagierChild01</defName>
+    <title>Shelter Child</title>
+    <titleShort>Sheltered</titleShort>
+    <description>[PAWN_nameDef] spent [PAWN_possessive] childhood in the deep shelters under Anima Prime, where the ceiling shook on a schedule and the adults counted the intervals out loud. [PAWN_pronoun] learned to read a bombardment the way other children learn weather.</description>
+    <skillGains>
+      <Intellectual>3</Intellectual>
+      <Melee>2</Melee>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_ChildBackstory">
+    <defName>DMST_MagierChild02</defName>
+    <title>Bloodline Ward</title>
+    <titleShort>Ward</titleShort>
+    <description>Artillery had already taken most of [PAWN_nameDef]'s family line before [PAWN_pronoun] was old enough to know what a bloodline was. The relatives who remained were catalogued, scattered to separate postings, and raised at the Mage Tower's expense.</description>
+    <skillGains>
+      <Intellectual>5</Intellectual>
+      <Social>2</Social>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_ChildBackstory">
+    <defName>DMST_MagierChild03</defName>
+    <title>Range Runner</title>
+    <titleShort>Runner</titleShort>
+    <description>[PAWN_nameDef] grew up on the edge of a live-fire range, running spent brass and message slips between the firing lines for pocket money. [PAWN_pronoun] could name a weapon by its report long before [PAWN_pronoun] was allowed to hold one.</description>
+    <skillGains>
+      <Shooting>4</Shooting>
+      <Animals>-2</Animals>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_ChildBackstory">
+    <defName>DMST_MagierChild04</defName>
+    <title>Reservist Caster</title>
+    <titleShort>Reservist</titleShort>
+    <description>[PAWN_nameDef] was born in a city-state under offworlder occupation. Once [PAWN_pronoun] tested for strong psychic affinity [PAWN_possessive] tuition was covered in full, and [PAWN_pronoun] left school commissioned as a reserve non-commissioned officer.</description>
+    <skillGains>
+      <Intellectual>4</Intellectual>
+      <Social>3</Social>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_ChildBackstory">
+    <defName>DMST_MagierChild05</defName>
+    <title>Wreck Picker</title>
+    <titleShort>Picker</titleShort>
+    <description>[PAWN_nameDef] made a childhood out of other people's destroyed equipment, prising stamped components out of burnt-out frames and selling them by weight. [PAWN_pronoun] came away knowing exactly how a machine goes together - and, more usefully, exactly where it comes apart.</description>
+    <skillGains>
+      <Crafting>4</Crafting>
+      <Construction>3</Construction>
+    </skillGains>
+  </BackstoryDef>
+
+  <!-- ==================== ADULTHOOD ==================== -->
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
     <defName>DMST_Magier01</defName>
     <title>Retired Medic</title>
     <titleShort>Medic</titleShort>
-    <description>[PAWN_nameDef] served as a medic in the Armed Forces and retired from military life prematurely after a serious injury.</description>
-    <slot>Adulthood</slot>
+    <description>[PAWN_nameDef] served as a medic in the Armed Forces, until a serious injury ended [PAWN_possessive] service early.</description>
     <skillGains>
       <Shooting>8</Shooting>
       <Medicine>16</Medicine>
     </skillGains>
   </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier02</defName>
+    <title>Line Magier</title>
+    <titleShort>Magier</titleShort>
+    <description>[PAWN_nameDef] spent [PAWN_possessive] service attached to line infantry, bleeding for the nation [PAWN_pronoun] served alongside tactical casters of [PAWN_possessive] own generation.</description>
+    <skillGains>
+      <Shooting>10</Shooting>
+      <Melee>6</Melee>
+      <Intellectual>4</Intellectual>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier03</defName>
+    <title>Assault Engineer</title>
+    <titleShort>Engineer</titleShort>
+    <description>[PAWN_nameDef] was trained to take structures apart - charges when there was time, bare psychic force when there was not. Breaching walls and disabling emplacements became second nature.</description>
+    <skillGains>
+      <Shooting>6</Shooting>
+      <Construction>12</Construction>
+      <Crafting>8</Crafting>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier04</defName>
+    <title>Breach Magier</title>
+    <titleShort>Breacher</titleShort>
+    <description>[PAWN_nameDef] went through doorways first, for years. Flash, two steps, rifle up before anyone inside had their eyes back. The doctrine is not complicated and it does not forgive hesitation.</description>
+    <skillGains>
+      <Shooting>12</Shooting>
+      <Melee>8</Melee>
+      <Social>-2</Social>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier05</defName>
+    <title>Construct Wright</title>
+    <titleShort>Wright</titleShort>
+    <description>[PAWN_nameDef] fought a war largely by proxy, condensing entropy into crystal and framing it around whatever stamped parts were to hand. [PAWN_possessive] section learned to judge how the fight was going by how many constructs were still standing.</description>
+    <skillGains>
+      <Crafting>10</Crafting>
+      <Construction>8</Construction>
+      <Intellectual>6</Intellectual>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier06</defName>
+    <title>Countermech Specialist</title>
+    <titleShort>Countermech</titleShort>
+    <description>[PAWN_nameDef] was posted where the mechanoids came through, twisting the field lines into pulses that left whole formations reeling. Nobody ever thanked [PAWN_pronoun] for it, because nobody ever saw the fight [PAWN_pronoun] prevented.</description>
+    <skillGains>
+      <Shooting>8</Shooting>
+      <Intellectual>10</Intellectual>
+      <Crafting>4</Crafting>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier07</defName>
+    <title>Long Watch</title>
+    <titleShort>Watchstander</titleShort>
+    <description>[PAWN_nameDef] held observation posts alone for stretches no unaugmented soldier could manage, forcing [PAWN_possessive] own brain awake shift after shift. The neural heat accumulated. So did the habit of talking to nobody.</description>
+    <skillGains>
+      <Shooting>9</Shooting>
+      <Intellectual>6</Intellectual>
+      <Social>-3</Social>
+    </skillGains>
+  </BackstoryDef>
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier08</defName>
+    <title>Cloaked Scout</title>
+    <titleShort>Ghost</titleShort>
+    <description>Helmet and cloak together, [PAWN_nameDef] walked through positions that were certain they were secure. [PAWN_pronoun] reported what was there, and occasionally removed it, and was never once seen doing either.</description>
+    <skillGains>
+      <Shooting>10</Shooting>
+      <Melee>7</Melee>
+      <Animals>3</Animals>
+    </skillGains>
+  </BackstoryDef>
+
+
+  <BackstoryDef ParentName="DMST_AdultBackstory">
+    <defName>DMST_Magier09</defName>
+    <title>Bodyguard Magier</title>
+    <titleShort>Bodyguard</titleShort>
+    <description>[PAWN_nameDef] was assigned to keep a staff officer alive, which in practice meant standing close enough to trade places with [PAWN_objective] at a moment's notice. [PAWN_pronoun] did so twice. The officer survived both times.</description>
+    <skillGains>
+      <Shooting>9</Shooting>
+      <Melee>9</Melee>
+      <Social>4</Social>
+    </skillGains>
+  </BackstoryDef>
+
+
+
 
 </Defs>

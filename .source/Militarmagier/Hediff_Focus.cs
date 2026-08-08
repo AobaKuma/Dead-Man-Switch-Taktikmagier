@@ -1,83 +1,154 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System;
 using Verse;
 
 namespace Militarmagier
 {
+    /// <summary>
+    /// Tracks the non-pawn constructs (turrets) this psycaster is sustaining and converts them
+    /// into a minimum psychic entropy floor.
+    ///
+    /// Construct *pawns* deliberately do NOT go through this hediff. VPE's
+    /// <c>Pawn_Construct</c> already implements <c>IMinHeatGiver</c> and
+    /// <c>CompBreakLink.PostSpawnSetup</c> registers it with the caster's
+    /// <c>Hediff_PsycastAbilities</c>; routing them through here as well would apply the same
+    /// stat offset twice from two different hediffs. See
+    /// <see cref="AbilityExtension_ConstructPawn"/>.
+    /// </summary>
     public class Hediff_Focus : HediffWithComps
     {
-        public HediffStage curStage;
-        public Dictionary<Thing, float> heatGiver = new();
-        public List<Thing> list1 = new();
-        public List<float> list2 = new();
+        /// <summary>Pruning cadence. Constructs die rarely, so per-tick scanning buys nothing.</summary>
+        private const int PruneIntervalTicks = 60;
+
+        public List<Thing> heatGivers = new List<Thing>();
+
+        private HediffStage cachedStage;
+        private int pruneCounter;
+
         public override HediffStage CurStage
         {
             get
             {
-                if (curStage == null) RecacheCurStage();
-                return curStage;
+                if (cachedStage == null)
+                {
+                    RecacheCurStage();
+                }
+                return cachedStage;
             }
         }
 
-        public override string Description => base.Description + ShowCost();
-        public string ShowCost()
+        /// <summary>
+        /// The hediff exists only to represent live constructs; with none left it is noise.
+        /// Deliberately does NOT fall through to base, whose rule is <c>Severity &lt;= 0</c> - this
+        /// hediff never touches severity and must not have its lifetime tied to it.
+        /// </summary>
+        public override bool ShouldRemove => heatGivers.Count == 0;
+
+        public int TotalHeat
         {
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine("");
-            for (int i = 0; i < heatGiver.Count; i++)
+            get
             {
-                stringBuilder.AppendLine(heatGiver.Keys.ElementAt(i).Label + ": " + heatGiver.Values.ElementAt(i));
+                int total = 0;
+                for (int i = 0; i < heatGivers.Count; i++)
+                {
+                    total += ConstructHeatExtension.HeatFor(heatGivers[i]?.def);
+                }
+                return total;
             }
-            return stringBuilder.ToString();
         }
 
-        public void AddHeatGiver(Thing thing, float heat)
+        public override string Description => base.Description + CostBreakdown();
+
+        private string CostBreakdown()
         {
-            heatGiver[thing] = heat;
+            if (heatGivers.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine();
+            for (int i = 0; i < heatGivers.Count; i++)
+            {
+                Thing thing = heatGivers[i];
+                if (thing == null)
+                {
+                    continue;
+                }
+                sb.AppendLine(thing.LabelCap + ": " + ConstructHeatExtension.HeatFor(thing.def));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Registers a live construct. Call this only once the construct is spawned, otherwise the
+        /// next prune pass will drop it again.
+        /// </summary>
+        public void AddHeatGiver(Thing thing)
+        {
+            if (thing == null || heatGivers.Contains(thing))
+            {
+                return;
+            }
+            heatGivers.Add(thing);
             RecacheCurStage();
         }
+
+        /// <summary>Drops constructs that are gone. Returns true if anything was removed.</summary>
+        private bool Prune()
+        {
+            return heatGivers.RemoveAll(t => t == null || t.Destroyed || !t.Spawned) > 0;
+        }
+
         public void RecacheCurStage()
         {
-            StatModifier heat = new()
+            cachedStage = new HediffStage
             {
-                stat = MilitarmagierDefOf.VPE_PsychicEntropyMinimum,
-                value = 0
-            };
-            for (int i = 0; i < heatGiver.Count; i++)
-            {
-                heat.value += heatGiver.Values.ElementAt(i);
-            }
-            curStage = new()
-            {
-                statOffsets = new()
+                statOffsets = new List<StatModifier>
                 {
-                    heat
+                    new StatModifier
+                    {
+                        stat = MilitarmagierDefOf.VPE_PsychicEntropyMinimum,
+                        value = TotalHeat
+                    }
                 }
             };
+
             if (pawn != null && pawn.Spawned)
             {
                 pawn.health.Notify_HediffChanged(this);
             }
         }
 
-        public override void Notify_PawnDied(DamageInfo? dinfo, Hediff culprit = null)
+        public override void TickInterval(int delta)
         {
-            for (int i = 0; i < heatGiver.Count; i++)
+            base.TickInterval(delta);
+
+            pruneCounter += delta;
+            if (pruneCounter < PruneIntervalTicks)
             {
-                heatGiver.Keys.ElementAt(i).Kill();
+                return;
             }
-            pawn.health.RemoveHediff(this);
+            pruneCounter = 0;
+
+            if (Prune())
+            {
+                RecacheCurStage();
+            }
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Collections.Look(ref heatGiver, "heatGiver", LookMode.Reference, LookMode.Value, ref list1, ref list2);
+            Scribe_Collections.Look(ref heatGivers, "heatGivers", LookMode.Reference);
+
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                heatGivers ??= new List<Thing>();
+                // Constructs destroyed before the save cannot be resolved and come back as nulls.
+                heatGivers.RemoveAll(t => t == null || t.Destroyed);
                 RecacheCurStage();
             }
         }

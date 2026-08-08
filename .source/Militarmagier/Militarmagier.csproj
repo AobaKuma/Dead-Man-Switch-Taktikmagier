@@ -36,7 +36,11 @@
   <ItemGroup>
     <Compile Include="AbilityExtension_Calm.cs" />
     <Compile Include="AbilityExtension_Construct.cs" />
+    <Compile Include="AbilityExtension_ConstructBase.cs" />
     <Compile Include="AbilityExtension_ConstructPawn.cs" />
+    <Compile Include="CompAbilityEffect_RequireApparel.cs" />
+    <Compile Include="ConstructHeatExtension.cs" />
+    <Compile Include="JobGiver_TaktikmagierCombat.cs" />
     <Compile Include="AbilityExtension_Destroy.cs" />
     <Compile Include="AbilityExtension_Heal.cs" />
     <Compile Include="Ability_Flash.cs" />
@@ -55,6 +59,7 @@
     <Reference Include="Fortified">
       <HintPath>..\..\..\_Fortified-Framework\1.6\Assemblies\Fortified.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>

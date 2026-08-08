@@ -3,12 +3,9 @@
   <VanillaPsycastsExpanded.PsycasterPathDef>
     <defName>DMST_Militarmagier</defName>
     <label>Militärmagier</label>
-    <!-- 軍事魔法師起源於阿尼瑪主星（Anima Prime），一個充滿靈能施法者卻深陷殘酷戰爭泥潭的世界。先進的火藥武器和無所不在的現代戰爭威脅，摧毀了無數才華洋溢的靈能施法者的血脈。第一批軍事魔法師正是從這些倖存的施法者的經驗和教訓中誕生的。
-軍事魔法師並不追求卓越的致命施法或驚天動地的奇蹟，而是不斷精煉他們的基礎法術，以提高其效率和頻率。結合現代科技和軍事訓練，他們得以在殘酷的現代戰爭中找到自己的位置。 -->
-    <description>Militärmagier originate from Anima Prime, a world teeming with psionic spellcasters but mired in brutal war. Advanced gunpowder weaponry and the ever-present threat of modern warfare decimated countless bloodlines of talented psycasters. The first Militärmagiers were formed from the experiences and lessons of those surviving spellcasters.\n\nMilitärmagier doesn't prioritize exceptional lethal cast or earth-shattering miracles, but continuously refines their fundamental spells to increase their efficiency and frequency. Combined with modern technology and military training to secure their own niche in modern warfare.</description>
+    <description>Militärmagier originate from Anima Prime, a world teeming with psionic spellcasters but mired in brutal war. When the Colonization Fleet came for it, Anima Prime fought - and learned what advanced gunpowder weaponry does to a tradition built on grand workings. Bloodline after bloodline of talented psycasters was spent buying time for castings that arrived too late. The first Militärmagiers were formed from the experiences and lessons of the spellcasters who survived that war.\n\nWhat remained of those bloodlines was not so much conquered as absorbed. The Fleet is a meritocracy and cares very little where a useful soldier came from; the casters of Anima Prime took the commission, and their descendants now serve under the same flag that broke them.\n\nMilitärmagier doesn't prioritize exceptional lethal cast or earth-shattering miracles, but continuously refines their fundamental spells to increase their efficiency and frequency. Combined with modern technology and military training to secure their own niche in modern warfare.</description>
     <background>UI/Backgrounds/Militarmagier</background>
     <tab>Psycasts</tab>
-    <!-- 軍事魔法師的道路追求的是戰場上不斷生存和戰鬥的能力。他們會毫不猶豫地使用現代槍械，因為子彈的射速遠比任何致命的法術都快。 -->
     <tooltip>The path of the Militärmagier seeks the ability to continuously survive and battle on the battlefield. They have no hesitation in using firearms because bullets cast faster than any lethal spell.</tooltip>
   </VanillaPsycastsExpanded.PsycasterPathDef>
 </Defs>

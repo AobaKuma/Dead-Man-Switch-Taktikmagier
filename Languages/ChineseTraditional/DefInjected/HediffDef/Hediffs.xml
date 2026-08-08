@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<DMST_QuickDraw.label>快速拔槍</DMST_QuickDraw.label>
+	<DMST_QuickDraw.description>依靠反射動作完成瞄準與開火。身體舉槍扣扳機的速度遠超刻意瞄準所能達到的極限——而能不能打中想打的東西，就得看運氣了。</DMST_QuickDraw.description>
+
+	<DMST_PsycastFocus.label>維持中的構裝體</DMST_PsycastFocus.label>
+	<DMST_PsycastFocus.description>施術者正以一條持續的靈能絲線維繫著構裝體。每一個維持中的構裝體都會抬高施術者所能降到的最低心靈熵，而該容量會在構裝體被摧毀時立即返還。</DMST_PsycastFocus.description>
+
+</LanguageData>

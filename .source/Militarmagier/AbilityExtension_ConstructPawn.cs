@@ -1,45 +1,48 @@
-﻿using RimWorld.Planet;
+using RimWorld.Planet;
 using Verse;
-using VEF.Abilities;
 using Ability = VEF.Abilities.Ability;
-using VanillaPsycastsExpanded;
-using VanillaPsycastsExpanded.Technomancer;
+
 namespace Militarmagier
 {
-    public class AbilityExtension_ConstructPawn : AbilityExtension_AbilityMod
+    /// <summary>
+    /// Assembles a construct *pawn* (the gargoyle) out of a consumed component.
+    ///
+    /// This intentionally does not touch <see cref="Hediff_Focus"/>. <c>Pawn_Construct</c>
+    /// implements VPE's <c>IMinHeatGiver</c> and <c>CompBreakLink.PostSpawnSetup</c> registers
+    /// the pawn with the caster's <c>Hediff_PsycastAbilities</c> automatically, which also
+    /// handles pruning and save/load for us. Registering here as well would charge the caster
+    /// twice for the same construct — the bug this replaced.
+    /// <see cref="Pawn_ConstructWeaponUsable"/> supplies the heat value.
+    /// </summary>
+    public class AbilityExtension_ConstructPawn : AbilityExtension_ConstructBase
     {
         public PawnKindDef constructDef;
-        public ThingDef costDef;
-        public float heat;
+
         public override void Cast(GlobalTargetInfo[] targets, Ability ability)
         {
             base.Cast(targets, ability);
-            Pawn pawn = ability.pawn;
-            Hediff_Focus focus = (Hediff_Focus)pawn.health.hediffSet.GetFirstHediffOfDef(MilitarmagierDefOf.DMS_PsycastFocus);
-            focus ??= (Hediff_Focus)pawn.health.AddHediff(MilitarmagierDefOf.DMS_PsycastFocus);
-            foreach (GlobalTargetInfo globalTargetInfo in targets)
-            {
-                Pawn constructed = PawnGenerator.GeneratePawn(constructDef, pawn.Faction);
-                constructed.TryGetComp<CompBreakLink>().Pawn = pawn;
-                focus.AddHeatGiver(constructed, heat);
-                Thing cost = globalTargetInfo.Thing;
-                GenSpawn.Spawn(constructed, cost.Position, cost.Map);
-                cost.SplitOff(1);
-            }
-        }
-        public override bool ValidateTarget(LocalTargetInfo target, Ability ability, bool throwMessages = false)
-        {
-            Thing thing = target.Thing;
-            if (thing != null && thing.def == costDef)
-            {
-                return true;
-            }
-            return false;
-        }
 
-        public override bool CanApplyOn(LocalTargetInfo target, Ability ability, bool throwMessages = false)
-        {
-            return ValidateTarget(target, ability, throwMessages);
+            Pawn caster = ability?.pawn;
+            if (caster == null || constructDef == null)
+            {
+                return;
+            }
+
+            foreach (GlobalTargetInfo target in targets)
+            {
+                if (!TryConsumeCost(target, out IntVec3 position, out Map map))
+                {
+                    continue;
+                }
+
+                Pawn construct = PawnGenerator.GeneratePawn(constructDef, caster.Faction);
+
+                // Must be set before spawning: CompBreakLink reads Pawn in PostSpawnSetup to
+                // register the construct as a min-heat giver.
+                LinkToCaster(construct, caster);
+
+                GenSpawn.Spawn(construct, position, map);
+            }
         }
     }
 }

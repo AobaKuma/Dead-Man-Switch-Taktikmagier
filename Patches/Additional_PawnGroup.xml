@@ -2,13 +2,28 @@
 <Patch>
     <Operation Class="PatchOperationSequence">
         <operations>
+            <!--
+                DMS_Army declares several kindDef="Combat" pawnGroupMakers, including mech-only
+                ones (DMS_Mech_Dogge / DMS_Mech_Falcon). A bare li[kindDef="Combat"] predicate
+                matches all of them and PatchOperationAdd applies to every match, which used to
+                drop Taktikmagiers into raids that are meant to be pure mechanoids.
+                Requiring a DMS_Soldier option pins this to the human infantry groups.
+            -->
+            <!--
+                Commonality is deliberately top-heavy toward the adept: senior magiers are
+                supposed to be the exception, and only the veteran tier can reach the level 5
+                abilities (force wake, demolish).
+            -->
             <li Class="PatchOperationAdd">
-                <xpath>Defs/FactionDef[defName="DMS_Army"]/pawnGroupMakers/li[kindDef="Combat"]/options</xpath>
+                <xpath>Defs/FactionDef[defName="DMS_Army"]/pawnGroupMakers/li[kindDef="Combat"][options/DMS_Soldier]/options</xpath>
                 <value>
+                    <DMST_Magier_Adept>2</DMST_Magier_Adept>
                     <DMST_Taktikmagier>1</DMST_Taktikmagier>
+                    <DMST_Magier_Veteran>0.35</DMST_Magier_Veteran>
                 </value>
             </li>
 
+            <!-- Trader escorts stay on the standard tier only - a caravan guard, not a raid. -->
             <li Class="PatchOperationAdd">
                 <xpath>Defs/FactionDef[defName="DMS_Army"]/pawnGroupMakers/li[kindDef="Trader"]/guards</xpath>
                 <value>

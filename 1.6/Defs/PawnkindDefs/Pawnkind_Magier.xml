@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <PawnKindDef ParentName="DMS_SoldierBase">
-    <defName>DMST_Taktikmagier</defName>
-    <label>Tactical magier</label>
-    <apparelRequired>
-      <li>DMS_Apparel_Gunlink</li>
-      <li>DMST_Apparel_MagierHelmet</li>
-      <li>DMS_Apparel_StealthMask</li>
-      <li>DMS_Apparel_PowerSkeleton</li>
-      <li>DMST_Apparel_MagierCloak</li>
-      <li>DMS_Apparel_TacticalVest</li>
-    </apparelRequired>
+
+  <!--
+    Three seniority tiers of the same career. What separates them is how far up the
+    Militaermagier tree they got, not what they do:
+
+      Adept        level 2, tree levels 1-2   - the fundamentals only, no cloak, no constructs
+      Taktikmagier level 4, tree levels 1-4   - the standard line magier
+      Veteran      level 6, tree levels 1-5   - reaches force wake and demolish
+
+    unlockedPaths syntax is VPE's PathUnlockData: "<levelRange>|<abilityCount>", i.e.
+    1~4|2~10 means "pick 2 to 10 abilities from tree levels 1 through 4". Note the path has
+    five levels, so anything capped at 1~4 can never roll force wake or demolish.
+
+    backstoryCategories is declared here rather than inherited: DMS_SoldierBase supplies
+    FleetChild / Mili_Standard / Mili_Expert, none of which contain this mod's backstories.
+    Without this the DMST_Magier category is orphaned and never spawns - see BackstoriesDefs.xml.
+  -->
+  <PawnKindDef Name="DMST_MagierBase" ParentName="DMS_SoldierBase" Abstract="True">
+    <backstoryCategories Inherit="False">
+      <li>DMST_Magier</li>
+      <li>FleetChild</li>
+    </backstoryCategories>
     <apparelTags>
       <li>DMST_Magier</li>
     </apparelTags>
-    <weaponMoney>2500~5000</weaponMoney>
-    <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_WarrantOfficer</titleRequired>
     <weaponTags>
       <li>A_AR_LongRifle</li>
     </weaponTags>
     <immuneToTraps>true</immuneToTraps>
     <canOpenAnyDoor>true</canOpenAnyDoor>
     <aiAvoidCover>false</aiAvoidCover>
-    <skills>
-      <li>
-        <skill>Shooting</skill>
-        <range>8~16</range>
-      </li>
-      <li>
-        <skill>Melee</skill>
-        <range>8~16</range>
-      </li>
-    </skills>
+    <humanPregnancyChance>0.45</humanPregnancyChance>
+    <fixedGender>Female</fixedGender>
     <specificApparelRequirements>
       <li>
         <colorGenerator Class="ColorGenerator_Options">
@@ -54,9 +55,81 @@
         <color>(200,200,200)</color>
       </li>
     </specificApparelRequirements>
-    <humanPregnancyChance>0.45</humanPregnancyChance>
-    <fixedGender>Female</fixedGender>
+  </PawnKindDef>
+
+  <!--
+    Adept - still being trained. No magier cloak, which means no psychic camouflage at all
+    (the ability is granted by the cloak and gated on the helmet+cloak set), and the tree cap
+    of 1~2 keeps her off constructs entirely.
+  -->
+  <PawnKindDef ParentName="DMST_MagierBase">
+    <defName>DMST_Magier_Adept</defName>
+    <label>magier adept</label>
+    <combatPower>70</combatPower>
+    <apparelRequired>
+      <li>DMS_Apparel_Gunlink</li>
+      <li>DMST_Apparel_MagierHelmet</li>
+      <li>DMS_Apparel_TacticalVest</li>
+    </apparelRequired>
+    <!--
+      Standard garrison kit rather than the magier apparel pool. The base's DMST_Magier tag
+      would let apparelMoney roll her a magier cloak, and the cloak is what grants psychic
+      camouflage - an adept is not supposed to have it at all.
+    -->
+    <apparelTags Inherit="False">
+      <li>DMS_Garrison</li>
+    </apparelTags>
+    <weaponMoney>1200~2500</weaponMoney>
+    <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_Corporal</titleRequired>
+    <techHediffsChance>0.01</techHediffsChance>
+    <maxGenerationAge>21</maxGenerationAge>
+    <skills>
+      <li>
+        <skill>Shooting</skill>
+        <range>5~10</range>
+      </li>
+      <li>
+        <skill>Melee</skill>
+        <range>5~10</range>
+      </li>
+    </skills>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.PawnKindAbilityExtension_Psycasts">
+        <implantDef>VPE_PsycastAbilityImplant</implantDef>
+        <initialLevel>2</initialLevel>
+        <statUpgradePoints>0~2</statUpgradePoints>
+        <unlockedPaths>
+          <DMST_Militarmagier>1~2|1~3</DMST_Militarmagier>
+        </unlockedPaths>
+      </li>
+    </modExtensions>
+  </PawnKindDef>
+
+  <!-- Tactical magier - the standard line magier this mod is named for. -->
+  <PawnKindDef ParentName="DMST_MagierBase">
+    <defName>DMST_Taktikmagier</defName>
+    <label>tactical magier</label>
+    <apparelRequired>
+      <li>DMS_Apparel_Gunlink</li>
+      <li>DMST_Apparel_MagierHelmet</li>
+      <li>DMS_Apparel_StealthMask</li>
+      <li>DMS_Apparel_PowerSkeleton</li>
+      <li>DMST_Apparel_MagierCloak</li>
+      <li>DMS_Apparel_TacticalVest</li>
+    </apparelRequired>
+    <weaponMoney>2500~5000</weaponMoney>
+    <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_WarrantOfficer</titleRequired>
     <maxGenerationAge>24</maxGenerationAge>
+    <skills>
+      <li>
+        <skill>Shooting</skill>
+        <range>8~16</range>
+      </li>
+      <li>
+        <skill>Melee</skill>
+        <range>8~16</range>
+      </li>
+    </skills>
     <modExtensions>
       <li Class="VanillaPsycastsExpanded.PawnKindAbilityExtension_Psycasts">
         <implantDef>VPE_PsycastAbilityImplant</implantDef>
@@ -68,4 +141,54 @@
       </li>
     </modExtensions>
   </PawnKindDef>
+
+  <!--
+    Veteran - the only tier that reaches tree level 5, so the only one that can roll force wake
+    and demolish. Worth treating as a priority target.
+  -->
+  <PawnKindDef ParentName="DMST_MagierBase">
+    <defName>DMST_Magier_Veteran</defName>
+    <label>senior magier</label>
+    <combatPower>140</combatPower>
+    <apparelRequired>
+      <li>DMS_Apparel_Gunlink</li>
+      <li>DMST_Apparel_MagierHelmet</li>
+      <li>DMS_Apparel_StealthMask</li>
+      <li>DMS_Apparel_PowerSkeleton</li>
+      <li>DMST_Apparel_MagierCloak</li>
+      <li>DMS_Apparel_TacticalVest</li>
+    </apparelRequired>
+    <apparelMoney>2000~4500</apparelMoney>
+    <weaponMoney>4000~8000</weaponMoney>
+    <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_Lieutenant</titleRequired>
+    <techHediffsChance>0.15</techHediffsChance>
+    <gearHealthRange>0.9~2</gearHealthRange>
+    <minGenerationAge>28</minGenerationAge>
+    <maxGenerationAge>52</maxGenerationAge>
+    <skills>
+      <li>
+        <skill>Shooting</skill>
+        <range>14~20</range>
+      </li>
+      <li>
+        <skill>Melee</skill>
+        <range>12~18</range>
+      </li>
+      <li>
+        <skill>Intellectual</skill>
+        <range>8~16</range>
+      </li>
+    </skills>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.PawnKindAbilityExtension_Psycasts">
+        <implantDef>VPE_PsycastAbilityImplant</implantDef>
+        <initialLevel>6</initialLevel>
+        <statUpgradePoints>4~9</statUpgradePoints>
+        <unlockedPaths>
+          <DMST_Militarmagier>1~5|6~14</DMST_Militarmagier>
+        </unlockedPaths>
+      </li>
+    </modExtensions>
+  </PawnKindDef>
+
 </Defs>

@@ -49,5 +49,16 @@
 		</costList>
 		<uiIconPath>Things/Turrets/DMS_SentryTurret</uiIconPath>
 		<uiIconScale>1.25</uiIconScale>
+		<modExtensions>
+			<!--
+				Minimum psychic entropy this turret costs its summoner while alive. Read by
+				Militarmagier.Hediff_Focus. Buildings cannot be IMinHeatGiver (the thingClass is
+				swapped wholesale by CE), so turret upkeep is tracked on the focus hediff instead
+				of through VPE's registry.
+			-->
+			<li Class="Militarmagier.ConstructHeatExtension">
+				<heat>50</heat>
+			</li>
+		</modExtensions>
 	</ThingDef>
 </Defs>

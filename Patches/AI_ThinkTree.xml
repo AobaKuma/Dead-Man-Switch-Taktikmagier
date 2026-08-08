@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <!--
+        Gives AI-controlled magiers their Self- and Location-targeted psycasts.
+
+        Why the constant tree: VEF only offers abilities to the AI via a Pawn.TryGetAttackVerb
+        postfix, which can only pick abilities whose verb can hit the current enemy pawn. Flash,
+        Repel, EMP burst and quick draw all target self or a location, so no raider could ever
+        use them. HumanlikeConstant is evaluated regardless of the pawn's current job, which is
+        what lets the node interrupt a shooting job to blind someone.
+
+        Cost: this node is evaluated for every humanlike on the map. JobGiver_TaktikmagierCombat
+        rejects non-AI pawns, unspawned/downed pawns and pawns with no enemy target before doing
+        any real work, and only re-evaluates every 30 ticks.
+
+        If this patch ever fails (a future version renaming the tree), RimWorld logs a patch
+        error and the mod still loads - AI magiers simply fall back to shooting.
+    -->
+    <Operation Class="PatchOperationAdd">
+        <!--
+            Appended, not prepended, on purpose: the vanilla constant nodes ahead of it handle
+            things that must win over casting - escaping fire, dropping a burning weapon,
+            reacting to being drafted. A magier who is on fire should run, not cast Flash.
+        -->
+        <xpath>Defs/ThinkTreeDef[defName="HumanlikeConstant"]/thinkRoot/subNodes</xpath>
+        <value>
+            <li Class="Militarmagier.JobGiver_TaktikmagierCombat" />
+        </value>
+    </Operation>
+</Patch>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!--
+		CE-only replacement gun for the summoned sentry turret.
+
+		WHY THIS EXISTS
+		Under CE the turret would otherwise keep firing DMS_SubMachineGunMounted, which core's
+		CE patch gives a 300-round .22LR CompAmmoUser. Building_TurretGunCE.SpawnSetup only
+		auto-fills a magazine when:
+
+		    if (!everSpawned && (!Map.IsPlayerHome || Faction != Faction.OfPlayer))
+		        compAmmo?.ResetAmmoCount();
+
+		So an enemy magier's turret spawns loaded, but the PLAYER's turret - summoned on the
+		player's home map, owned by the player - falls through both clauses and spawns with an
+		EMPTY magazine. A psycast-summoned, self-destructing 12-hour turret that has to be
+		hand-fed .22LR before it will fire even once is not a usable ability.
+
+		This def is identical to core's CE-patched mounted SMG except that it deliberately
+		declares no CompProperties_AmmoUser. Building_TurretGunCE is null-safe about that
+		(`Reloadable => CompAmmo?.HasMagazine ?? false`, `EmptyMagazine => CompAmmo?.EmptyMagazine
+		?? false`), so the turret simply fires without an ammo pool. It stays time-limited by its
+		CompProperties_MechPowerCell battery, which is where the limit belongs - the construct's
+		"ammunition" is the psychic crystal, not a magazine anyone loaded.
+
+		The gun the mech version uses is left untouched, so the Hyrax keeps its .22LR ammo.
+	-->
+	<ThingDef ParentName="BaseAutoTurretGun">
+		<defName>DMST_Gun_SentryConstruct</defName>
+		<label>sentry construct gun</label>
+		<description>The weapon half of an assembled sentry construct. It has no magazine to speak of - rounds condense out of the same crystallised entropy that holds the frame together, and stop when that runs out.</description>
+		<graphicData>
+			<texPath>Things/Turrets/DMS_Gun_LMG</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>1</drawSize>
+		</graphicData>
+		<statBases>
+			<Mass>3.25</Mass>
+			<Bulk>4.16</Bulk>
+			<SwayFactor>0.96</SwayFactor>
+			<ShotSpread>0.15</ShotSpread>
+			<SightsEfficiency>1.0</SightsEfficiency>
+			<RangedWeapon_Cooldown>1</RangedWeapon_Cooldown>
+		</statBases>
+		<verbs>
+			<li Class="CombatExtended.VerbPropertiesCE">
+				<verbClass>CombatExtended.Verb_ShootCE</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_22LR_FMJ</defaultProjectile>
+				<warmupTime>0.8</warmupTime>
+				<range>20</range>
+				<ticksBetweenBurstShots>3</ticksBetweenBurstShots>
+				<burstShotCount>10</burstShotCount>
+				<soundCast>Shot_MachinePistol</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+				<recoilAmount>0.63</recoilAmount>
+				<recoilPattern>Mounted</recoilPattern>
+				<targetParams>
+					<canTargetLocations>true</canTargetLocations>
+				</targetParams>
+			</li>
+		</verbs>
+		<weaponTags>
+			<li>NoSwitch</li>
+		</weaponTags>
+	</ThingDef>
+
+</Defs>
