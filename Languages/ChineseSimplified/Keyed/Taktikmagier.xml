@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!-- {0} = 所需材料的标签，例如“冲压零件” -->
+	<DMST_ConstructNeedsCost>必须以{0}作为目标才能组装构装体。</DMST_ConstructNeedsCost>
+
+	<!-- {0} = 缺少的装备标签，例如“军术士头盔” -->
+	<DMST_CamouflageNeedsApparel>需要穿戴{0}。</DMST_CamouflageNeedsApparel>
+
+</LanguageData>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<DMST_Turret_Sentry.label>哨戒炮塔</DMST_Turret_Sentry.label>
+	<DMST_Turret_Sentry.description>快速部署的一次性遥控炮塔，部署后可持续运作约12小时，能量耗尽后便会自动关机。这类装备通常被部署在城镇战环境中用于伏击敌人。</DMST_Turret_Sentry.description>
+
+	<DMST_Construct_Gargoyle.label>石像鬼</DMST_Construct_Gargoyle.label>
+	<DMST_Construct_Gargoyle.description>由强大的灵能所驱动的组装零件。它会主动攻击附近的威胁，并保护主人免于任何伤害。\n\n&lt;color=#E5E54C&gt;游戏效果：&lt;/color&gt;构装体会为召唤它的施术者持续产生心灵熵。同时维持过多构装体会使施术者无法施放其他能力。</DMST_Construct_Gargoyle.description>
+
+	<DMST_Apparel_MagierHelmet.label>军术士头盔</DMST_Apparel_MagierHelmet.label>
+	<DMST_Apparel_MagierHelmet.description>军术士配戴的灵能头盔。以战术头盔为基础，覆上一顶由军规纤维制成的高耸尖帽。其表面带有灵能驱动的主动迷彩，但要达成完全隐形还需要搭配军术士斗篷。</DMST_Apparel_MagierHelmet.description>
+
+	<DMST_Apparel_MagierCloak.label>军术士斗篷</DMST_Apparel_MagierCloak.label>
+	<DMST_Apparel_MagierCloak.description>军术士配备的主动光学迷彩斗篷。具备由灵能驱动的主动迷彩能力，运作时会消耗心灵熵。需搭配军术士头盔才能生效。</DMST_Apparel_MagierCloak.description>
+
+</LanguageData>

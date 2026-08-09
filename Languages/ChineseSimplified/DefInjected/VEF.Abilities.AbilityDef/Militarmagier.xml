@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<DMST_Flash.label>突击闪光</DMST_Flash.label>
+	<DMST_Flash.description>透过引导灵能震动空间来产生爆发性的定向强光与噪音，其威力足以使扇形波及范围内的生物与机械传感器短暂失明。这经常被用于针对施法者的战斗，并辅以枪械在对方失明时给上致命一击。</DMST_Flash.description>
+
+	<DMST_Repel.label>排斥</DMST_Repel.label>
+	<DMST_Repel.description>以施法者为中心爆发一圈纯粹的灵能冲击波，将周围所有人掀翻并向外推开。它不会造成任何伤口，但被近身纠缠的军术士能借此换来数秒的空档。</DMST_Repel.description>
+
+	<DMST_Swap.label>换位</DMST_Swap.label>
+	<DMST_Swap.description>军术士与选定的目标瞬间交换位置。可用来把负伤的同伴拉出火线，或是把军术士自己的枪口精准地送到需要的地方。</DMST_Swap.description>
+
+	<DMST_ConstructTurret.label>组装炮塔构装体</DMST_ConstructTurret.label>
+	<DMST_ConstructTurret.description>将施术者的少量心灵熵转化为形而上的水晶，并以标准生产的冲压零件作为骨架来组装成一个临时的自动炮塔。该炮塔透过注入的能量来维持其索敌与开火，并在被摧毁时爆炸。</DMST_ConstructTurret.description>
+
+	<DMST_ConstructPawn.label>组装石像鬼构装体</DMST_ConstructPawn.label>
+	<DMST_ConstructPawn.description>将施术者的少量心灵熵转化为形而上的水晶，并以标准生产的冲压零件作为骨架组装成机械构装体。施术者对于构装体有着完全的控制并能够使役其操作枪械作为火力支援。当核心水晶被击毁后，所占用的心灵熵容量会返还。</DMST_ConstructPawn.description>
+
+	<DMST_QuickDraw.label>快速拔枪</DMST_QuickDraw.label>
+	<DMST_QuickDraw.description>透过电流的直接刺激来使身体透过反射动作在片刻间完成枪械的瞄准与开火。这种被称为枪斗术的近距离射击技巧能够有效的对威胁做出快速反应，也经常被直接用来进行近身格斗。代价是几乎谈不上准头。</DMST_QuickDraw.description>
+
+	<DMST_EmpBurst.label>电磁脉冲</DMST_EmpBurst.label>
+	<DMST_EmpBurst.description>引导灵能扭曲周围的磁场线来凭空制造出一个巨大的电磁脉冲，能够有效的使范围内的敌人受到EMP以及磁场干扰所导致的严重不适。</DMST_EmpBurst.description>
+
+	<DMST_FieldAid.label>战地急救</DMST_FieldAid.label>
+	<DMST_FieldAid.description>透过刺激患者伤口的皮肤组织增生来封闭开放性创口，被用于在交战中为重伤的同伴或自身快速止血。这是一个非常讲求施术者技巧的施法，但同时也是每一个军术士在训练时都被要求熟练掌握的基本施法。</DMST_FieldAid.description>
+
+	<DMST_ForceWake.label>强制清醒</DMST_ForceWake.label>
+	<DMST_ForceWake.description>透过灵能干涉来强制大脑保持清醒意识并潜意识的用乐观情绪催眠自己，这对于那些在战场上高度警惕的施术者们执行长时间任务时十分有用。但频繁的使用可能会累积大量神经热而适得其反。</DMST_ForceWake.description>
+
+	<DMST_Demolish.label>解体</DMST_Demolish.label>
+	<DMST_Demolish.description>透过对事物构造的了解，军术士们能够直接操作零件的位置来甚至在分子层面上断开缠结的分子链，以此来达到将物体解体的能力。这项技巧被广泛用于爆炸物拆除与瘫痪精密设备，并对建筑与炮塔这样的静态物体来说非常合适。更坚固的目标则只会被严重破坏而非彻底拆解。</DMST_Demolish.description>
+
+</LanguageData>

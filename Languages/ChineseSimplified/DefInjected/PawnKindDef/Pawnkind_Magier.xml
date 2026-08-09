@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<DMST_Magier_Adept.label>见习军术士</DMST_Magier_Adept.label>
+	<DMST_Taktikmagier.label>战术军术士</DMST_Taktikmagier.label>
+	<DMST_Magier_Veteran.label>资深军术士</DMST_Magier_Veteran.label>
+
+	<DMST_Construct_Gargoyle.label>石像鬼</DMST_Construct_Gargoyle.label>
+
+</LanguageData>

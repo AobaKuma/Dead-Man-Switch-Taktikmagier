@@ -52,7 +52,7 @@
         <bodyPartGroup>UpperHead</bodyPartGroup>
         <apparelLayer>Overhead</apparelLayer>
         <stuff>Plasteel</stuff>
-        <color>(200,200,200)</color>
+        <color>(90,100,90)</color>
       </li>
     </specificApparelRequirements>
   </PawnKindDef>
