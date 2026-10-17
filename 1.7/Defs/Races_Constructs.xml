@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!--
+		The gargoyle is an FFF drone, built the same way as DMS's own drones (DMS_BaseDroidRace:
+		BaseMechanoid + Fortified.WeaponUsableMech). The summoning magier is its control platform
+		(CompDrone.SetPlatform, done by CompAbilityEffect_ConstructPawn), so it can only be drafted while
+		that magier is drafted on the same map - "the magier holds complete control over it".
+
+		Being a mechanoid it feels no pain and catches no disease without any extra comps, and it is
+		hit by EMP, including its own summoner's EMP burst.
+	-->
+	<ThingDef ParentName="DMS_BaseDroidRace">
+		<defName>DMST_Construct_Gargoyle</defName>
+		<label>gargoyle</label>
+		<description>assembled components which animated by powerful psychic energy. It will engage nearby threats and defend the master from any harm that may come to them.\n\n&lt;color=#E5E54C&gt;Gameplay effect:&lt;/color&gt;Constructs occupy part of the neural heat limit of the caster that summoned them. Keeping too many constructs alive could prevent the psycaster from casting other abilities.</description>
+		<statBases>
+			<MarketValue>150</MarketValue>
+			<MoveSpeed>4.2</MoveSpeed>
+			<ArmorRating_Sharp>0.4</ArmorRating_Sharp><!--銳抗-->
+			<ArmorRating_Blunt>0.1</ArmorRating_Blunt><!--鈍抗-->
+			<ArmorRating_Heat>0.5</ArmorRating_Heat>  <!--能抗-->
+		</statBases>
+		<tools Inherit="False">
+			<li>
+				<label>head</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>14</power>
+				<cooldownTime>2</cooldownTime>
+				<linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+				<ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+			</li>
+			<li>
+				<label>left fist</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>12.0</power>
+				<cooldownTime>2</cooldownTime>
+				<linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+				<alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+			</li>
+			<li>
+				<label>right fist</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>12.0</power>
+				<cooldownTime>2</cooldownTime>
+				<linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+				<alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+			</li>
+		</tools>
+		<!--
+			Only the drone link and the magier link. The base's dormancy, recycling and mech repair comps
+			are left out on purpose: a construct is not a machine you wake up, salvage or service - it
+			holds together for as long as its summoner does.
+		-->
+		<comps Inherit="False">
+			<li Class="Fortified.CompProperties_Drone" />
+			<li Class="Militarmagier.CompProperties_MagierLink" />
+		</comps>
+		<race>
+			<body>DMS_Humanoid_Soldat</body>
+			<baseBodySize>1</baseBodySize>
+			<baseHealthScale>1</baseHealthScale>
+			<deathAction>
+				<workerClass>Militarmagier.DeathActionWorker_ConstructSlag</workerClass>
+			</deathAction>
+			<soundCallIntervalRange>12000~20000</soundCallIntervalRange>
+		</race>
+		<modExtensions>
+			<!--
+				Neural heat limit this construct occupies on its summoner while alive (flat points).
+				Tracked by Militarmagier.Hediff_Focus, charged by StatPart_SustainedConstructs.
+			-->
+			<li Class="Militarmagier.ConstructHeatExtension">
+				<heat>12</heat>
+			</li>
+			<li Class="Fortified.MechWeaponExtension">
+				<EnableWeaponFilter>true</EnableWeaponFilter>
+				<UsableWeaponTags>
+					<li>SimpleGun</li>
+					<li>ShortShots</li>
+					<li>CE_SMG</li>
+					<li>DMS_MechWeaponLight</li>
+					<li>IndustrialGun</li>
+				</UsableWeaponTags>
+				<EnableTechLevelFilter>true</EnableTechLevelFilter>
+				<UsableTechLevels>
+					<li>Industrial</li>
+				</UsableTechLevels>
+				<BypassUsableWeapons />
+			</li>
+			<li Class="Fortified.TurretMannableExtension">
+				<mannableByDefault>false</mannableByDefault>
+				<BypassMannable>
+					<li MayRequire="Aoba.Fortress.Industrial">FT_TurretAT</li>
+					<li MayRequire="Aoba.Fortress.Industrial">FT_Maxim4M</li>
+					<li MayRequire="Aoba.Fortress.Industrial">FT_AutoCannon</li>
+					<li MayRequire="Aoba.Fortress.Frontier">FT_GPMG</li>
+					<li MayRequire="Aoba.Fortress.Frontier">FT_HeavyMachinegun</li>
+					<li MayRequire="Aoba.Fortress.Frontier">FT_InfantryAutoCannon</li>
+				</BypassMannable>
+			</li>
+		</modExtensions>
+	</ThingDef>
+
+	<!-- Two life stages because DMS_BaseDroidRace declares two (brand new / damaged); same art for both. -->
+	<PawnKindDef ParentName="DMS_DroidKind">
+		<defName>DMST_Construct_Gargoyle</defName>
+		<label>gargoyle</label>
+		<race>DMST_Construct_Gargoyle</race>
+		<combatPower>80</combatPower>
+		<lifeStages>
+			<li>
+				<bodyGraphicData>
+					<texPath>Mech/gargoyle</texPath>
+					<drawSize>1.6</drawSize>
+					<drawOffset>(0,0,0.1)</drawOffset>
+					<shadowData>
+						<volume>(0.3,1,0.3)</volume>
+						<offset>(0,0,-0.2)</offset>
+					</shadowData>
+				</bodyGraphicData>
+			</li>
+			<li>
+				<bodyGraphicData>
+					<texPath>Mech/gargoyle</texPath>
+					<drawSize>1.6</drawSize>
+					<drawOffset>(0,0,0.1)</drawOffset>
+					<shadowData>
+						<volume>(0.3,1,0.3)</volume>
+						<offset>(0,0,-0.2)</offset>
+					</shadowData>
+				</bodyGraphicData>
+			</li>
+		</lifeStages>
+	</PawnKindDef>
+</Defs>

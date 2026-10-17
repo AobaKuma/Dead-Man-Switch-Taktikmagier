@@ -14,3 +14,7 @@
 *.kra~
 
 # Build output that IS shipped stays tracked - do not ignore 1.6/Assemblies/
+
+# RimWorld 1.7 asset packs baked on Workshop upload (and their local sidecars)
+Assets.zip
+Assets.zip.*

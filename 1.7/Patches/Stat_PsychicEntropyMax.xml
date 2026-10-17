@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+	<!--
+		Sustained constructs lower the neural heat limit by a flat amount. A stat part, because stat
+		parts run after the psylink's stage factors: a hediff offset would be multiplied by the psylink
+		level and psychic sensitivity. See Militarmagier.Hediff_Focus.
+	-->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/StatDef[defName="PsychicEntropyMax"]/parts</xpath>
+		<value>
+			<li Class="Militarmagier.StatPart_SustainedConstructs" />
+		</value>
+	</Operation>
+</Patch>

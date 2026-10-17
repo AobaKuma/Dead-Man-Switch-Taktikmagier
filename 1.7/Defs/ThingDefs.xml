@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<ThingDef ParentName="DMS_BaseCannonBuilding">
+		<defName>DMST_Turret_Sentry</defName>
+		<label>Sentry turret</label>
+		<description>A quick-deployed, disposable remote-controlled turret that can be used continuously for about 12 hours after being deployed. It will automatically shut down after the energy is used up. These type of equipments are usually deployed in urban combat environments to ambush enemies.</description>
+		<techLevel>Industrial</techLevel>
+		<graphicData>
+			<texPath>Things/Turrets/Tripod</texPath>
+			<graphicClass>Graphic_Multi</graphicClass>
+			<drawSize>1</drawSize>
+			<drawOffset>(0,0,-0.1)</drawOffset>
+		</graphicData>
+		<size>(1,1)</size>
+		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+		<designationCategory Inherit="false" />
+		<fillPercent>0.7</fillPercent>
+		<statBases>
+			<MaxHitPoints>50</MaxHitPoints>
+			<Flammability>0.5</Flammability>
+			<WorkToBuild>4500</WorkToBuild>
+			<Beauty>-2</Beauty>
+			<ShootingAccuracyTurret>1</ShootingAccuracyTurret>
+		</statBases>
+		<comps Inherit="false">
+			<li MayRequire="VanillaExpanded.VFEA" Class="VFEAncients.CompProperties_SolarPowerUp" />
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_MechPowerCell">
+				<totalPowerTicks>30000</totalPowerTicks>
+				<killWhenDepleted>false</killWhenDepleted>
+				<labelOverride>Battery power</labelOverride>
+				<tooltipOverride>This turret has a limited battery life. Once it runs out, it will stop working entirely.</tooltipOverride>
+			</li>
+			<li Class="Militarmagier.CompProperties_MagierLink" />
+		</comps>
+		<building>
+			<turretGunDef>DMS_SubMachineGunMounted</turretGunDef>
+			<turretTopDrawSize>1</turretTopDrawSize>
+			<turretBurstWarmupTime>0.5</turretBurstWarmupTime>   <!--================冷卻與瞄準時間================-->
+			<turretBurstCooldownTime>1</turretBurstCooldownTime>
+		</building>
+		<costList>
+			<Steel>50</Steel>
+			<ComponentStamped>1</ComponentStamped>
+		</costList>
+		<uiIconPath>Things/Turrets/DMS_SentryTurret</uiIconPath>
+		<uiIconScale>1.25</uiIconScale>
+		<modExtensions>
+			<!--
+				Neural heat limit this turret occupies on its summoner while alive (flat points).
+				Tracked by Militarmagier.Hediff_Focus, charged by StatPart_SustainedConstructs.
+			-->
+			<li Class="Militarmagier.ConstructHeatExtension">
+				<heat>10</heat>
+			</li>
+		</modExtensions>
+	</ThingDef>
+</Defs>

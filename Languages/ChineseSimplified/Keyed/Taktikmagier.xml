@@ -7,4 +7,15 @@
 	<!-- {0} = 缺少的装备标签，例如“军术士头盔” -->
 	<DMST_CamouflageNeedsApparel>需要穿戴{0}。</DMST_CamouflageNeedsApparel>
 
+	<!-- {0} = 构装体会占用的心灵熵上限 -->
+	<DMST_ConstructNoCapacity>心灵熵容量不足：此构装体会占用 {0} 点。</DMST_ConstructNoCapacity>
+
+	<DMST_BreakLink>解除术式联结</DMST_BreakLink>
+	<DMST_BreakLinkDesc>解除这个构装体。{CASTER_labelShort}会取回它占用的心灵熵容量。</DMST_BreakLinkDesc>
+
+	<!-- 心灵熵上限属性明细中的一行 -->
+	<DMST_SustainedConstructsStat>维持中的构装体</DMST_SustainedConstructsStat>
+
+	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort}没有心灵敏感度。</DMST_TargetPsychicallyDeaf>
+
 </LanguageData>

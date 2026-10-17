@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <loadFolders>
-	<v1.6>
+	<!--
+		1.7 only, matching DMS 2. There is deliberately no v1.6 node: DMS 2 itself loads nothing on 1.6.
+	-->
+	<v1.7>
 		<li>/</li>
-		<li>1.6</li>
-		<li IfModActive="CETeam.CombatExtended,CETeam.CombatExtended_steam">1.6/CE</li>
-	</v1.6>
+		<li>1.7</li>
+		<li IfModActive="CETeam.CombatExtended,CETeam.CombatExtended_steam">1.7/CE</li>
+	</v1.7>
 </loadFolders>

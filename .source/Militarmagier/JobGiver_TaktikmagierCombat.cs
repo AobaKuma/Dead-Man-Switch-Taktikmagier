@@ -1,26 +1,19 @@
 using RimWorld;
-using RimWorld.Planet;
 using System.Collections.Generic;
+using System.Linq;
 using Verse;
 using Verse.AI;
-using VEF.Abilities;
-using Ability = VEF.Abilities.Ability;
-using AbilityDef = VEF.Abilities.AbilityDef;
-using System.Linq;
 
 namespace Militarmagier
 {
     /// <summary>
     /// Lets AI-controlled magiers actually fight like magiers.
     ///
-    /// VEF only feeds abilities to the AI through a postfix on <c>Pawn.TryGetAttackVerb</c>,
-    /// which can only offer abilities whose verb can hit the current enemy pawn. That rules out
-    /// every Self- and Location-targeted psycast in this path - Flash, Repel, EMP burst and
-    /// quick draw were unreachable by any raider, which is most of what makes a Taktikmagier
-    /// feel like one. This think node drives those four directly.
+    /// Flash, repel, EMP burst and quick draw are not offered to vanilla's AI casting at all
+    /// (aiCanUse is false on every magier spell), so this think node decides when raiders use them.
     ///
-    /// Player pawns are deliberately excluded: they have gizmos and VEF's own autocast toggle,
-    /// and having their psycasts fire itself would be an unpleasant surprise.
+    /// Player pawns are deliberately excluded: they have gizmos, and having their psycasts fire by
+    /// themselves would be an unpleasant surprise.
     /// </summary>
     public class JobGiver_TaktikmagierCombat : ThinkNode_JobGiver
     {
@@ -41,11 +34,14 @@ namespace Militarmagier
 
         /// <summary>
         /// Quick draw sits at the bottom of the ladder, so it must not eat the neural heat the
-        /// caster will want for Repel or Flash. VPE only ever stops a cast that would overflow
+        /// caster will want for Repel or Flash. Vanilla only stops a cast that would overflow
         /// entropy outright; reserving headroom for the abilities that actually matter is the
         /// part the AI has to decide for itself.
         /// </summary>
         private const float QuickDrawEntropyCeiling = 0.5f;
+
+        /// <summary>Vanilla's psyfocus comparison slack, from Psycast.GizmoDisabled.</summary>
+        private const float PsyfocusCostTolerance = 0.0005f;
 
         protected override Job TryGiveJob(Pawn pawn)
         {
@@ -63,6 +59,10 @@ namespace Militarmagier
             {
                 return null;
             }
+            if (pawn.abilities == null || pawn.abilities.abilities.NullOrEmpty() || pawn.psychicEntropy == null)
+            {
+                return null;
+            }
 
             Thing enemy = pawn.mindState?.enemyTarget;
             if (enemy == null || !enemy.Spawned || enemy.Map != pawn.Map)
@@ -70,32 +70,24 @@ namespace Militarmagier
                 return null;
             }
 
-            CompAbilities comp = pawn.GetComp<CompAbilities>();
-            if (comp == null || comp.currentlyCasting != null || comp.LearnedAbilities.NullOrEmpty())
-            {
-                return null;
-            }
             // Never interrupt an ability cast that is already running.
-            if (pawn.CurJobDef == MilitarmagierDefOf.VFEA_UseAbility)
+            if (pawn.CurJob?.ability != null)
             {
                 return null;
             }
 
             // --- decision ladder, most urgent first ---
             //
-            // Note on range checks below: Ability.CanHitTarget requires
-            // distanceToTarget < GetRangeForPawn(). Repel, EMP burst and quick draw never
-            // declare <range>, so their range is 0 and CanHitTarget(self) is 0 < 0 == FALSE.
-            // Do NOT "tidy this up" by routing the self-cast branches through CanHitTarget or
-            // ValidateTarget - that silently disables three of the four abilities. The real
-            // targeting path never range-checks Self-mode abilities either.
+            // Repel, EMP burst and quick draw are self-cast (targetRequired false). Vanilla's
+            // Verb.CanHitTargetFrom returns targetParams.canTargetSelf when the target is the caster,
+            // so they need no range check; flash is location-targeted and really does have a range.
             Job job;
 
             // 1. Being swarmed in melee - break contact before anything else.
-            Ability repel = Ready(comp, MilitarmagierAbilityDefOf.DMST_Repel);
+            Ability repel = Ready(pawn, MilitarmagierAbilityDefOf.DMST_Repel);
             if (repel != null && HostilesWithin(pawn, SwarmedRadius, mechsOnly: false) >= SwarmedCount)
             {
-                job = TryCastJob(pawn, comp, repel, pawn);
+                job = repel.GetJob(pawn, pawn);
                 if (job != null)
                 {
                     return job;
@@ -103,22 +95,21 @@ namespace Militarmagier
             }
 
             // 2. A cluster of mechanoids in range of the burst.
-            Ability emp = Ready(comp, MilitarmagierAbilityDefOf.DMST_EmpBurst);
-            if (emp != null && HostilesWithin(pawn, emp.GetRadiusForPawn(), mechsOnly: true) >= EmpMechCount)
+            Ability emp = Ready(pawn, MilitarmagierAbilityDefOf.DMST_EmpBurst);
+            if (emp != null && HostilesWithin(pawn, EmpRadius(emp), mechsOnly: true) >= EmpMechCount)
             {
-                job = TryCastJob(pawn, comp, emp, pawn);
+                job = emp.GetJob(pawn, pawn);
                 if (job != null)
                 {
                     return job;
                 }
             }
 
-            // 3. Blind the target before shooting into it. Location-targeted, so this one really
-            //    does have a range and CanHitTarget is the right gate.
-            Ability flash = Ready(comp, MilitarmagierAbilityDefOf.DMST_Flash);
-            if (flash != null && flash.CanHitTarget(enemy.Position))
+            // 3. Blind the target before shooting into it.
+            Ability flash = Ready(pawn, MilitarmagierAbilityDefOf.DMST_Flash);
+            if (flash != null && flash.verb.CanHitTarget(enemy.Position))
             {
-                job = TryCastJob(pawn, comp, flash, enemy.Position);
+                job = flash.GetJob(enemy.Position, enemy.Position);
                 if (job != null)
                 {
                     return job;
@@ -127,7 +118,7 @@ namespace Militarmagier
 
             // 4. Close range, no buff up yet, and enough neural headroom left that spending it
             //    here will not cost the caster its emergency options.
-            Ability quickDraw = Ready(comp, MilitarmagierAbilityDefOf.DMST_QuickDraw);
+            Ability quickDraw = Ready(pawn, MilitarmagierAbilityDefOf.DMST_QuickDraw);
             if (quickDraw != null
                 && pawn.equipment?.Primary != null
                 && !pawn.equipment.Primary.def.IsMeleeWeapon
@@ -135,7 +126,7 @@ namespace Militarmagier
                 && pawn.Position.InHorDistOf(enemy.Position, QuickDrawRange)
                 && EntropyFraction(pawn) < QuickDrawEntropyCeiling)
             {
-                job = TryCastJob(pawn, comp, quickDraw, pawn);
+                job = quickDraw.GetJob(pawn, pawn);
                 if (job != null)
                 {
                     return job;
@@ -149,79 +140,41 @@ namespace Militarmagier
         private static float EntropyFraction(Pawn pawn)
         {
             Pawn_PsychicEntropyTracker tracker = pawn.psychicEntropy;
-            if (tracker == null)
-            {
-                return 1f;
-            }
-
             float max = tracker.MaxEntropy;
             return max <= 0f ? 1f : tracker.EntropyValue / max;
         }
 
-        /// <summary>The pawn's copy of <paramref name="def"/> if it is off cooldown and otherwise castable.</summary>
-        private static Ability Ready(CompAbilities comp, AbilityDef def)
+        private static float EmpRadius(Ability emp)
         {
-            if (def == null)
+            return emp.CompOfType<CompAbilityEffect_EmpBurst>()?.Props.radius ?? 0f;
+        }
+
+        /// <summary>
+        /// The pawn's copy of <paramref name="def"/> if it can be cast right now, else null.
+        ///
+        /// Ability.GizmoDisabled cannot be used here: it refuses every undrafted pawn, and raiders are
+        /// never drafted. CanCast covers comps (including the camouflage apparel check), cooldown, the
+        /// psylink level and entropy overflow - but once a psycast has an entropy cost, Psycast.CanCast
+        /// stops there, so the psyfocus cost and the psyfocus band limit are checked by hand.
+        /// </summary>
+        private static Ability Ready(Pawn pawn, AbilityDef def)
+        {
+            Ability ability = pawn.abilities.GetAbility(def);
+            if (ability == null || !ability.CanCast)
             {
                 return null;
             }
 
-            List<Ability> abilities = comp.LearnedAbilities;
-            for (int i = 0; i < abilities.Count; i++)
+            Pawn_PsychicEntropyTracker tracker = pawn.psychicEntropy;
+            if (def.PsyfocusCost > tracker.CurrentPsyfocus + PsyfocusCostTolerance)
             {
-                Ability ability = abilities[i];
-                if (ability?.def != def)
-                {
-                    continue;
-                }
-                // IsEnabledForPawn covers the cooldown and the psycast extension's own
-                // psyfocus / entropy checks, so an exhausted magier will not try to cast.
-                return ability.IsEnabledForPawn(out _) ? ability : null;
+                return null;
             }
-            return null;
-        }
-
-        /// <summary>
-        /// Builds the same job VEF's <c>Ability.StartAbilityJob</c> would, after running the same
-        /// validation <c>Ability.CreateCastJob</c> runs. Returns null if the cast is refused.
-        ///
-        /// Two deliberate divergences from VEF's own path:
-        ///
-        /// * <c>EndCurrentJob</c> is not called. The think tree is already partway through
-        ///   choosing the next job; ending the current one here would re-enter the job tracker.
-        /// * <c>PreCast</c> is not called. Its contract hands the extension a callback to start
-        ///   the job later, which a think node cannot honour - it must return a job now or
-        ///   nothing. None of the four abilities driven here use a PreCast extension
-        ///   (AbilityExtension_Psycast does not override it), so nothing is lost; if a future
-        ///   ability needs one, it belongs on VEF's normal casting path instead of in here.
-        /// </summary>
-        private static Job TryCastJob(Pawn pawn, CompAbilities comp, Ability ability, LocalTargetInfo target)
-        {
-            GlobalTargetInfo[] targets = { target.ToGlobalTargetInfo(pawn.Map) };
-            ability.ModifyTargets(ref targets);
-
-            // The gate CreateCastJob applies before it will start a cast. AbilityExtension_Psycast
-            // re-checks psyfocus, entropy overflow, psychic sensitivity and whether the caster is
-            // already channelling, so anything that squeaked past the cheap Ready() filter is
-            // caught here. throwMessages stays false: an AI decision must never put a rejection
-            // message on the player's screen.
-            List<AbilityExtension_AbilityMod> extensions = ability.AbilityModExtensions;
-            for (int i = 0; i < extensions.Count; i++)
+            if (def.level > tracker.MaxAbilityLevel)
             {
-                if (!extensions[i].Valid(targets, ability, false))
-                {
-                    return null;
-                }
+                return null;
             }
-
-            // VEF tracks the in-flight cast on the comp rather than on the Job, so it has to be
-            // staged before the job is handed back.
-            comp.currentlyCasting = ability;
-            comp.currentlyCastingTargets = targets;
-
-            Job job = JobMaker.MakeJob(ability.def.jobDef ?? MilitarmagierDefOf.VFEA_UseAbility, target);
-            job.checkOverrideOnExpire = true;
-            return job;
+            return ability;
         }
 
         /// <summary>Counts live hostiles within <paramref name="radius"/> of the caster.</summary>

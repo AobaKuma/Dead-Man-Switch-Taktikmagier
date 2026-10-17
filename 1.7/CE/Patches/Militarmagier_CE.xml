@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_Flash"]/verbProperties/range</xpath>
+		<value>
+			<range>15</range>
+		</value>
+</Operation>
+
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_Repel"]/comps/li[@Class="Militarmagier.CompProperties_AbilityRepel"]/radius</xpath>
+		<value>
+			<radius>8</radius>
+		</value>
+</Operation>
+
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_Swap"]/verbProperties/range</xpath>
+		<value>
+			<range>24</range>
+		</value>
+</Operation>
+
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_ConstructTurret" or defName="DMST_ConstructPawn"]/verbProperties/range</xpath>
+		<value>
+			<range>12</range>
+		</value>
+</Operation>
+
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_EmpBurst"]/cooldownTicksRange</xpath>
+		<value>
+			<cooldownTicksRange>5400</cooldownTicksRange>
+		</value>
+</Operation>
+
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_EmpBurst"]/statBases/Ability_PsyfocusCost</xpath>
+		<value>
+			<Ability_PsyfocusCost>0.07</Ability_PsyfocusCost>
+		</value>
+</Operation>
+
+<!--
+	Carried over unchanged from the VPE version (30). The non-CE value is now 20 on vanilla's heat
+	scale, so CE's surcharge is +50% where it used to be +200%; revisit when balancing.
+-->
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_EmpBurst"]/statBases/Ability_EntropyGain</xpath>
+		<value>
+			<Ability_EntropyGain>30</Ability_EntropyGain>
+		</value>
+</Operation>
+
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_Demolish"]/verbProperties/range</xpath>
+		<value>
+			<range>17.5</range>
+		</value>
+</Operation>
+
+<!--
+	Field aid was the one ability left on its vanilla range while every other one here was
+	stretched for CE's longer engagement distances (flash 10.9->15, transposition 18.9->24,
+	both constructs 8.9->12, demolish 10.9->17.5). At 3.9 the caster has to stand practically
+	on top of a casualty, which in CE means standing in the same fire that put them down.
+-->
+<Operation Class="PatchOperationReplace">
+		<xpath>Defs/AbilityDef[defName="DMST_FieldAid"]/verbProperties/range</xpath>
+		<value>
+			<range>6</range>
+		</value>
+</Operation>
+
+</Patch>
