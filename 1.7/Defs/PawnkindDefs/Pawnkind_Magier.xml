@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    Three seniority tiers of the same career. What separates them is how far up the
+    Militaermagier path they got, not what they do:
+
+      Adept        psylink 2, spell levels 1-2   - the fundamentals only, no cloak, no constructs
+      Taktikmagier psylink 4, spell levels 1-4   - the standard line magier
+      Veteran      psylink 6, spell levels 1-5   - reaches force wake and demolish
+
+    Militarmagier.MagierKindExtension raises the psylink to psylinkLevel (without vanilla's random
+    psycast per level) and draws spellCountRange spells from the DMST spells whose level falls in
+    spellLevelRange. The count is capped by how many qualify. The path has five levels, so anything
+    capped at 1~4 can never roll force wake or demolish.
+
+    backstoryCategories is declared here rather than inherited: DMS_SoldierBase supplies
+    FleetChild / Mili_Standard / Mili_Expert, none of which contain this mod's backstories.
+    Without this the DMST_Magier category is orphaned and never spawns - see BackstoriesDefs.xml.
+  -->
+  <PawnKindDef Name="DMST_MagierBase" ParentName="DMS_SoldierBase" Abstract="True">
+    <backstoryCategories Inherit="False">
+      <li>DMST_Magier</li>
+      <li>FleetChild</li>
+    </backstoryCategories>
+    <apparelTags>
+      <li>DMST_Magier</li>
+    </apparelTags>
+    <weaponTags>
+      <li>A_AR_LongRifle</li>
+    </weaponTags>
+    <immuneToTraps>true</immuneToTraps>
+    <canOpenAnyDoor>true</canOpenAnyDoor>
+    <aiAvoidCover>false</aiAvoidCover>
+    <humanPregnancyChance>0.45</humanPregnancyChance>
+    <fixedGender>Female</fixedGender>
+    <specificApparelRequirements>
+      <li>
+        <colorGenerator Class="ColorGenerator_Options">
+          <options>
+            <li>
+              <only>(90, 100, 90)</only>
+            </li>
+          </options>
+        </colorGenerator>
+      </li>
+      <li>
+        <bodyPartGroup>Torso</bodyPartGroup>
+        <apparelLayer>Middle</apparelLayer>
+        <stuff>DMS_Ceramics</stuff>
+      </li>
+      <li>
+        <bodyPartGroup>UpperHead</bodyPartGroup>
+        <apparelLayer>Overhead</apparelLayer>
+        <stuff>Plasteel</stuff>
+        <color>(90,100,90)</color>
+      </li>
+    </specificApparelRequirements>
+  </PawnKindDef>
+
+  <!--
+    Adept - still being trained. No magier cloak, which means no psychic camouflage at all
+    (the ability is granted by the cloak and gated on the helmet+cloak set), and the tree cap
+    of 1~2 keeps her off constructs entirely.
+  -->
+  <PawnKindDef ParentName="DMST_MagierBase">
+    <defName>DMST_Magier_Adept</defName>
+    <label>magier adept</label>
+    <combatPower>70</combatPower>
+    <apparelRequired>
+      <li>DMS_Apparel_Gunlink</li>
+      <li>DMST_Apparel_MagierHelmet</li>
+      <li>DMS_Apparel_TacticalVest</li>
+    </apparelRequired>
+    <!--
+      Standard garrison kit rather than the magier apparel pool. The base's DMST_Magier tag
+      would let apparelMoney roll her a magier cloak, and the cloak is what grants psychic
+      camouflage - an adept is not supposed to have it at all.
+    -->
+    <apparelTags Inherit="False">
+      <li>DMS_Garrison</li>
+    </apparelTags>
+    <weaponMoney>1200~2500</weaponMoney>
+    <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_Corporal</titleRequired>
+    <techHediffsChance>0.01</techHediffsChance>
+    <maxGenerationAge>21</maxGenerationAge>
+    <skills>
+      <li>
+        <skill>Shooting</skill>
+        <range>5~10</range>
+      </li>
+      <li>
+        <skill>Melee</skill>
+        <range>5~10</range>
+      </li>
+    </skills>
+    <modExtensions>
+      <li Class="Militarmagier.MagierKindExtension">
+        <psylinkLevel>2</psylinkLevel>
+        <spellLevelRange>1~2</spellLevelRange>
+        <spellCountRange>1~3</spellCountRange>
+      </li>
+    </modExtensions>
+  </PawnKindDef>
+
+  <!-- Tactical magier - the standard line magier this mod is named for. -->
+  <PawnKindDef ParentName="DMST_MagierBase">
+    <defName>DMST_Taktikmagier</defName>
+    <label>tactical magier</label>
+    <apparelRequired>
+      <li>DMS_Apparel_Gunlink</li>
+      <li>DMST_Apparel_MagierHelmet</li>
+      <li>DMS_Apparel_StealthMask</li>
+      <li>DMS_Apparel_PowerSkeleton</li>
+      <li>DMST_Apparel_MagierCloak</li>
+      <li>DMS_Apparel_TacticalVest</li>
+    </apparelRequired>
+    <weaponMoney>2500~5000</weaponMoney>
+    <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_WarrantOfficer</titleRequired>
+    <maxGenerationAge>24</maxGenerationAge>
+    <skills>
+      <li>
+        <skill>Shooting</skill>
+        <range>8~16</range>
+      </li>
+      <li>
+        <skill>Melee</skill>
+        <range>8~16</range>
+      </li>
+    </skills>
+    <modExtensions>
+      <li Class="Militarmagier.MagierKindExtension">
+        <psylinkLevel>4</psylinkLevel>
+        <spellLevelRange>1~4</spellLevelRange>
+        <spellCountRange>2~10</spellCountRange>
+      </li>
+    </modExtensions>
+  </PawnKindDef>
+
+  <!--
+    Veteran - the only tier that reaches tree level 5, so the only one that can roll force wake
+    and demolish. Worth treating as a priority target.
+  -->
+  <PawnKindDef ParentName="DMST_MagierBase">
+    <defName>DMST_Magier_Veteran</defName>
+    <label>senior magier</label>
+    <combatPower>140</combatPower>
+    <apparelRequired>
+      <li>DMS_Apparel_Gunlink</li>
+      <li>DMST_Apparel_MagierHelmet</li>
+      <li>DMS_Apparel_StealthMask</li>
+      <li>DMS_Apparel_PowerSkeleton</li>
+      <li>DMST_Apparel_MagierCloak</li>
+      <li>DMS_Apparel_TacticalVest</li>
+    </apparelRequired>
+    <apparelMoney>2000~4500</apparelMoney>
+    <weaponMoney>4000~8000</weaponMoney>
+    <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_Lieutenant</titleRequired>
+    <techHediffsChance>0.15</techHediffsChance>
+    <gearHealthRange>0.9~2</gearHealthRange>
+    <minGenerationAge>28</minGenerationAge>
+    <maxGenerationAge>52</maxGenerationAge>
+    <skills>
+      <li>
+        <skill>Shooting</skill>
+        <range>14~20</range>
+      </li>
+      <li>
+        <skill>Melee</skill>
+        <range>12~18</range>
+      </li>
+      <li>
+        <skill>Intellectual</skill>
+        <range>8~16</range>
+      </li>
+    </skills>
+    <modExtensions>
+      <li Class="Militarmagier.MagierKindExtension">
+        <psylinkLevel>6</psylinkLevel>
+        <spellLevelRange>1~5</spellLevelRange>
+        <spellCountRange>6~14</spellCountRange>
+      </li>
+    </modExtensions>
+  </PawnKindDef>
+
+</Defs>

@@ -7,4 +7,15 @@
 	<!-- {0} = label of the missing apparel piece, e.g. "magier helmet" -->
 	<DMST_CamouflageNeedsApparel>Requires {0} to be worn.</DMST_CamouflageNeedsApparel>
 
+	<!-- {0} = neural heat limit the construct would occupy -->
+	<DMST_ConstructNoCapacity>Not enough neural heat capacity: this construct would occupy {0}.</DMST_ConstructNoCapacity>
+
+	<DMST_BreakLink>Break link</DMST_BreakLink>
+	<DMST_BreakLinkDesc>Release this construct. {CASTER_labelShort} gets back the neural heat capacity it occupies.</DMST_BreakLinkDesc>
+
+	<!-- Line in the neural heat limit stat breakdown -->
+	<DMST_SustainedConstructsStat>Sustained constructs</DMST_SustainedConstructsStat>
+
+	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort} is not psychically sensitive.</DMST_TargetPsychicallyDeaf>
+
 </LanguageData>

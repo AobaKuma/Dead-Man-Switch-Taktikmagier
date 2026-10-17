@@ -1,21 +1,19 @@
 using RimWorld;
 using System.Collections.Generic;
 using System.Text;
-using System;
 using Verse;
 
 namespace Militarmagier
 {
     /// <summary>
-    /// Tracks the non-pawn constructs (turrets) this psycaster is sustaining and converts them
-    /// into a minimum psychic entropy floor.
+    /// Tracks every construct (turrets and construct pawns alike) this psycaster is sustaining.
     ///
-    /// Construct *pawns* deliberately do NOT go through this hediff. VPE's
-    /// <c>Pawn_Construct</c> already implements <c>IMinHeatGiver</c> and
-    /// <c>CompBreakLink.PostSpawnSetup</c> registers it with the caster's
-    /// <c>Hediff_PsycastAbilities</c>; routing them through here as well would apply the same
-    /// stat offset twice from two different hediffs. See
-    /// <see cref="AbilityExtension_ConstructPawn"/>.
+    /// The hediff itself only keeps the books. The cost is applied by
+    /// <see cref="StatPart_SustainedConstructs"/>, which lowers the caster's neural heat limit by
+    /// <see cref="TotalHeat"/>. A stat part rather than a stage offset because the psylink scales
+    /// PsychicEntropyMax with stage *factors*: an offset here would be multiplied by the psylink level
+    /// and psychic sensitivity, so a construct would cost a level 4 caster more than twice what the
+    /// def says. Stat parts run after the factors, so the def value is what gets charged.
     /// </summary>
     public class Hediff_Focus : HediffWithComps
     {
@@ -24,20 +22,7 @@ namespace Militarmagier
 
         public List<Thing> heatGivers = new List<Thing>();
 
-        private HediffStage cachedStage;
         private int pruneCounter;
-
-        public override HediffStage CurStage
-        {
-            get
-            {
-                if (cachedStage == null)
-                {
-                    RecacheCurStage();
-                }
-                return cachedStage;
-            }
-        }
 
         /// <summary>
         /// The hediff exists only to represent live constructs; with none left it is noise.
@@ -60,6 +45,23 @@ namespace Militarmagier
         }
 
         public override string Description => base.Description + CostBreakdown();
+
+        /// <summary>The caster's focus hediff, or null if they are sustaining nothing.</summary>
+        public static Hediff_Focus Of(Pawn caster)
+        {
+            return caster?.health?.hediffSet?.GetFirstHediffOfDef(MilitarmagierDefOf.DMST_PsycastFocus) as Hediff_Focus;
+        }
+
+        public static Hediff_Focus GetOrAdd(Pawn caster)
+        {
+            return Of(caster) ?? (Hediff_Focus)caster.health.AddHediff(MilitarmagierDefOf.DMST_PsycastFocus);
+        }
+
+        /// <summary>Total heat capacity <paramref name="caster"/>'s constructs occupy; 0 if none.</summary>
+        public static int SustainedHeat(Pawn caster)
+        {
+            return Of(caster)?.TotalHeat ?? 0;
+        }
 
         private string CostBreakdown()
         {
@@ -93,7 +95,7 @@ namespace Militarmagier
                 return;
             }
             heatGivers.Add(thing);
-            RecacheCurStage();
+            NotifyChanged();
         }
 
         /// <summary>Drops constructs that are gone. Returns true if anything was removed.</summary>
@@ -102,20 +104,9 @@ namespace Militarmagier
             return heatGivers.RemoveAll(t => t == null || t.Destroyed || !t.Spawned) > 0;
         }
 
-        public void RecacheCurStage()
+        /// <summary>Tells the health tracker the heat limit moved, so cached stats and the UI catch up.</summary>
+        private void NotifyChanged()
         {
-            cachedStage = new HediffStage
-            {
-                statOffsets = new List<StatModifier>
-                {
-                    new StatModifier
-                    {
-                        stat = MilitarmagierDefOf.VPE_PsychicEntropyMinimum,
-                        value = TotalHeat
-                    }
-                }
-            };
-
             if (pawn != null && pawn.Spawned)
             {
                 pawn.health.Notify_HediffChanged(this);
@@ -135,7 +126,7 @@ namespace Militarmagier
 
             if (Prune())
             {
-                RecacheCurStage();
+                NotifyChanged();
             }
         }
 
@@ -149,7 +140,6 @@ namespace Militarmagier
                 heatGivers ??= new List<Thing>();
                 // Constructs destroyed before the save cannot be resolved and come back as nulls.
                 heatGivers.RemoveAll(t => t == null || t.Destroyed);
-                RecacheCurStage();
             }
         }
     }

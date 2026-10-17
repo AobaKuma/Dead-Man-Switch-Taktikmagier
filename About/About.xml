@@ -4,31 +4,37 @@
 	<modIconPath IgnoreIfNoMatchingField="True">UI/NaraLogo</modIconPath>
   	<author>AobaKuma ,Bill Doors, KV4EX</author>
 	<!--
-		1.5 is deliberately not listed. LoadFolders.xml only declares a <v1.6> node, and when a
-		LoadFolders.xml exists but has no entry for the running version RimWorld loads nothing at
-		all from the mod - not even the root folder. Re-adding 1.5 here requires a <v1.5> node in
-		LoadFolders.xml and a 1.5/ folder with its own Assemblies build.
+		1.7 only, same as DMS 2. DMS 2's LoadFolders.xml has no 1.6 node, so on 1.6 the core mod
+		loads nothing and this mod's defs (which inherit DMS bases) would have nothing to stand on.
+
+		Royalty is required: magier spells are vanilla psycasts, and Psycast.Activate refuses to run
+		without Royalty (ModLister.CheckRoyalty). Neural heat also needs Royalty's PsychicEntropy hediff.
 	-->
-    <supportedVersions>
-		<li>1.6</li>
+	<supportedVersions>
+		<li>1.7</li>
 	</supportedVersions>
 	<packageId>Aoba.DeadManSwitch.Taktikmagier</packageId>
-    <modDependencies>
-        <li>
+	<modDependencies>
+		<li>
+			<packageId>brrainz.harmony</packageId>
+			<displayName>Harmony</displayName>
+			<steamWorkshopUrl>https://steamcommunity.com/workshop/filedetails/?id=2009463077</steamWorkshopUrl>
+			<downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+		</li>
+		<li>
+			<packageId>ludeon.rimworld.royalty</packageId>
+			<displayName>Royalty</displayName>
+		</li>
+		<li>
 			<packageId>Aoba.DeadManSwitch.Core</packageId>
 			<steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3121742525</steamWorkshopUrl>
 			<displayName>Dead Man Switch</displayName>
-		</li>		
-		<li>
-			<packageId>VanillaExpanded.VPsycastsE</packageId>
-			<displayName>Vanilla Psycasts Expanded</displayName>
-			<steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2842502659</steamWorkshopUrl>
 		</li>
 	</modDependencies>
 	<loadAfter>
-		<li>Aoba.DeadManSwitch.Core</li>
 		<li>brrainz.harmony</li>
-		<li>VanillaExpanded.VPsycastsE</li>
+		<li>AOBA.Framework</li>
+		<li>Aoba.DeadManSwitch.Core</li>
 		<li>vanillaexpanded.achievements</li>
   	</loadAfter>
 	<description>Millennia earlier, as the threat of archotech war machines, pirates and awry bio-organic weapons arise. Nara Industries initiated a project of semi-automated war-machines, which aimed at creating a legion of war-machines with low technology and maintenance requirements to aid humans in all galaxy to the war against all those threats.</description>

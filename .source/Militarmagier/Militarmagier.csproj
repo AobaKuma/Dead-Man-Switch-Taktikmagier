@@ -1,79 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    只建置 RimWorld 1.7（.NET 10 / Waylith）→ 1.7/Assemblies，與 DMS 2 一致。
+    1.7 沒有參考組件套件，直接參考遊戲本體的 DLL；預設假設本模組位於 <RimWorld>/Mods/<模組>/，
+    遊戲裝在別處時以 -p:RimWorldDir=<遊戲目錄>\ 覆寫。不再參考 VPE／VEF。
+    Builds RimWorld 1.7 only (.NET 10 / Waylith) into 1.7/Assemblies, matching DMS 2.
+    1.7 has no reference-assembly package, so the game's own DLLs are referenced; override the game path
+    with -p:RimWorldDir=<game dir>\ when the mod is not under <RimWorld>/Mods/<mod>/. VPE and VEF are no
+    longer referenced.
+  -->
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DAD38E4D-7C64-49BE-9DF5-6F9E9503AA0C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>Militarmagier</RootNamespace>
     <AssemblyName>Militarmagier</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <LangVersion>10.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
+    <!-- Properties/AssemblyInfo.cs 已提供組件屬性。Properties/AssemblyInfo.cs already supplies the assembly attributes. -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DebugType>none</DebugType>
+    <!-- 遊戲只載入 Assemblies 內的 .dll，不需要 deps.json。The game only loads the .dll, so no deps.json. -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <RimWorldDir Condition="'$(RimWorldDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\..\</RimWorldDir>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\1.7\Assemblies\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9.0</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9.0</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="AbilityExtension_Calm.cs" />
-    <Compile Include="AbilityExtension_Construct.cs" />
-    <Compile Include="AbilityExtension_ConstructBase.cs" />
-    <Compile Include="AbilityExtension_ConstructPawn.cs" />
-    <Compile Include="CompAbilityEffect_RequireApparel.cs" />
-    <Compile Include="ConstructHeatExtension.cs" />
-    <Compile Include="JobGiver_TaktikmagierCombat.cs" />
-    <Compile Include="AbilityExtension_Destroy.cs" />
-    <Compile Include="AbilityExtension_Heal.cs" />
-    <Compile Include="Ability_Flash.cs" />
-    <Compile Include="Ability_Repel.cs" />
-    <Compile Include="Ability_Swap.cs" />
-    <Compile Include="Hediff_Focus.cs" />
-    <Compile Include="MilitarmagierDefOf.cs" />
-    <Compile Include="Pawn_ConstructWeaponUsable.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Assembly-CSharp, Version=1.5.9214.33606, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    <!-- 與 Harmony 模組 1.7 資料夾內的 0Harmony.dll 相同版本（做法同 FFF）。Same version as the Harmony mod's 1.7 0Harmony.dll (as FFF does). -->
+    <PackageReference Include="Lib.Harmony" Version="3.0.0-rc.2" ExcludeAssets="runtime" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(RimWorldDir)Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <!-- 1.7 的 UnityEngine.* 型別全部由 UnityStubs 提供。In 1.7 every UnityEngine.* type comes from UnityStubs. -->
+    <Reference Include="UnityStubs">
+      <HintPath>$(RimWorldDir)UnityStubs.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Waylith">
+      <HintPath>$(RimWorldDir)Waylith.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Fortified">
-      <HintPath>..\..\..\_Fortified-Framework\1.6\Assemblies\Fortified.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="VanillaPsycastsExpanded, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\workshop\content\294100\2842502659\1.6\Assemblies\VanillaPsycastsExpanded.dll</HintPath>
-    </Reference>
-    <Reference Include="VEF">
-      <HintPath>..\..\..\..\..\..\workshop\content\294100\2023507013\1.6\Assemblies\VEF.dll</HintPath>
+      <HintPath>$(MSBuildThisFileDirectory)..\..\..\_Fortified-Framework\1.7\Assemblies\Fortified.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
