@@ -5,12 +5,13 @@
 		The broom: DMS's anti-materiel rifle rebuilt for magiers. The same bullet, range and accuracy as
 		DMS_AntiMaterialRifle, quicker to aim and cycle, and two magier additions:
 
-		  psychic lift   Militarmagier.PsychicLiftExtension, which is also its FFF heavy-weapon extension.
-		                 The wielder must pass StandardAutomatroid (exoskeleton, synthetic arm, ...) or be
-		                 psychically sensitive. Mass (13 kg) and the move-speed penalty (-0.15) are divided
-		                 by 1 + the holder's psychic sensitivity, by the stat parts in
-		                 Patches/Stat_PsychicLift.xml. The penalty is the extension's moveSpeedOffset, not
-		                 equippedStatOffsets, so that it can scale.
+		  psychic lift   Militarmagier.PsychicLiftExtension. Only a psycaster - a psylink and psychic
+		                 sensitivity above zero - can wield it (Militarmagier.Patch_EquipmentUtility_CanEquip);
+		                 unlike the AMR it has no FFF heavy-weapon extension, so an exoskeleton or an
+		                 automatroid frame does not qualify. For a psycaster holder, mass (13 kg) and the
+		                 move-speed penalty (-0.15) are divided by 1 + their psychic sensitivity, by the stat
+		                 parts in Patches/Stat_PsychicLift.xml. The penalty is the extension's
+		                 moveSpeedOffset, not equippedStatOffsets, so that it can scale.
 		  broom flight   DMST_BroomFlight below, given to whoever wields it by CompEquippableAbility.
 
 		Crafted after the class II sealed file "artificial psychic circuitry", like the sigil. Senior
@@ -23,7 +24,7 @@
 	<ThingDef ParentName="DMS_AutomatroidGun">
 		<defName>DMST_MagierBroom</defName>
 		<label>broom</label>
-		<description>An anti-materiel rifle converted from the standard-issue Mech Semiauto Rifle. It is more practical than the tactical brooms magiers use in training; its one shortcoming is that it cannot sweep the floor. Forged from tungsteel alloy and psychic matter, it is engraved with precise sigils that turn psychic power into repulsion. Passively they use psychic power to lighten the rifle, and when actively triggered they can even carry the wielder on a long flight.\n\n&lt;color=#E5E54C&gt;Gameplay effect:&lt;/color&gt; usable by automatroids, by anyone fitted to carry automatroid weapons, and by anyone with psychic sensitivity. Its mass and movement penalty are divided by 1 + the holder's psychic sensitivity. The wielder gains the psycast "broom flight", which needs no psylink.</description>
+		<description>An anti-materiel rifle converted from the standard-issue Mech Semiauto Rifle. It is more practical than the tactical brooms magiers use in training; its one shortcoming is that it cannot sweep the floor. Forged from tungsteel alloy and psychic matter, it is engraved with precise sigils that turn psychic power into repulsion. Passively they use psychic power to lighten the rifle, and when actively triggered they can even carry the wielder on a long flight.\n\n&lt;color=#E5E54C&gt;Gameplay effect:&lt;/color&gt; only psycasters (a psylink and psychic sensitivity) can wield it. In a psycaster's hands its mass and movement penalty are divided by 1 + their psychic sensitivity. The wielder gains the psycast "broom flight".</description>
 		<descriptionHyperlinks>
 			<AbilityDef>DMST_BroomFlight</AbilityDef>
 		</descriptionHyperlinks>
@@ -40,6 +41,12 @@
 			<texPath>Item/DMS_MageBroom</texPath>
 			<drawSize>1.5</drawSize>
 		</graphicData>
+		<!--
+			The texture is drawn diagonally, muzzle to the top right. PawnRenderUtility.DrawEquipmentAiming
+			adds this angle clockwise (and mirrors it when aiming left), so the rifle lies level in the
+			hands like the horizontally drawn DMS guns. On the ground and in icons it stays diagonal.
+		-->
+		<equippedAngleOffset>45</equippedAngleOffset>
 		<soundInteract>Interact_Rifle</soundInteract>
 		<statBases>
 			<WorkToMake>60000</WorkToMake>
@@ -102,7 +109,6 @@
 				<isAlternately>true</isAlternately>
 			</li>
 			<li Class="Militarmagier.PsychicLiftExtension">
-				<EquippableDef>StandardAutomatroid</EquippableDef>
 				<moveSpeedOffset>-0.15</moveSpeedOffset>
 			</li>
 		</modExtensions>
@@ -110,8 +116,8 @@
 
 	<!--
 		The broom's flight: vanilla's longjump (Verb_CastAbilityJump, CastJump job), cast as a psycast.
-		Level 0, so no psylink is needed - only psychic sensitivity, which the psycast gizmo already
-		checks - and neural heat is the only cost (a psycast with heat skips the psyfocus check).
+		Level 0, so any psylink level casts it; only psycasters can wield the broom in the first place.
+		Neural heat is the only cost (a psycast with heat skips the psyfocus check).
 		NoPsytrainerExtension keeps vanilla from making a psytrainer for it.
 	-->
 	<AbilityDef ParentName="PsycastBase">

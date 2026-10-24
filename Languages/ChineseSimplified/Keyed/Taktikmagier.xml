@@ -18,7 +18,7 @@
 
 	<!-- 扫帚。重量与移动惩罚减轻时的属性明细行，以及无法持用时的原因 -->
 	<DMST_PsychicLiftStat>灵能减重</DMST_PsychicLiftStat>
-	<DMST_PsychicLiftCannotEquip>没有心灵敏感度或力量强化，太重而无法持用</DMST_PsychicLiftCannotEquip>
+	<DMST_PsychicLiftCannotEquip>只有灵能者（拥有心灵连结且具备心灵敏感度）才能持用</DMST_PsychicLiftCannotEquip>
 
 	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort}没有心灵敏感度。</DMST_TargetPsychicallyDeaf>
 
@@ -39,5 +39,10 @@
 	<DMST_MagierRevealedLabel>军术士现形</DMST_MagierRevealedLabel>
 	<DMST_MagierRevealedDesc>一名隐身的敌方军术士{PAWN_labelShort}凭空出现了！</DMST_MagierRevealedDesc>
 	<DMST_MagierRevealedMessage>隐身的军术士现形了：{PAWN_labelShort}。</DMST_MagierRevealedMessage>
+
+	<!-- 玩家方穿戴者的迷彩与心灵熵。{PAWN} = 穿戴者；Desc 行中的 {1}、{0} 为心灵熵上限的百分比，HeatDesc 的 {0} 为每秒心灵熵 -->
+	<DMST_CamouflageOverheated>{PAWN_labelShort}的心灵熵过高，无法维持灵能迷彩。在心灵熵降到 {1} 以下之前，迷彩都不会展开。</DMST_CamouflageOverheated>
+	<DMST_CamouflageOverheatedDesc>过热：在心灵熵降到上限的 {0} 以下之前，迷彩都不会展开。</DMST_CamouflageOverheatedDesc>
+	<DMST_CamouflageHeatDesc>躯干上的其他衣物使隐身时每秒积蓄 {0} 心灵熵。达到上限的 {1} 时迷彩会失效。</DMST_CamouflageHeatDesc>
 
 </LanguageData>

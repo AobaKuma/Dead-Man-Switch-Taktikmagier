@@ -18,7 +18,7 @@
 
 	<!-- The broom. The stat breakdown line for its lighter mass and move-speed penalty, and why someone cannot wield it -->
 	<DMST_PsychicLiftStat>Psychic lift</DMST_PsychicLiftStat>
-	<DMST_PsychicLiftCannotEquip>too heavy to wield without psychic sensitivity or a strength augment</DMST_PsychicLiftCannotEquip>
+	<DMST_PsychicLiftCannotEquip>only a psycaster (a psylink and psychic sensitivity) can wield it</DMST_PsychicLiftCannotEquip>
 
 	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort} is not psychically sensitive.</DMST_TargetPsychicallyDeaf>
 
@@ -39,5 +39,10 @@
 	<DMST_MagierRevealedLabel>Magier revealed</DMST_MagierRevealedLabel>
 	<DMST_MagierRevealedDesc>{PAWN_labelShort}, a cloaked enemy magier, has appeared out of thin air!</DMST_MagierRevealedDesc>
 	<DMST_MagierRevealedMessage>A cloaked magier has appeared: {PAWN_labelShort}.</DMST_MagierRevealedMessage>
+
+	<!-- A player wearer's camouflage and neural heat. {PAWN} = the wearer; {1} and {0} in the Desc lines are percentages of the heat limit, {0} in HeatDesc is heat per second -->
+	<DMST_CamouflageOverheated>{PAWN_labelShort}'s neural heat is too high to hold the psychic camouflage. It stays down until the heat falls below {1}.</DMST_CamouflageOverheated>
+	<DMST_CamouflageOverheatedDesc>Overheated: the camouflage stays down until neural heat falls below {0} of the limit.</DMST_CamouflageOverheatedDesc>
+	<DMST_CamouflageHeatDesc>Other clothing on the torso makes hiding build up {0} neural heat per second. The camouflage fails at {1} of the limit.</DMST_CamouflageHeatDesc>
 
 </LanguageData>

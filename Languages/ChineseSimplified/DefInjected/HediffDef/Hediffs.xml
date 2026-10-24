@@ -24,6 +24,6 @@
 	<DMST_MagierSigil.description>一种通过超凡力量来驱动的植入物，通过超凡力量系结着施法者潜意识中最安全的地方，使其在失去意识及邻近死亡时产生一个空间折叠场来回避危险。为了让伴随部队的非施法者成员能识别因此会在身体表面纹上明显的印记。\n\n&lt;color=#E5E54C&gt;游戏效果：&lt;/color&gt;持有者倒地时有 80% 几率为其止血包扎并传送——玩家阵营传送到殖民地的床边，其他阵营则离开地图。持有者死亡时，遗体也会以同样方式传送。囚犯、奴隶或麻醉中不会触发。</DMST_MagierSigil.description>
 
 	<DMST_MagierCamouflage.label>灵能迷彩</DMST_MagierCamouflage.label>
-	<DMST_MagierCamouflage.description>通过军术士斗篷的编织，以灵能驱动的拟态迷彩。它会一直维持到被敌人发现为止——清醒、够近且视线无阻的敌人就能识破它，光线越亮越容易——之后需要一段时间才能重新展开。近身战斗一定会暴露位置，射击则有时会。必须同时穿戴军术士头盔与军术士斗篷，任何一件都无法单独维持迷彩场。</DMST_MagierCamouflage.description>
+	<DMST_MagierCamouflage.description>通过军术士斗篷的编织，以灵能驱动的拟态迷彩，需与军术士头盔一同维持。警觉的敌人或交战都可能使穿戴者暴露。隔着其他衣物驱动迷彩场会加重心灵负担，心灵过热时便无法维持。</DMST_MagierCamouflage.description>
 
 </LanguageData>

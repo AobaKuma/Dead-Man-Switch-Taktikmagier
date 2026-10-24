@@ -1,4 +1,3 @@
-using Fortified;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -6,29 +5,35 @@ using Verse;
 namespace Militarmagier
 {
     /// <summary>
-    /// The broom's heavy-weapon rule and its psychic lift.
+    /// The broom's psychic lift, and its rule that only a psycaster can wield it.
     ///
-    /// A subclass of FFF's extension, which FFF finds through GetModExtension&lt;HeavyEquippableExtension&gt;,
-    /// so its EquippableDef still lets automatroids (and whatever else that def allows) wield it.
-    /// <see cref="Patch_HeavyEquippableExtension_CanEquippedBy"/> adds anyone psychically sensitive.
+    /// <see cref="Patch_EquipmentUtility_CanEquip"/> refuses anyone who cannot lift it: no psylink, or no
+    /// psychic sensitivity to drive the sigils with. Nothing else qualifies - not an exoskeleton, not an
+    /// automatroid frame - which is why this is not FFF's HeavyEquippableExtension, whose rules would let
+    /// those through.
     ///
     /// The lift divides the weapon's mass (<see cref="StatPart_PsychicLiftMass"/>) and its wielder's
     /// move-speed penalty (<see cref="StatPart_PsychicLiftMoveSpeed"/>) by 1 + the holder's psychic
-    /// sensitivity: full weight on the ground or for a psychically deaf holder, half at 100%, a third at
-    /// 200%.
+    /// sensitivity, when the holder can lift it: half at 100%, a third at 200%. On the ground, or with
+    /// anyone else carrying it, it weighs its full mass.
     /// </summary>
-    public class PsychicLiftExtension : HeavyEquippableExtension
+    public class PsychicLiftExtension : DefModExtension
     {
         /// <summary>MoveSpeed offset while wielded, before the lift. Used instead of equippedStatOffsets so it can scale.</summary>
         public float moveSpeedOffset;
 
         public static bool CanLift(Pawn pawn)
         {
-            return pawn.RaceProps.Humanlike && pawn.GetStatValue(StatDefOf.PsychicSensitivity) > float.Epsilon;
+            return pawn.HasPsylink && pawn.GetStatValue(StatDefOf.PsychicSensitivity) > float.Epsilon;
         }
 
+        /// <summary>The factor on the weapon's weight with this pawn holding it.</summary>
         public static float LiftFactor(Pawn pawn)
         {
+            if (!CanLift(pawn))
+            {
+                return 1f;
+            }
             return 1f / (1f + Mathf.Max(0f, pawn.GetStatValue(StatDefOf.PsychicSensitivity)));
         }
 
@@ -81,7 +86,7 @@ namespace Militarmagier
                 return false;
             }
             Pawn holder = PsychicLiftExtension.Holder(req.Thing);
-            if (holder == null)
+            if (holder == null || !PsychicLiftExtension.CanLift(holder))
             {
                 return false;
             }

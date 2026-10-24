@@ -26,6 +26,28 @@ namespace Militarmagier
         /// <summary>Every piece that must be worn for the camouflage to hold.</summary>
         public List<ThingDef> requiredApparel;
 
+        /// <summary>
+        /// Net neural heat per second a player wearer builds up while hidden with any torso apparel on that
+        /// is not in <see cref="heatFreeApparel"/>.
+        /// </summary>
+        public float heatPerSecond;
+
+        /// <summary>Torso apparel the field runs through for free: the cloak itself.</summary>
+        public List<ThingDef> heatFreeApparel;
+
+        /// <summary>Wearing any of these multiplies <see cref="heatPerSecond"/> by <see cref="heatSlowingFactor"/>.</summary>
+        public List<ThingDef> heatSlowingApparel;
+
+        public float heatSlowingFactor = 1f;
+
+        /// <summary>
+        /// A player wearer cannot hide from the moment their neural heat reaches this fraction of the limit,
+        /// whatever raised it, until it falls back below <see cref="heatResumeAt"/>.
+        /// </summary>
+        public float heatOverheatAt = 1f;
+
+        public float heatResumeAt = 1f;
+
         public HediffCompProperties_MagierCamouflage()
         {
             compClass = typeof(HediffComp_MagierCamouflage);
@@ -42,10 +64,12 @@ namespace Militarmagier
     /// camouflage stays down for ticksUntilRecover. Melee always gives the wearer away; anything else has
     /// detectChanceOnCast. A hostile wearer being spotted is announced the way a jaeger is.
     ///
-    /// Two differences from the jaeger: the camouflage only holds while every piece in requiredApparel is
-    /// worn (the helmet and cloak descriptions both promise a two-piece set), and the jaeger comp's
+    /// Three differences from the jaeger: the camouflage only holds while every piece in requiredApparel is
+    /// worn (the helmet and cloak descriptions both promise a two-piece set), the jaeger comp's
     /// once-a-second forced attack for non-player pawns is left out - that exists for mechs, and on a
-    /// humanlike it would cut into the magier AI's spellcasting.
+    /// humanlike it would cut into the magier AI's spellcasting - and the player's wearers pay neural heat
+    /// (<see cref="TryPayHeat"/>): hiding with other clothes on the torso slowly builds it up, and too much
+    /// of it, from any source, keeps them visible. Other factions' magiers pay nothing.
     /// </summary>
     public class HediffComp_MagierCamouflage : HediffComp
     {
@@ -59,6 +83,9 @@ namespace Militarmagier
         private int lastDetectedTick = -99999;
 
         public bool active = true;
+
+        /// <summary>Set when heat reached heatOverheatAt; cleared once it is back below heatResumeAt.</summary>
+        private bool overheated;
 
         [Unsaved]
         private Texture2D iconTex;
@@ -144,10 +171,88 @@ namespace Militarmagier
             {
                 CheckDetected();
             }
-            if (!Recovering)
+            if (Recovering)
+            {
+                return;
+            }
+            if (TryPayHeat())
             {
                 invisibility.BecomeInvisible();
             }
+            else
+            {
+                invisibility.BecomeVisible();
+            }
+        }
+
+        private bool PaysHeat => Pawn.Faction != null && Pawn.Faction.IsPlayer && Pawn.psychicEntropy != null;
+
+        /// <summary>
+        /// Charges a player wearer the heat for this check interval of hiding, and says whether they can hide
+        /// at all. The tracker's own recovery is added back on top of heatPerSecond, so the heat climbs at
+        /// exactly that rate while the camouflage holds. A wearer who cannot take the heat - at the limit,
+        /// or with no limit, being psychically deaf - is overheated straight away.
+        /// </summary>
+        private bool TryPayHeat()
+        {
+            if (!PaysHeat)
+            {
+                return true;
+            }
+
+            Pawn_PsychicEntropyTracker entropy = Pawn.psychicEntropy;
+            if (overheated)
+            {
+                if (entropy.EntropyRelativeValue >= Props.heatResumeAt)
+                {
+                    return false;
+                }
+                overheated = false;
+            }
+
+            float rate = HeatPerSecond();
+            bool paid = rate <= 0f
+                || entropy.TryAddEntropy((entropy.RecoveryRate + rate) * CheckIntervalTicks.TicksToSeconds(), Pawn, scale: false);
+            if (!paid || entropy.EntropyRelativeValue >= Props.heatOverheatAt)
+            {
+                overheated = true;
+                Messages.Message("DMST_CamouflageOverheated".Translate(Pawn.Named("PAWN"), Props.heatResumeAt.ToStringPercent()),
+                    Pawn, MessageTypeDefOf.NegativeEvent, historical: false);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>Net neural heat per second hiding costs this wearer, before the tracker's own recovery.</summary>
+        private float HeatPerSecond()
+        {
+            List<Apparel> worn = Pawn.apparel?.WornApparel;
+            if (worn == null || Props.heatPerSecond <= 0f)
+            {
+                return 0f;
+            }
+
+            bool otherTorsoApparel = false;
+            bool slowed = false;
+            for (int i = 0; i < worn.Count; i++)
+            {
+                ThingDef def = worn[i].def;
+                if (!otherTorsoApparel && def.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Torso)
+                    && (Props.heatFreeApparel == null || !Props.heatFreeApparel.Contains(def)))
+                {
+                    otherTorsoApparel = true;
+                }
+                if (!slowed && Props.heatSlowingApparel != null && Props.heatSlowingApparel.Contains(def))
+                {
+                    slowed = true;
+                }
+            }
+
+            if (!otherTorsoApparel)
+            {
+                return 0f;
+            }
+            return slowed ? Props.heatPerSecond * Props.heatSlowingFactor : Props.heatPerSecond;
         }
 
         private void CheckDetected()
@@ -260,7 +365,7 @@ namespace Militarmagier
                 defaultLabel = (Props.commandKey + "_Label").Translate(),
                 defaultDesc = desc.Translate() + (Recovering
                     ? (Props.commandKey + "_CooldownDesc").Translate((lastDetectedTick + Props.ticksUntilRecover - Find.TickManager.TicksGame + 1).ToStringTicksToPeriod())
-                    : TaggedString.Empty),
+                    : TaggedString.Empty) + HeatDesc(),
                 isActive = () => active,
                 toggleAction = () =>
                 {
@@ -281,11 +386,31 @@ namespace Militarmagier
             yield return toggle;
         }
 
+        /// <summary>The gizmo's heat lines: the overheat lock, or what hiding currently costs.</summary>
+        private string HeatDesc()
+        {
+            if (!PaysHeat)
+            {
+                return string.Empty;
+            }
+            if (overheated)
+            {
+                return "\n\n" + "DMST_CamouflageOverheatedDesc".Translate(Props.heatResumeAt.ToStringPercent());
+            }
+            float rate = HeatPerSecond();
+            if (rate > 0f)
+            {
+                return "\n\n" + "DMST_CamouflageHeatDesc".Translate(rate.ToString("0.##"), Props.heatOverheatAt.ToStringPercent());
+            }
+            return string.Empty;
+        }
+
         public override void CompExposeData()
         {
             base.CompExposeData();
             Scribe_Values.Look(ref lastDetectedTick, "lastDetectedTick", -99999);
             Scribe_Values.Look(ref active, "active", true);
+            Scribe_Values.Look(ref overheated, "overheated", false);
         }
     }
 }

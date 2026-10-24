@@ -1,4 +1,3 @@
-using Fortified;
 using HarmonyLib;
 using RimWorld;
 using System;
@@ -169,25 +168,9 @@ namespace Militarmagier
     }
 
     /// <summary>
-    /// The broom's carry rule (<see cref="PsychicLiftExtension"/>): whoever its HeavyEquippableDef
-    /// allows, plus anyone with psychic sensitivity. Patched on the extension so both of FFF's callers,
-    /// its EquipmentUtility.CanEquip postfix and its mech weapon check, see it.
-    /// </summary>
-    [HarmonyPatch(typeof(HeavyEquippableExtension), nameof(HeavyEquippableExtension.CanEquippedBy), new Type[] { typeof(Pawn) })]
-    public static class Patch_HeavyEquippableExtension_CanEquippedBy
-    {
-        public static void Postfix(HeavyEquippableExtension __instance, Pawn pawn, ref bool __result)
-        {
-            if (!__result && pawn != null && __instance is PsychicLiftExtension && PsychicLiftExtension.CanLift(pawn))
-            {
-                __result = true;
-            }
-        }
-    }
-
-    /// <summary>
-    /// FFF explains a failed heavy-weapon check with a body size requirement, which is not why the broom
-    /// refuses someone. Runs after FFF's postfix and gives the real reason.
+    /// Only a psycaster can wield the broom (<see cref="PsychicLiftExtension.CanLift"/>). Runs last, so
+    /// no other mod's postfix - FFF lets its mechs wield weapons by tag - can let anyone else through.
+    /// The equip float menu, opportunistic weapon pickup and the caravan gear tab all ask this.
     /// </summary>
     [HarmonyPatch(
         typeof(EquipmentUtility),
@@ -197,16 +180,16 @@ namespace Militarmagier
     public static class Patch_EquipmentUtility_CanEquip
     {
         [HarmonyPriority(Priority.Last)]
-        public static void Postfix(Thing __0, Pawn __1, ref string __2, bool __result)
+        public static void Postfix(Thing __0, Pawn __1, ref string __2, ref bool __result)
         {
-            if (__result || __0 == null || __1 == null)
+            if (!__result || __0 == null || __1 == null)
             {
                 return;
             }
-            PsychicLiftExtension lift = __0.def.GetModExtension<PsychicLiftExtension>();
-            if (lift != null && !lift.CanEquippedBy(__1))
+            if (__0.def.HasModExtension<PsychicLiftExtension>() && !PsychicLiftExtension.CanLift(__1))
             {
-                // No leading space, unlike FFF's reasons: vanilla's float menu writes ": " + cantReason.CapitalizeFirst().
+                __result = false;
+                // Vanilla's float menu writes ": " + cantReason.CapitalizeFirst().
                 __2 = "DMST_PsychicLiftCannotEquip".Translate();
             }
         }

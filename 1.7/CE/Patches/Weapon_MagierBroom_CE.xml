@@ -9,8 +9,8 @@
 		taking some of its weight off the arms.
 
 		The tools and ToughnessRating come from core's patch of DMS_AutomatroidGun, the parent.
-		Militarmagier.StatPart_PsychicLiftMass still divides the CE mass by 1 + the holder's
-		psychic sensitivity; bulk is the rifle's size, so the lift leaves it alone.
+		Militarmagier.StatPart_PsychicLiftMass still divides the CE mass by 1 + a psycaster
+		holder's psychic sensitivity; bulk is the rifle's size, so the lift leaves it alone.
 	-->
 	<Operation Class="CombatExtended.PatchOperationMakeGunCECompatible">
 		<defName>DMST_MagierBroom</defName>
@@ -48,17 +48,9 @@
 	</Operation>
 
 	<!--
-		Core lets average humans carry its CE anti-materiel rifle and drops its move-speed penalty;
-		the broom follows. Psychic sensitivity still lightens it (the mass above), and broom flight
-		still needs it.
+		Core drops its CE anti-materiel rifle's move-speed penalty; the broom follows. It stays
+		psycaster-only under CE: that rule is the sigils', not the rifle's weight.
 	-->
-	<Operation Class="PatchOperationReplace">
-		<xpath>Defs/ThingDef[defName="DMST_MagierBroom"]/modExtensions/li[@Class="Militarmagier.PsychicLiftExtension"]/EquippableDef</xpath>
-		<value>
-			<EquippableDef>AverageHumanCanUse</EquippableDef>
-		</value>
-	</Operation>
-
 	<Operation Class="PatchOperationRemove">
 		<xpath>Defs/ThingDef[defName="DMST_MagierBroom"]/modExtensions/li[@Class="Militarmagier.PsychicLiftExtension"]/moveSpeedOffset</xpath>
 	</Operation>

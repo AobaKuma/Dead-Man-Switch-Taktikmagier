@@ -89,11 +89,17 @@
 		invisibility settings are copied from FFF's FFF_Camouflage, which the jaeger uses - including
 		visibleToPlayer false, so a player's own hidden magier fades from view the way a jaeger does.
 		Militarmagier.HediffComp_MagierCamouflage carries the jaeger's detection rules and its toggle.
+
+		Neural heat, for the player's wearers only (other factions' magiers pay nothing): hiding with
+		any torso apparel on besides the cloak builds up heatPerSecond net of natural recovery, at
+		heatSlowingFactor with the DMS stealth mask on - 0.25/s takes a 30-heat limit to 80% in about
+		a minute and a half, 0.125/s in about three. At heatOverheatAt of the limit, whatever raised it,
+		the camouflage fails until the heat is back below heatResumeAt.
 	-->
 	<HediffDef>
 		<defName>DMST_MagierCamouflage</defName>
 		<label>psychic camouflage</label>
-		<description>Morphic camouflage driven by psychic power through the weave of the magier cloak. It holds until an enemy spots the wearer - an awake enemy close enough, with a clear line of sight, breaks it, more easily in good light - and then takes a while to settle again. Fighting in melee always gives the wearer away; shooting sometimes does. It needs both the magier helmet and the magier cloak - neither piece can sustain the field on its own.</description>
+		<description>Morphic camouflage driven by psychic power through the weave of the magier cloak, held together with the magier helmet. A watchful enemy or a fight can give the wearer away. Pushing the field through other clothing strains the mind, and an overheated mind cannot hold it.</description>
 		<hediffClass>HediffWithComps</hediffClass>
 		<isBad>false</isBad>
 		<comps>
@@ -112,6 +118,16 @@
 					<li>DMST_Apparel_MagierHelmet</li>
 					<li>DMST_Apparel_MagierCloak</li>
 				</requiredApparel>
+				<heatPerSecond>0.25</heatPerSecond>
+				<heatFreeApparel>
+					<li>DMST_Apparel_MagierCloak</li>
+				</heatFreeApparel>
+				<heatSlowingApparel>
+					<li>DMS_Apparel_StealthMask</li>
+				</heatSlowingApparel>
+				<heatSlowingFactor>0.5</heatSlowingFactor>
+				<heatOverheatAt>0.8</heatOverheatAt>
+				<heatResumeAt>0.5</heatResumeAt>
 			</li>
 		</comps>
 	</HediffDef>
