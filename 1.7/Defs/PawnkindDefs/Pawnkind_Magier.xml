@@ -7,7 +7,8 @@
 
       Adept        psylink 2, spell levels 1-2   - the fundamentals only, no cloak, no constructs
       Taktikmagier psylink 4, spell levels 1-4   - the standard line magier
-      Veteran      psylink 6, spell levels 1-5   - reaches force wake and demolish
+      Veteran      psylink 6, spell levels 1-5   - reaches force wake and demolish;
+                                                 30% carry a field manual
 
     Militarmagier.MagierKindExtension raises the psylink to psylinkLevel (without vanilla's random
     psycast per level) and draws spellCountRange spells from the DMST spells whose level falls in
@@ -179,6 +180,8 @@
         <psylinkLevel>6</psylinkLevel>
         <spellLevelRange>1~5</spellLevelRange>
         <spellCountRange>6~14</spellCountRange>
+        <!-- A field manual for one of her spells, with a title and quality set. -->
+        <manualChance>0.3</manualChance>
       </li>
     </modExtensions>
   </PawnKindDef>

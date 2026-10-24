@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+	<!--
+		The Fleet sells its own field manuals: its settlements, and the technology intermediary caravan
+		that already deals in textbooks and schematics. Stock generators set the book's quality, which
+		is what generates its title and spell.
+	-->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/TraderKindDef[defName="DMS_Base_Army_Standard" or defName="DMS_Caravan_Tech"]/stockGenerators</xpath>
+		<value>
+			<li Class="StockGenerator_SingleDef">
+				<thingDef>DMST_FieldManual</thingDef>
+				<countRange>1~2</countRange>
+			</li>
+		</value>
+	</Operation>
+</Patch>

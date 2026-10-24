@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!-- [spell_label] = 法术名称（由教范自动代入） -->
+	<DMST_Namer_FieldManual.rulePack.rulesStrings>
+		<li>title->军术教范：[spell_label]</li>
+		<li>title->《军术教范：[spell_label]》第[edition]版</li>
+		<li>title->操练手册：[spell_label]</li>
+		<li>edition->二</li>
+		<li>edition->三</li>
+		<li>edition->四</li>
+		<li>edition->五</li>
+	</DMST_Namer_FieldManual.rulePack.rulesStrings>
+
+	<DMST_Description_FieldManual.rulePack.rulesStrings>
+		<li>desc->[opening][detail]\n\n[stamp]</li>
+
+		<li>opening->一本殖民舰队的[spell_label]野战教范，由法师塔根据阿尼玛原星残存的血脉传承汇编而成。</li>
+		<li>opening->这本教范将[spell_label]拆解成一条条编号的操练，就像舰队教导其他一切事物那样。</li>
+		<li>opening->军术士训练的标准配发教材：[spell_label]，一页一个操练。</li>
+
+		<li>detail->它读起来不像魔导书，反而更像步枪手册——这正是重点。</li>
+		<li>detail->每隔一页就是一张手势与呼吸位置的图解。</li>
+		<li>detail->页缘挤满了前一位持有者的笔记，大部分是在订正错误。</li>
+		<li>detail(quality[less_than]3)->有几页印歪了，其中一个操练还少了一个步骤。</li>
+		<li>detail(quality[greater_than]3)->这个版本收录了法师塔内部使用的注解版操练。</li>
+
+		<li>stamp->封面内侧盖着一枚印章：“舰队财产，严禁外借。”</li>
+		<li>stamp->封面内侧列着六位前任持有者，其中五个名字已被划掉。</li>
+		<li>stamp->封底内侧还夹着一张领用单。</li>
+	</DMST_Description_FieldManual.rulePack.rulesStrings>
+
+</LanguageData>

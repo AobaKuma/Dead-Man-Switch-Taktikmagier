@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!--
+		Militärmagier field manual (Feldhandbuch). A vanilla book: BookOutcomeDoer_MagierManual picks
+		the spell it covers when the book is generated (low levels more often) and teaches it to a
+		reader whose psylink is high enough. Field manuals are the only way to learn magier spells -
+		vanilla's psylink rewards and psytrainers leave them out (see HarmonyPatches.cs).
+
+		Sources: the Fleet's settlement and technology traders (1.7/Patches/TraderKinds_FieldManual.xml),
+		quest rewards (RewardStandardMidFreq, inherited from BookBase), and senior magiers, who may carry
+		one for a spell they know (MagierKindExtension.manualChance).
+	-->
+	<ThingDef ParentName="BookBase">
+		<defName>DMST_FieldManual</defName>
+		<label>field manual</label>
+		<description>A Colonization Fleet field manual: one Militärmagier spell broken down into numbered drills and printed for issue. Reading it through teaches that spell to a psycaster whose psylink is strong enough to cast it.</description>
+		<graphicData>
+			<texPath>Item/Feldhandbuch</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>0.8</drawSize>
+		</graphicData>
+		<uiIconPath>Item/Feldhandbuch</uiIconPath>
+		<statBases>
+			<MarketValue>400</MarketValue>
+		</statBases>
+		<comps>
+			<li Class="CompProperties_Book">
+				<nameMaker>DMST_Namer_FieldManual</nameMaker>
+				<descriptionMaker>DMST_Description_FieldManual</descriptionMaker>
+				<ageYearsRange>1~30</ageYearsRange>
+				<openGraphic>
+					<texPath>Item/Feldhandbuch_Open</texPath>
+					<graphicClass>Graphic_Multi</graphicClass>
+					<drawSize>0.7</drawSize>
+				</openGraphic>
+				<verticalGraphic>
+					<texPath>Item/Feldhandbuch_Vertical</texPath>
+					<graphicClass>Graphic_Multi</graphicClass>
+					<addTopAltitudeBias>true</addTopAltitudeBias>
+				</verticalGraphic>
+				<doers>
+					<li Class="Militarmagier.BookOutcomeProperties_MagierManual" />
+				</doers>
+			</li>
+		</comps>
+	</ThingDef>
+
+	<!--
+		Konzentrat: restores psyfocus on the spot for magiers who cannot stop to meditate. No addiction
+		(that would need a chemical, a need and an addiction hediff of its own); repeated doses are kept
+		in check by the overdose risk and by the after-effect.
+	-->
+	<ThingDef ParentName="MakeableDrugBase">
+		<defName>DMST_Konzentrat</defName>
+		<label>Konzentrat</label>
+		<description>A Fleet-issue injectable for psycasters in the field, where there is no time to meditate. It forces a magier's psychic focus back up on the spot, at the cost of half a day of dulled psychic sensitivity. Several doses in a row risk an overdose.</description>
+		<descriptionHyperlinks>
+			<HediffDef>DMST_KonzentratAftereffect</HediffDef>
+		</descriptionHyperlinks>
+		<graphicData>
+			<texPath>Item/Ampul</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+		</graphicData>
+		<rotatable>false</rotatable>
+		<statBases>
+			<WorkToMake>600</WorkToMake>
+			<MarketValue>40</MarketValue>
+			<Mass>0.05</Mass>
+		</statBases>
+		<techLevel>Industrial</techLevel>
+		<ingestible>
+			<drugCategory>Medical</drugCategory>
+			<foodType>Processed, Fluid</foodType>
+			<baseIngestTicks>80</baseIngestTicks>
+			<ingestSound>Ingest_Inject</ingestSound>
+			<ingestHoldOffsetStanding>
+				<northDefault>
+					<offset>(0.18,0,0)</offset>
+				</northDefault>
+			</ingestHoldOffsetStanding>
+			<ingestCommandString>Inject {0}</ingestCommandString>
+			<ingestReportString>Injecting {0}.</ingestReportString>
+			<useEatingSpeedStat>false</useEatingSpeedStat>
+			<chairSearchRadius>0</chairSearchRadius>
+			<outcomeDoers>
+				<li Class="IngestionOutcomeDoer_OffsetPsyfocus">
+					<offset>0.2</offset>
+				</li>
+				<li Class="IngestionOutcomeDoer_GiveHediff">
+					<hediffDef>DMST_KonzentratAftereffect</hediffDef>
+					<severity>1</severity>
+				</li>
+			</outcomeDoers>
+		</ingestible>
+		<recipeMaker>
+			<researchPrerequisite>DrugProduction</researchPrerequisite>
+			<recipeUsers>
+				<li>DrugLab</li>
+			</recipeUsers>
+			<soundWorking>Recipe_Drug</soundWorking>
+			<displayPriority>2150</displayPriority>
+		</recipeMaker>
+		<costList>
+			<Neutroamine>2</Neutroamine>
+		</costList>
+		<comps>
+			<li Class="CompProperties_Drug">
+				<listOrder>1010</listOrder>
+				<overdoseSeverityOffset>0.18~0.35</overdoseSeverityOffset>
+			</li>
+		</comps>
+	</ThingDef>
+
+</Defs>

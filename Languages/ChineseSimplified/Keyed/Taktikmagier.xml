@@ -18,4 +18,12 @@
 
 	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort}没有心灵敏感度。</DMST_TargetPsychicallyDeaf>
 
+	<DMST_NothingToRepair>那里没有需要修复的东西。</DMST_NothingToRepair>
+
+	<!-- {PAWN} = 读者，{SPELL} = 法术名称 -->
+	<DMST_ManualLearned>{PAWN_labelShort}从军术教范中学会了{SPELL}。</DMST_ManualLearned>
+
+	<!-- 教范效益说明。{SPELL} = 法术，{LEVEL} = 所需心灵连结等级，{HOURS} = 此品质下的阅读时间 -->
+	<DMST_ManualTeaches>教授{SPELL}（需要 {LEVEL} 级心灵连结），约需阅读 {HOURS} 小时。</DMST_ManualTeaches>
+
 </LanguageData>

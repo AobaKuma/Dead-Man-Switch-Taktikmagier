@@ -12,8 +12,9 @@
 
 		=== AI ===
 		aiCanUse is left false on purpose: none of these go through vanilla's AI casting. Raiders
-		cast flash, repel, EMP burst and quick draw through Militarmagier.JobGiver_TaktikmagierCombat
-		(see Patches/AI_ThinkTree.xml); everything else is player-only.
+		cast repel, smoke veil, ward, EMP burst, flash, field repair, mark and the two shooting
+		stances through Militarmagier.JobGiver_TaktikmagierCombat (see Patches/AI_ThinkTree.xml);
+		everything else is player-only.
 
 		=== DMST_MagierSpellBase ===
 		Carries MagierSpellExtension, which is how enemy magiers find the spells they may roll.
@@ -90,6 +91,38 @@
 		</comps>
 	</AbilityDef>
 
+	<!--
+		Aimed at a cell, not a pawn: vanilla refuses a psychologically invisible hostile as a target,
+		and catching cloaked magiers is half of what this spell is for. CompAbilityEffect_Mark marks
+		every hostile pawn in the radius.
+	-->
+	<AbilityDef ParentName="DMST_MagierSpellBase">
+		<defName>DMST_Mark</defName>
+		<label>mark</label>
+		<description>The magier fixes a patch of ground in their mind and pins a psychic tag on every hostile standing in it. A marked target cannot hold any concealment, cloaked or not, and takes harder hits from the squad while the mark lasts.</description>
+		<level>1</level>
+		<iconPath>UI/AbilityIcon/markieren</iconPath>
+		<cooldownTicksRange>1200</cooldownTicksRange>
+		<statBases>
+			<Ability_EntropyGain>6</Ability_EntropyGain>
+			<Ability_PsyfocusCost>0.01</Ability_PsyfocusCost>
+		</statBases>
+		<verbProperties>
+			<warmupTime>0.5</warmupTime>
+			<range>24.9</range>
+			<targetParams>
+				<canTargetLocations>True</canTargetLocations>
+				<canTargetSelf>False</canTargetSelf>
+			</targetParams>
+		</verbProperties>
+		<comps>
+			<li Class="Militarmagier.CompProperties_AbilityMark">
+				<radius>2.9</radius>
+				<hediffDef>DMST_Marked</hediffDef>
+			</li>
+		</comps>
+	</AbilityDef>
+
 	<AbilityDef ParentName="DMST_MagierSpellBase">
 		<defName>DMST_Swap</defName>
 		<label>transposition</label>
@@ -114,6 +147,67 @@
 		</verbProperties>
 		<comps>
 			<li Class="Militarmagier.CompProperties_AbilitySwap" />
+		</comps>
+	</AbilityDef>
+
+	<AbilityDef ParentName="DMST_MagierSelfSpellBase">
+		<defName>DMST_SteadyAim</defName>
+		<label>steady aim</label>
+		<description>The counterpart to quick draw: psychic focus stills breath and hands, slowing the aim but putting every round where it is meant to go. Magiers settle into it before a long-range exchange. It cannot be held together with quick draw - taking up one stance drops the other.</description>
+		<level>2</level>
+		<iconPath>UI/AbilityIcon/zielhilfe</iconPath>
+		<hostile>False</hostile>
+		<cooldownTicksRange>600</cooldownTicksRange>
+		<statBases>
+			<Ability_EntropyGain>6</Ability_EntropyGain>
+			<Ability_PsyfocusCost>0.01</Ability_PsyfocusCost>
+			<!-- Seconds. Also the hediff's lifetime: CompAbilityEffect_GiveHediff overwrites its Disappears timer with this. -->
+			<Ability_Duration>30</Ability_Duration>
+		</statBases>
+		<verbProperties>
+			<warmupTime>0</warmupTime>
+		</verbProperties>
+		<comps>
+			<li Class="Militarmagier.CompProperties_AbilityRemoveHediffs">
+				<hediffDefs>
+					<li>DMST_QuickDraw</li>
+				</hediffDefs>
+			</li>
+			<li Class="CompProperties_AbilityGiveHediff">
+				<compClass>CompAbilityEffect_GiveHediff</compClass>
+				<hediffDef>DMST_SteadyAim</hediffDef>
+				<onlyApplyToSelf>True</onlyApplyToSelf>
+				<replaceExisting>True</replaceExisting>
+			</li>
+		</comps>
+	</AbilityDef>
+
+	<AbilityDef ParentName="DMST_MagierSpellBase">
+		<defName>DMST_Smoke</defName>
+		<label>smoke veil</label>
+		<description>Moisture in the air is wrung into a thick, blinding fog at the target point. It hides friend and foe alike; magiers use it to cross open ground, or to break contact when a fight turns against them.</description>
+		<level>2</level>
+		<iconPath>UI/AbilityIcon/nebel</iconPath>
+		<hostile>False</hostile>
+		<cooldownTicksRange>1800</cooldownTicksRange>
+		<statBases>
+			<Ability_EntropyGain>10</Ability_EntropyGain>
+			<Ability_PsyfocusCost>0.01</Ability_PsyfocusCost>
+		</statBases>
+		<verbProperties>
+			<warmupTime>1</warmupTime>
+			<range>24.9</range>
+			<targetParams>
+				<canTargetLocations>True</canTargetLocations>
+				<canTargetSelf>True</canTargetSelf>
+			</targetParams>
+		</verbProperties>
+		<comps>
+			<li Class="Militarmagier.CompProperties_AbilitySmoke">
+				<radius>3.9</radius>
+				<damageDef>Smoke</damageDef>
+				<gasType>BlindSmoke</gasType>
+			</li>
 		</comps>
 	</AbilityDef>
 
@@ -231,11 +325,51 @@
 			<warmupTime>0</warmupTime>
 		</verbProperties>
 		<comps>
+			<!-- The two shooting stances are exclusive; see DMST_SteadyAim. -->
+			<li Class="Militarmagier.CompProperties_AbilityRemoveHediffs">
+				<hediffDefs>
+					<li>DMST_SteadyAim</li>
+				</hediffDefs>
+			</li>
 			<li Class="CompProperties_AbilityGiveHediff">
 				<compClass>CompAbilityEffect_GiveHediff</compClass>
 				<hediffDef>DMST_QuickDraw</hediffDef>
 				<onlyApplyToSelf>True</onlyApplyToSelf>
 				<replaceExisting>True</replaceExisting>
+			</li>
+		</comps>
+	</AbilityDef>
+
+	<AbilityDef ParentName="DMST_MagierSpellBase">
+		<defName>DMST_FieldRepair</defName>
+		<label>field repair</label>
+		<description>Field aid's counterpart for machines. Knowing how a thing is put together lets a magier coax buckled plating and severed lines back into place - a damaged turret or wall, or a mechanoid, the Fleet's own war machines included. It restores function, not perfection.</description>
+		<level>3</level>
+		<iconPath>UI/AbilityIcon/instandsetzung</iconPath>
+		<hostile>False</hostile>
+		<cooldownTicksRange>600</cooldownTicksRange>
+		<statBases>
+			<Ability_EntropyGain>12</Ability_EntropyGain>
+			<Ability_PsyfocusCost>0.02</Ability_PsyfocusCost>
+		</statBases>
+		<verbProperties>
+			<warmupTime>2</warmupTime>
+			<range>9.9</range>
+			<targetParams>
+				<canTargetPawns>True</canTargetPawns>
+				<canTargetMechs>True</canTargetMechs>
+				<canTargetHumans>False</canTargetHumans>
+				<canTargetAnimals>False</canTargetAnimals>
+				<canTargetBuildings>True</canTargetBuildings>
+				<canTargetItems>False</canTargetItems>
+				<canTargetLocations>False</canTargetLocations>
+				<canTargetSelf>False</canTargetSelf>
+			</targetParams>
+		</verbProperties>
+		<comps>
+			<!-- Refuses hostile targets and anything with nothing to repair. -->
+			<li Class="Militarmagier.CompProperties_AbilityFieldRepair">
+				<amount>40</amount>
 			</li>
 		</comps>
 	</AbilityDef>
@@ -300,6 +434,40 @@
 			<li Class="Militarmagier.CompProperties_AbilityHeal">
 				<psychic>True</psychic>
 				<tendQualityRange>0.4~0.8</tendQualityRange>
+			</li>
+		</comps>
+	</AbilityDef>
+
+	<AbilityDef ParentName="DMST_MagierSpellBase">
+		<defName>DMST_Ward</defName>
+		<label>ward</label>
+		<description>A thin psychic film is laid over a squadmate - or the caster - and hardens against incoming harm, soaking up bullets and blades until it is spent. It does not last long, and it is meant to: magiers throw it over whoever is about to go down.</description>
+		<level>4</level>
+		<iconPath>UI/AbilityIcon/schild</iconPath>
+		<hostile>False</hostile>
+		<cooldownTicksRange>1800</cooldownTicksRange>
+		<statBases>
+			<Ability_EntropyGain>15</Ability_EntropyGain>
+			<Ability_PsyfocusCost>0.02</Ability_PsyfocusCost>
+			<!-- Seconds. Also the hediff's lifetime: CompAbilityEffect_GiveHediff overwrites its Disappears timer with this. -->
+			<Ability_Duration>30</Ability_Duration>
+		</statBases>
+		<verbProperties>
+			<warmupTime>1</warmupTime>
+			<range>9.9</range>
+			<targetParams>
+				<canTargetPawns>True</canTargetPawns>
+				<canTargetSelf>True</canTargetSelf>
+				<canTargetAnimals>True</canTargetAnimals>
+				<canTargetMechs>True</canTargetMechs>
+				<canTargetBuildings>False</canTargetBuildings>
+			</targetParams>
+		</verbProperties>
+		<comps>
+			<li Class="CompProperties_AbilityGiveHediff">
+				<compClass>CompAbilityEffect_GiveHediff</compClass>
+				<hediffDef>DMST_Ward</hediffDef>
+				<replaceExisting>True</replaceExisting>
 			</li>
 		</comps>
 	</AbilityDef>

@@ -7,4 +7,16 @@
 	<DMST_PsycastFocus.label>维持中的构装体</DMST_PsycastFocus.label>
 	<DMST_PsycastFocus.description>施术者正以一条持续的灵能丝线维系着构装体。每一个维持中的构装体都会降低施术者的心灵熵上限，而该容量会在构装体被摧毁时立即返还。</DMST_PsycastFocus.description>
 
+	<DMST_SteadyAim.label>精准瞄准</DMST_SteadyAim.label>
+	<DMST_SteadyAim.description>以灵能稳住的呼吸与双手。每一发都经过深思熟虑——出手较慢，但更有可能命中。</DMST_SteadyAim.description>
+
+	<DMST_Marked.label>已标定</DMST_Marked.label>
+	<DMST_Marked.description>军术士的灵能标记。被标定者无法维持任何隐匿，而施加标记的小队清楚知道该往哪里瞄。</DMST_Marked.description>
+
+	<DMST_Ward.label>术式护壁</DMST_Ward.label>
+	<DMST_Ward.description>覆盖全身的硬化灵能薄膜，会吸收伤害直到耗尽。</DMST_Ward.description>
+
+	<DMST_KonzentratAftereffect.label>专注安瓿后劲</DMST_KonzentratAftereffect.label>
+	<DMST_KonzentratAftereffect.description>用专注安瓿强行拉回专注的人，心灵敏感度会在之后一段时间内变得迟钝。</DMST_KonzentratAftereffect.description>
+
 </LanguageData>

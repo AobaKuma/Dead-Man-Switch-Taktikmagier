@@ -31,4 +31,19 @@
 	<DMST_Demolish.label>解体</DMST_Demolish.label>
 	<DMST_Demolish.description>透过对事物构造的了解，军术士们能够直接操作零件的位置来甚至在分子层面上断开缠结的分子链，以此来达到将物体解体的能力。这项技巧被广泛用于爆炸物拆除与瘫痪精密设备，并对建筑与炮塔这样的静态物体来说非常合适。更坚固的目标则只会被严重破坏而非彻底拆解。</DMST_Demolish.description>
 
+	<DMST_Mark.label>标定</DMST_Mark.label>
+	<DMST_Mark.description>军术士在脑海中锁定一块区域，为站在其中的每一名敌人钉上灵能标记。被标定的目标无法维持任何隐匿手段，无论是否披着迷彩，并且在标记持续期间会受到小队更重的伤害。</DMST_Mark.description>
+
+	<DMST_SteadyAim.label>精准瞄准</DMST_SteadyAim.label>
+	<DMST_SteadyAim.description>快速拔枪的另一面：以灵能稳住呼吸与双手，瞄准变慢，但每一发都会落在该落的地方。军术士会在远距离交火前进入这个架势。它无法与快速拔枪同时维持——进入一种架势就会解除另一种。</DMST_SteadyAim.description>
+
+	<DMST_Smoke.label>烟幕</DMST_Smoke.label>
+	<DMST_Smoke.description>将空气中的水气拧成浓厚的致盲雾气，笼罩目标地点。它不分敌我地遮蔽一切；军术士用它穿越开阔地，或在战况恶化时脱离接触。</DMST_Smoke.description>
+
+	<DMST_FieldRepair.label>战地重构</DMST_FieldRepair.label>
+	<DMST_FieldRepair.description>战地急救的机械版。通过对事物构造的了解，军术士能将变形的装甲与断开的线路导回原位——无论是受损的炮塔、墙壁，或是机械体，包括舰队自己的战争机器。它恢复的是功能，而不是完美。</DMST_FieldRepair.description>
+
+	<DMST_Ward.label>术式护壁</DMST_Ward.label>
+	<DMST_Ward.description>在队友——或施术者自己——身上覆上一层薄薄的灵能薄膜，它会在受到攻击时硬化，吸收子弹与刀刃直到耗尽。它持续不久，而这正是用意：军术士会把它丢给快要倒下的人。</DMST_Ward.description>
+
 </LanguageData>

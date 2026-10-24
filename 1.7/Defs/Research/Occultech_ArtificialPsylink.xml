@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!--
+		Class II (DMS_Sealed) occultech file, on DMS's Occultech tab in the free sealed-column slot (3, 4).
+
+		Obtainable from the attested archive casket only: 1.7/Patches/ArchiveCasket_ArtificialPsylink.xml
+		adds it to the casket's file list, and it is deliberately left out of every data cache. Nothing
+		else in DMS picks sealed projects at random - the deviant handover only draws restricted (class I)
+		files, server hacks only draw techprint projects, and stele extractors only feed restricted
+		knowledge. Unsealing completes it outright; with Fabrication still unfinished the casket holds it
+		as a pending grant until Fabrication is done.
+
+		Completing it triggers DMS's class II sanction (fleet hostility and a raid), as for every sealed file.
+	-->
+	<ResearchProjectDef>
+		<defName>DMST_Occultech_ArtificialPsylink</defName>
+		<label>artificial psychic circuitry</label>
+		<description>Reverse-engineered from the psychic circuitry that makes up the horn organ of the thrumbo, this technique lets the Colonization Fleet mass-produce psylink neuroformers with complex zero-gravity vacuum lithography. Because archotech machines are beyond control, however, the program was bound by treaty and by local production conditions, and it was never rolled out. Yet in the armed conflict with the native psycasters of Anima Prime, the locals - with the planet's abundant thrumbo herds - refined it into a production method far better suited to rimworlds.\n\nThe Colonization ████ Fleet's long-term records and studies of the thrumbo have established that the thrumbo is a ████ ████ creature, and the species' indifference to its own systematic slaughter by humans is most likely ████. Approved by ████ and ██, artificial psychic circuitry and its related technologies are designated class II sealed technology. Disclosure of such technology to developing worlds is prohibited, so that a leak does not lead to the systematic hunting and extinction of the thrumbos of colonized worlds.</description>
+		<tab>DMS_ExpeditionalKnowledge</tab>
+		<knowledgeCategory>DMS_Sealed</knowledgeCategory>
+		<knowledgeCost>150</knowledgeCost>
+		<techLevel>Spacer</techLevel>
+		<researchViewX>3.00</researchViewX>
+		<researchViewY>4.00</researchViewY>
+		<prerequisites>
+			<!-- The recipe is made at a fabrication bench. -->
+			<li>Fabrication</li>
+		</prerequisites>
+		<discoveredLetterTitle>Sealed file II: artificial psychic circuitry</discoveredLetterTitle>
+		<discoveredLetterText>Using the data they have gathered, researchers have finished decoding the sealed technology. It records how the natives of Anima Prime turned thrumbo horn into psylink neuroformers.\n\nPsylink neuroformers can now be made at a fabrication bench from a thrumbo horn and advanced components.\n\nThe fleets sealed this file so that no colonized world would learn what a thrumbo horn is worth. Every neuroformer made this way is paid for with a thrumbo.</discoveredLetterText>
+		<descriptionHyperlinks>
+			<ThingDef>PsychicAmplifier</ThingDef>
+			<ThingDef>ThrumboHorn</ThingDef>
+		</descriptionHyperlinks>
+	</ResearchProjectDef>
+
+	<!-- The Anima Prime method: one thrumbo horn and two advanced components make one vanilla psylink neuroformer. -->
+	<RecipeDef>
+		<defName>DMST_Make_PsylinkNeuroformer</defName>
+		<label>make psylink neuroformer</label>
+		<description>Make a psylink neuroformer from a thrumbo horn, by the method the natives of Anima Prime refined.</description>
+		<jobString>Making psylink neuroformer.</jobString>
+		<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+		<effectWorking>Cook</effectWorking>
+		<soundWorking>Recipe_Machining</soundWorking>
+		<workAmount>20000</workAmount>
+		<unfinishedThingDef>UnfinishedComponent</unfinishedThingDef>
+		<ingredients>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>ThrumboHorn</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>ComponentSpacer</li>
+					</thingDefs>
+				</filter>
+				<count>2</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<thingDefs>
+				<li>ThrumboHorn</li>
+				<li>ComponentSpacer</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<products>
+			<PsychicAmplifier>1</PsychicAmplifier>
+		</products>
+		<skillRequirements>
+			<Crafting>10</Crafting>
+		</skillRequirements>
+		<workSkill>Crafting</workSkill>
+		<researchPrerequisite>DMST_Occultech_ArtificialPsylink</researchPrerequisite>
+		<recipeUsers>
+			<li>FabricationBench</li>
+		</recipeUsers>
+	</RecipeDef>
+
+</Defs>

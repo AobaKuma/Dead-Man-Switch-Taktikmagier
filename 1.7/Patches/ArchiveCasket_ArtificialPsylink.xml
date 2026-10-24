@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+	<!--
+		Adds artificial psychic circuitry to the attested archive casket's file list - the only place it
+		can be obtained (see 1.7/Defs/Research/Occultech_ArtificialPsylink.xml). Not added to any data cache
+		on purpose.
+	-->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/ThingDef[defName="DMS_ArchiveCasket"]/comps/li[@Class="DMS.CompProperties_UseEffect_UnsealArchive"]/researchProjects</xpath>
+		<value>
+			<li>DMST_Occultech_ArtificialPsylink</li>
+		</value>
+	</Operation>
+</Patch>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!--
+		Title and description for DMST_FieldManual. Book.GenerateBook resolves "title" with the name
+		maker and "desc" with the description maker. [spell_label] and [spell_level] come from
+		BookOutcomeDoer_MagierManual.GetTopicRuleStrings; [quality] is set by Book for books with quality.
+	-->
+	<RulePackDef>
+		<defName>DMST_Namer_FieldManual</defName>
+		<rulePack>
+			<rulesStrings>
+				<li>title->Field Manual: [spell_label]</li>
+				<li>title->Feldhandbuch: [spell_label]</li>
+				<li>title->Field Manual: [spell_label], [edition] Edition</li>
+				<li>title->Drill Book: [spell_label]</li>
+				<li>edition->Second</li>
+				<li>edition->Third</li>
+				<li>edition->Fourth</li>
+				<li>edition->Revised</li>
+			</rulesStrings>
+		</rulePack>
+	</RulePackDef>
+
+	<RulePackDef>
+		<defName>DMST_Description_FieldManual</defName>
+		<rulePack>
+			<rulesStrings>
+				<li>desc->[opening] [detail]\n\n[stamp]</li>
+
+				<li>opening->A Colonization Fleet field manual on [spell_label], compiled by the Mage Tower from what survived of Anima Prime's bloodline teachings.</li>
+				<li>opening->This manual breaks [spell_label] down into numbered drills, the way the Fleet teaches everything else.</li>
+				<li>opening->Standard issue for Militärmagier training: [spell_label], one drill to a page.</li>
+
+				<li>detail->It reads less like a grimoire than a rifle manual, which is the point.</li>
+				<li>detail->Diagrams of hand and breath placement fill every other page.</li>
+				<li>detail->The margins are crowded with a previous owner's notes, most of them corrections.</li>
+				<li>detail(quality[less_than]3)->Several pages have been reprinted crooked, and one drill is missing a step.</li>
+				<li>detail(quality[greater_than]3)->This edition includes the annotated drills used at the Mage Tower itself.</li>
+
+				<li>stamp->A stamp inside the cover reads: "Property of the Fleet. Not to be lent."</li>
+				<li>stamp->The inside cover lists six previous holders. Five of the names have been struck through.</li>
+				<li>stamp->A requisition slip is still tucked inside the back cover.</li>
+			</rulesStrings>
+		</rulePack>
+	</RulePackDef>
+
+</Defs>

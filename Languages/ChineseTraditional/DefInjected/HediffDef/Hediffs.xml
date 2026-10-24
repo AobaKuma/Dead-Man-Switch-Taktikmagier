@@ -7,4 +7,16 @@
 	<DMST_PsycastFocus.label>維持中的構裝體</DMST_PsycastFocus.label>
 	<DMST_PsycastFocus.description>施術者正以一條持續的靈能絲線維繫著構裝體。每一個維持中的構裝體都會降低施術者的心靈熵上限，而該容量會在構裝體被摧毀時立即返還。</DMST_PsycastFocus.description>
 
+	<DMST_SteadyAim.label>精準瞄準</DMST_SteadyAim.label>
+	<DMST_SteadyAim.description>以靈能穩住的呼吸與雙手。每一發都經過深思熟慮——出手較慢，但更有可能命中。</DMST_SteadyAim.description>
+
+	<DMST_Marked.label>已標定</DMST_Marked.label>
+	<DMST_Marked.description>軍術士的靈能標記。被標定者無法維持任何隱匿，而施加標記的小隊清楚知道該往哪裡瞄。</DMST_Marked.description>
+
+	<DMST_Ward.label>術式護壁</DMST_Ward.label>
+	<DMST_Ward.description>覆蓋全身的硬化靈能薄膜，會吸收傷害直到耗盡。</DMST_Ward.description>
+
+	<DMST_KonzentratAftereffect.label>專注安瓿後勁</DMST_KonzentratAftereffect.label>
+	<DMST_KonzentratAftereffect.description>用專注安瓿強行拉回專注的人，心靈敏感度會在之後一段時間內變得遲鈍。</DMST_KonzentratAftereffect.description>
+
 </LanguageData>

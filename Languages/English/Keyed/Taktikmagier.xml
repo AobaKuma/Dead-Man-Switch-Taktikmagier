@@ -18,4 +18,12 @@
 
 	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort} is not psychically sensitive.</DMST_TargetPsychicallyDeaf>
 
+	<DMST_NothingToRepair>There is nothing there to repair.</DMST_NothingToRepair>
+
+	<!-- {PAWN} = reader, {SPELL} = spell label -->
+	<DMST_ManualLearned>{PAWN_labelShort} has learned {SPELL} from a field manual.</DMST_ManualLearned>
+
+	<!-- Field manual benefit line. {SPELL} = spell, {LEVEL} = psylink level needed, {HOURS} = reading time at this quality -->
+	<DMST_ManualTeaches>Teaches {SPELL} (psylink level {LEVEL} needed). About {HOURS} hours of reading.</DMST_ManualTeaches>
+
 </LanguageData>

@@ -20,6 +20,9 @@ namespace Militarmagier
         /// <summary>How many spells to draw; capped by how many qualify.</summary>
         public IntRange spellCountRange = new IntRange(1, 1);
 
+        /// <summary>Chance to carry a field manual for one of the spells this pawn knows.</summary>
+        public float manualChance;
+
         public override IEnumerable<string> ConfigErrors()
         {
             foreach (string error in base.ConfigErrors())
@@ -55,6 +58,45 @@ namespace Militarmagier
             {
                 pawn.abilities.GainAbility(def);
             }
+
+            if (manualChance > 0f && Rand.Chance(manualChance))
+            {
+                GiveManual(pawn);
+            }
+        }
+
+        /// <summary>
+        /// Puts a field manual for one of the pawn's spells in their inventory.
+        ///
+        /// The quality is set here on purpose. A book only generates its title and spell when its
+        /// quality is set, and pawn kind inventoryOptions never set one - a manual given that way
+        /// would have no title.
+        /// </summary>
+        private static void GiveManual(Pawn pawn)
+        {
+            AbilityDef spell = pawn.abilities.abilities
+                .Select(a => a.def)
+                .Where(def => def.HasModExtension<MagierSpellExtension>())
+                .RandomElementWithFallback();
+            if (spell == null || pawn.inventory == null)
+            {
+                return;
+            }
+
+            Thing thing = ThingMaker.MakeThing(MilitarmagierDefOf.DMST_FieldManual);
+            BookOutcomeDoer_MagierManual doer = (thing as Book)?.BookComp?.Doers
+                .OfType<BookOutcomeDoer_MagierManual>()
+                .FirstOrDefault();
+            CompQuality quality = thing.TryGetComp<CompQuality>();
+            if (doer == null || quality == null)
+            {
+                thing.Destroy();
+                return;
+            }
+
+            doer.fixedSpell = spell;
+            quality.SetQuality(QualityUtility.GenerateQualityTraderItem(), ArtGenerationContext.Outsider);
+            pawn.inventory.innerContainer.TryAdd(thing);
         }
 
         /// <summary>

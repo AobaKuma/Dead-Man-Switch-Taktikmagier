@@ -16,6 +16,100 @@
 	</HediffDef>
 
 	<!--
+		Steady aim, the long-range counterpart of quick draw. ShootingAccuracyPawn is counted in
+		shooting skill levels before its curve, so +3 is worth three levels (quick draw costs one).
+	-->
+	<HediffDef ParentName="PsycastHediffBase">
+		<defName>DMST_SteadyAim</defName>
+		<label>steady aim</label>
+		<description>Psychically stilled breathing and hands. Every shot is placed deliberately - slower to come, far more likely to land.</description>
+		<isBad>false</isBad>
+		<stages>
+			<li>
+				<statOffsets>
+					<ShootingAccuracyPawn>3</ShootingAccuracyPawn>
+					<AimingDelayFactor>0.3</AimingDelayFactor>
+				</statOffsets>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!--
+		Put on hostiles by the mark spell. HediffComp_RevealInvisibility disrupts every invisibility
+		comp on the pawn each tick, so they are forced visible and cannot cloak again until it ends.
+		The duration lives here: CompAbilityEffect_Mark adds the hediff directly.
+	-->
+	<HediffDef>
+		<defName>DMST_Marked</defName>
+		<label>marked</label>
+		<description>A magier's psychic tag. The marked can hold no concealment, and the squad that put it there knows exactly where to aim.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>true</isBad>
+		<defaultLabelColor>(1, 0.4, 0.3)</defaultLabelColor>
+		<comps>
+			<li Class="HediffCompProperties_Disappears">
+				<disappearsAfterTicks>1200~1200</disappearsAfterTicks>
+				<showRemainingTime>True</showRemainingTime>
+			</li>
+			<li Class="HediffCompProperties_DisappearsOnDeath" />
+			<li Class="Militarmagier.HediffCompProperties_RevealInvisibility" />
+		</comps>
+		<stages>
+			<li>
+				<statFactors>
+					<IncomingDamageFactor>1.15</IncomingDamageFactor>
+				</statFactors>
+				<statOffsets>
+					<MeleeDodgeChance>-0.1</MeleeDodgeChance>
+				</statOffsets>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!--
+		The ward spell's shield. Its lifetime comes from the ward ability's Ability_Duration; the pool
+		is HediffComp_PsychicWard's, shown in brackets after the label, and the hediff goes when either
+		runs out.
+	-->
+	<HediffDef ParentName="PsycastHediffBase">
+		<defName>DMST_Ward</defName>
+		<label>ward</label>
+		<description>A hardened psychic film over the body that absorbs incoming harm until it is spent.</description>
+		<isBad>false</isBad>
+		<comps>
+			<li Class="Militarmagier.HediffCompProperties_PsychicWard">
+				<hitpoints>60</hitpoints>
+			</li>
+		</comps>
+	</HediffDef>
+
+	<!-- Konzentrat's after-effect: half a day of dulled psychic sensitivity. -->
+	<HediffDef>
+		<defName>DMST_KonzentratAftereffect</defName>
+		<label>Konzentrat after-effect</label>
+		<description>The psychic sensitivity of someone who forced their focus back with Konzentrat stays dulled for a while afterwards.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>true</isBad>
+		<initialSeverity>1</initialSeverity>
+		<maxSeverity>1</maxSeverity>
+		<scenarioCanAdd>false</scenarioCanAdd>
+		<comps>
+			<!-- 1 → 0 in half a day. -->
+			<li Class="HediffCompProperties_SeverityPerDay">
+				<severityPerDay>-2</severityPerDay>
+				<showHoursToRecover>true</showHoursToRecover>
+			</li>
+		</comps>
+		<stages>
+			<li>
+				<statOffsets>
+					<PsychicSensitivity>-0.1</PsychicSensitivity>
+				</statOffsets>
+			</li>
+		</stages>
+	</HediffDef>
+
+	<!--
 		Upkeep bookkeeping for every sustained construct, turrets and gargoyles alike. It declares no
 		<stages>: the heat limit is lowered by Militarmagier.StatPart_SustainedConstructs (patched onto
 		PsychicEntropyMax), which reads the constructs this hediff tracks.

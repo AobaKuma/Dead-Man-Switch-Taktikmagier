@@ -13,4 +13,12 @@
 	<DMST_Apparel_MagierCloak.label>军术士斗篷</DMST_Apparel_MagierCloak.label>
 	<DMST_Apparel_MagierCloak.description>军术士配备的主动光学迷彩斗篷。具备由灵能驱动的主动迷彩能力，运作时会消耗心灵熵。需搭配军术士头盔才能生效。</DMST_Apparel_MagierCloak.description>
 
+	<DMST_FieldManual.label>军术教范</DMST_FieldManual.label>
+	<DMST_FieldManual.description>殖民舰队的野战教范：将一个军术士法术拆解成编号的操练，印制后统一配发。读完它，心灵连结等级足以施放该法术的施术者就能学会。</DMST_FieldManual.description>
+
+	<DMST_Konzentrat.label>专注安瓿</DMST_Konzentrat.label>
+	<DMST_Konzentrat.description>舰队配发给前线施术者的注射剂，用在没有时间冥想的时候。它能当场把军术士的心灵专注强行拉回来，代价是半天内心灵敏感度变得迟钝。连续施打数剂有过量的风险。</DMST_Konzentrat.description>
+	<DMST_Konzentrat.ingestible.ingestCommandString>注射{0}</DMST_Konzentrat.ingestible.ingestCommandString>
+	<DMST_Konzentrat.ingestible.ingestReportString>正在注射{0}。</DMST_Konzentrat.ingestible.ingestReportString>
+
 </LanguageData>
