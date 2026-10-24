@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+
+	<!--
+		The broom under CE, built on core's CE anti-materiel rifle (Dead-Man-Switch
+		1.7/CE/Patches/Weapons/MiliGuns_CE.xml): the same .50 BMG, range, mass, bulk and optics.
+		Relative to it the broom is semi-automatic with a 10-round magazine, aims and cycles about a
+		third faster (as in vanilla, 2 s / 1.5 s against 3 s / 2 s), and sways less, the lift
+		taking some of its weight off the arms.
+
+		The tools and ToughnessRating come from core's patch of DMS_AutomatroidGun, the parent.
+		Militarmagier.StatPart_PsychicLiftMass still divides the CE mass by 1 + the holder's
+		psychic sensitivity; bulk is the rifle's size, so the lift leaves it alone.
+	-->
+	<Operation Class="CombatExtended.PatchOperationMakeGunCECompatible">
+		<defName>DMST_MagierBroom</defName>
+		<statBases>
+			<Mass>16.37</Mass>
+			<Bulk>15.74</Bulk>
+			<SwayFactor>1.5</SwayFactor>
+			<ShotSpread>0.02</ShotSpread>
+			<SightsEfficiency>3.05</SightsEfficiency>
+			<RangedWeapon_Cooldown>1.0</RangedWeapon_Cooldown>
+		</statBases>
+		<Properties>
+			<recoilAmount>2.77</recoilAmount>
+			<verbClass>CombatExtended.Verb_ShootCE</verbClass>
+			<hasStandardCommand>true</hasStandardCommand>
+			<defaultProjectile>Bullet_50BMG_FMJ</defaultProjectile>
+			<warmupTime>2.4</warmupTime>
+			<range>95</range>
+			<soundCast>Shot_TurretSniper</soundCast>
+			<soundCastTail>GunTail_Heavy</soundCastTail>
+			<muzzleFlashScale>9</muzzleFlashScale>
+		</Properties>
+		<AmmoUser>
+			<magazineSize>10</magazineSize>
+			<reloadTime>5</reloadTime>
+			<ammoSet>AmmoSet_50BMG</ammoSet>
+		</AmmoUser>
+		<FireModes>
+			<aiAimMode>AimedShot</aiAimMode>
+		</FireModes>
+		<weaponTags>
+			<li>Bipod_DMR</li>
+			<li>CE_AI_SR</li>
+		</weaponTags>
+	</Operation>
+
+	<!--
+		Core lets average humans carry its CE anti-materiel rifle and drops its move-speed penalty;
+		the broom follows. Psychic sensitivity still lightens it (the mass above), and broom flight
+		still needs it.
+	-->
+	<Operation Class="PatchOperationReplace">
+		<xpath>Defs/ThingDef[defName="DMST_MagierBroom"]/modExtensions/li[@Class="Militarmagier.PsychicLiftExtension"]/EquippableDef</xpath>
+		<value>
+			<EquippableDef>AverageHumanCanUse</EquippableDef>
+		</value>
+	</Operation>
+
+	<Operation Class="PatchOperationRemove">
+		<xpath>Defs/ThingDef[defName="DMST_MagierBroom"]/modExtensions/li[@Class="Militarmagier.PsychicLiftExtension"]/moveSpeedOffset</xpath>
+	</Operation>
+
+</Patch>

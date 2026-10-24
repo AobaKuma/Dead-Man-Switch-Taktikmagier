@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!--
+		Magier sigil: a torso implant built like vanilla's death acidifier (item + install surgery +
+		implant hediff, and no removal surgery). Behaviour lives in Militarmagier.Hediff_MagierSigil:
+
+		  bearer goes down   80% (downedChance): every wound tended so the bleeding stops, bearer stays
+		                     down; player pawn -> beside a random humanlike bed on a player home map,
+		                     anyone else -> leaves the map (ExitMap).
+		  bearer dies        always: player corpse -> beside such a bed, anyone else's corpse vanishes
+		                     with its gear.
+		  never fires for    prisoners, slaves, or a pawn that went down to surgical anaesthesia.
+
+		All three magier tiers are generated with one (DMST_MagierBase.techHediffsRequired). The player
+		crafts it after the class II sealed file "artificial psychic circuitry", from solidified zero-point
+		energy, which only DMS's zero-point generator makes (class III file "zero-point energy").
+	-->
+
+	<ThingDef ParentName="BodyPartBase">
+		<defName>DMST_MagierSigil</defName>
+		<label>magier sigil</label>
+		<description>An implant and identification code used by the Colonization Fleet's tactical magier corps to mark a caster's identity - usually so that members of the fleet do not realize who they were dealing with only after making a grave mistake. Beyond identification, it uses transcendent power to bind the place the caster's subconscious holds to be safest, so that when they lose consciousness or come close to death it raises a space-folding field to carry them out of danger, and to keep them from falling into enemy hands alive.\n\n&lt;color=#E5E54C&gt;Gameplay effect:&lt;/color&gt; when the bearer goes down, 80% chance to stop their bleeding and teleport them - beside a bed in the colony for the player, off the map for anyone else. When the bearer dies, the body is teleported the same way. Does nothing for prisoners, slaves, or under anaesthesia.</description>
+		<descriptionHyperlinks>
+			<RecipeDef>DMST_InstallMagierSigil</RecipeDef>
+		</descriptionHyperlinks>
+		<techLevel>Spacer</techLevel>
+		<graphicData>
+			<texPath>Things/Item/Health/HealthItem</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>0.80</drawSize>
+			<color>(110,150,190)</color>
+		</graphicData>
+		<thingCategories>
+			<li>BodyPartsArchotech</li>
+		</thingCategories>
+		<statBases>
+			<MarketValue>1200</MarketValue>
+			<WorkToMake>26000</WorkToMake>
+		</statBases>
+		<costList>
+			<DMS_SolitaryZPM>1</DMS_SolitaryZPM>
+			<ComponentSpacer>1</ComponentSpacer>
+		</costList>
+		<recipeMaker>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<workSkill>Crafting</workSkill>
+			<effectWorking>Smith</effectWorking>
+			<soundWorking>Recipe_Smith</soundWorking>
+			<unfinishedThingDef>UnfinishedHealthItemBionic</unfinishedThingDef>
+			<skillRequirements>
+				<Crafting>10</Crafting>
+			</skillRequirements>
+			<researchPrerequisite>DMST_Occultech_ArtificialPsylink</researchPrerequisite>
+			<recipeUsers>
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+	</ThingDef>
+
+	<RecipeDef ParentName="SurgeryInstallImplantBase">
+		<defName>DMST_InstallMagierSigil</defName>
+		<label>install magier sigil</label>
+		<description>An implant and identification code used by the Colonization Fleet's tactical magier corps to mark a caster's identity - usually so that members of the fleet do not realize who they were dealing with only after making a grave mistake. Beyond identification, it uses transcendent power to bind the place the caster's subconscious holds to be safest, so that when they lose consciousness or come close to death it raises a space-folding field to carry them out of danger, and to keep them from falling into enemy hands alive.</description>
+		<descriptionHyperlinks>
+			<ThingDef>DMST_MagierSigil</ThingDef>
+			<HediffDef>DMST_MagierSigil</HediffDef>
+		</descriptionHyperlinks>
+		<jobString>Installing magier sigil.</jobString>
+		<ingredients>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>DMST_MagierSigil</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<thingDefs>
+				<li>DMST_MagierSigil</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<appliedOnFixedBodyParts>
+			<li>Torso</li>
+		</appliedOnFixedBodyParts>
+		<addsHediff>DMST_MagierSigil</addsHediff>
+	</RecipeDef>
+
+	<HediffDef ParentName="ImplantHediffBase">
+		<defName>DMST_MagierSigil</defName>
+		<hediffClass>Militarmagier.Hediff_MagierSigil</hediffClass>
+		<label>magier sigil</label>
+		<labelNoun>a magier sigil</labelNoun>
+		<description>An implant driven by transcendent power. It binds the place the caster's subconscious holds to be safest, so that when they lose consciousness or come close to death it raises a space-folding field to carry them out of danger. So that the non-caster members of the units they serve with can recognize them, a conspicuous sigil is tattooed onto the surface of the body.\n\n&lt;color=#E5E54C&gt;Gameplay effect:&lt;/color&gt; when the bearer goes down, 80% chance to stop their bleeding and teleport them - beside a bed in the colony for the player, off the map for anyone else. When the bearer dies, the body is teleported the same way. Does nothing for prisoners, slaves, or under anaesthesia.</description>
+		<descriptionHyperlinks>
+			<ThingDef>DMST_MagierSigil</ThingDef>
+		</descriptionHyperlinks>
+		<spawnThingOnRemoved>DMST_MagierSigil</spawnThingOnRemoved>
+		<!--
+			The sigil tattooed onto the bearer's body. A child of the humanlike Body node, which draws
+			body tattoos at layer 2, pre-apparel wounds at 8 and the apparel root (on-skin apparel first)
+			at 20. Layer 5 puts the sigil over the skin and any tattoo, under wounds and under every piece
+			of apparel. It uses the body's own mesh (PawnRenderNode.MeshSetFor's default), so the textures
+			are body-aligned like a naked body; drawn for the Female body type, which every magier has.
+		-->
+		<renderNodeProperties>
+			<li>
+				<debugLabel>Magier sigil</debugLabel>
+				<texPath>Item/Sigil/sigil</texPath>
+				<parentTagDef>Body</parentTagDef>
+				<baseLayer>5</baseLayer>
+				<rotDrawMode>Fresh, Rotting</rotDrawMode>
+			</li>
+		</renderNodeProperties>
+		<modExtensions>
+			<li Class="Militarmagier.MagierSigilExtension">
+				<downedChance>0.8</downedChance>
+				<tendQuality>0.4~0.7</tendQuality>
+			</li>
+		</modExtensions>
+	</HediffDef>
+
+</Defs>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+	<!--
+		The broom's psychic lift (Militarmagier.PsychicLiftExtension): its mass, and its wielder's
+		move-speed penalty, divided by 1 + the holder's psychic sensitivity.
+	-->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/StatDef[defName="Mass"]/parts</xpath>
+		<value>
+			<li Class="Militarmagier.StatPart_PsychicLiftMass" />
+		</value>
+	</Operation>
+
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/StatDef[defName="MoveSpeed"]/parts</xpath>
+		<value>
+			<li Class="Militarmagier.StatPart_PsychicLiftMoveSpeed" />
+		</value>
+	</Operation>
+</Patch>

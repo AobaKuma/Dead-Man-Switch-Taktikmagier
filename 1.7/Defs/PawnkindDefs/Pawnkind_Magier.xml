@@ -34,7 +34,24 @@
     <canOpenAnyDoor>true</canOpenAnyDoor>
     <aiAvoidCover>false</aiAvoidCover>
     <humanPregnancyChance>0.45</humanPregnancyChance>
+    <!--
+      Magiers are women with the Female body type. fixedGender alone is not enough: a request that
+      names a gender overrides it (vanilla asks for a male father, of the child's kind, when it
+      generates siblings' parents), and body genes or a missing adulthood backstory change the body
+      type. Militarmagier.FemaleKindExtension handles both; the three tiers inherit it from here.
+    -->
     <fixedGender>Female</fixedGender>
+    <!-- Every tier carries the magier sigil (1.7/Defs/MagierSigil.xml). -->
+    <techHediffsRequired>
+      <li>DMST_MagierSigil</li>
+    </techHediffsRequired>
+    <modExtensions>
+      <li Class="Militarmagier.FemaleKindExtension">
+        <bodyType>Female</bodyType>
+        <!-- A fleet scout fathers the family instead of a male "magier". -->
+        <maleStandInKind>DMS_Soldier</maleStandInKind>
+      </li>
+    </modExtensions>
     <specificApparelRequirements>
       <li>
         <colorGenerator Class="ColorGenerator_Options">
@@ -156,6 +173,10 @@
     </apparelRequired>
     <apparelMoney>2000~4500</apparelMoney>
     <weaponMoney>4000~8000</weaponMoney>
+    <!-- Added to the base's rifles: a senior magier may carry the broom. -->
+    <weaponTags>
+      <li>DMST_MagierBroom</li>
+    </weaponTags>
     <titleRequired MayRequire="Ludeon.RimWorld.Royalty">DMS_Lieutenant</titleRequired>
     <techHediffsChance>0.15</techHediffsChance>
     <gearHealthRange>0.9~2</gearHealthRange>

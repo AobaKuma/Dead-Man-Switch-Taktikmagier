@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<!--
+		The broom: DMS's anti-materiel rifle rebuilt for magiers. The same bullet, range and accuracy as
+		DMS_AntiMaterialRifle, quicker to aim and cycle, and two magier additions:
+
+		  psychic lift   Militarmagier.PsychicLiftExtension, which is also its FFF heavy-weapon extension.
+		                 The wielder must pass StandardAutomatroid (exoskeleton, synthetic arm, ...) or be
+		                 psychically sensitive. Mass (13 kg) and the move-speed penalty (-0.15) are divided
+		                 by 1 + the holder's psychic sensitivity, by the stat parts in
+		                 Patches/Stat_PsychicLift.xml. The penalty is the extension's moveSpeedOffset, not
+		                 equippedStatOffsets, so that it can scale.
+		  broom flight   DMST_BroomFlight below, given to whoever wields it by CompEquippableAbility.
+
+		Crafted after the class II sealed file "artificial psychic circuitry", like the sigil. Senior
+		magiers can spawn with one (DMST_Magier_Veteran's weaponTags).
+
+		comps are not inherited: CompEquippableAbility replaces BaseWeapon's CompEquippable, and two of
+		them would leave the ability on the wrong one (as vanilla's hellcat rifle notes). The rest are
+		DMS_AutomatroidGun's comps, copied from BaseWeapon and BaseGun.
+	-->
+	<ThingDef ParentName="DMS_AutomatroidGun">
+		<defName>DMST_MagierBroom</defName>
+		<label>broom</label>
+		<description>An anti-materiel rifle converted from the standard-issue Mech Semiauto Rifle. It is more practical than the tactical brooms magiers use in training; its one shortcoming is that it cannot sweep the floor. Forged from tungsteel alloy and psychic matter, it is engraved with precise sigils that turn psychic power into repulsion. Passively they use psychic power to lighten the rifle, and when actively triggered they can even carry the wielder on a long flight.\n\n&lt;color=#E5E54C&gt;Gameplay effect:&lt;/color&gt; usable by automatroids, by anyone fitted to carry automatroid weapons, and by anyone with psychic sensitivity. Its mass and movement penalty are divided by 1 + the holder's psychic sensitivity. The wielder gains the psycast "broom flight", which needs no psylink.</description>
+		<descriptionHyperlinks>
+			<AbilityDef>DMST_BroomFlight</AbilityDef>
+		</descriptionHyperlinks>
+		<tradeTags Inherit="False" />
+		<weaponClasses>
+			<li>RangedHeavy</li>
+			<li>LongShots</li>
+			<li>Ranged</li>
+		</weaponClasses>
+		<weaponTags>
+			<li>DMST_MagierBroom</li>
+		</weaponTags>
+		<graphicData>
+			<texPath>Item/DMS_MageBroom</texPath>
+			<drawSize>1.5</drawSize>
+		</graphicData>
+		<soundInteract>Interact_Rifle</soundInteract>
+		<statBases>
+			<WorkToMake>60000</WorkToMake>
+			<AccuracyTouch>0.50</AccuracyTouch>
+			<AccuracyShort>0.80</AccuracyShort>
+			<AccuracyMedium>0.90</AccuracyMedium>
+			<AccuracyLong>0.88</AccuracyLong>
+			<Mass>13.00</Mass>
+			<RangedWeapon_Cooldown>1.5</RangedWeapon_Cooldown>
+		</statBases>
+		<recipeMaker>
+			<researchPrerequisite>DMST_Occultech_ArtificialPsylink</researchPrerequisite>
+			<skillRequirements>
+				<Crafting>10</Crafting>
+			</skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+		<costList>
+			<Tungsteel>50</Tungsteel>
+			<ComponentSpacer>2</ComponentSpacer>
+			<DMS_SolitaryZPM>1</DMS_SolitaryZPM>
+		</costList>
+		<smeltProducts>
+			<Tungsteel>24</Tungsteel>
+		</smeltProducts>
+		<verbs>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_DMS_AMR</defaultProjectile>
+				<warmupTime>2.0</warmupTime>
+				<burstShotCount>1</burstShotCount>
+				<range>47.9</range>
+				<soundCast>Shot_TurretSniper</soundCast>
+				<soundCastTail>GunTail_Heavy</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+			</li>
+		</verbs>
+		<comps Inherit="False">
+			<li Class="CompProperties_EquippableAbility">
+				<abilityDef>DMST_BroomFlight</abilityDef>
+			</li>
+			<li Class="CompProperties_Forbiddable" />
+			<li Class="CompProperties_Styleable" />
+			<li Class="CompProperties_Art">
+				<nameMaker>NamerArtWeaponGun</nameMaker>
+				<descriptionMaker>ArtDescription_WeaponGun</descriptionMaker>
+				<minQualityForArtistic>Excellent</minQualityForArtistic>
+			</li>
+		</comps>
+		<modExtensions>
+			<li Class="MuzzleFlash.MuzzleFlashProps" MayRequire="IssacZhuang.MuzzleFlash">
+				<def>MF_StandardMuzzleFalsh</def>
+				<drawSize>(0.5,0.5)</drawSize>
+				<offsets>
+					<li>(1,0)</li>
+				</offsets>
+				<isAlternately>true</isAlternately>
+			</li>
+			<li Class="Militarmagier.PsychicLiftExtension">
+				<EquippableDef>StandardAutomatroid</EquippableDef>
+				<moveSpeedOffset>-0.15</moveSpeedOffset>
+			</li>
+		</modExtensions>
+	</ThingDef>
+
+	<!--
+		The broom's flight: vanilla's longjump (Verb_CastAbilityJump, CastJump job), cast as a psycast.
+		Level 0, so no psylink is needed - only psychic sensitivity, which the psycast gizmo already
+		checks - and neural heat is the only cost (a psycast with heat skips the psyfocus check).
+		NoPsytrainerExtension keeps vanilla from making a psytrainer for it.
+	-->
+	<AbilityDef ParentName="PsycastBase">
+		<defName>DMST_BroomFlight</defName>
+		<label>broom flight</label>
+		<description>Overload the broom's repulsion sigils and let them carry the wielder through the air to a distant spot.</description>
+		<level>0</level>
+		<iconPath>Item/DMS_MageBroom</iconPath>
+		<cooldownTicksRange>1800</cooldownTicksRange>
+		<hostile>false</hostile>
+		<casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+		<jobDef>CastJump</jobDef>
+		<statBases>
+			<Ability_EntropyGain>20</Ability_EntropyGain>
+			<Ability_PsyfocusCost>0</Ability_PsyfocusCost>
+		</statBases>
+		<verbProperties>
+			<verbClass>Verb_CastAbilityJump</verbClass>
+			<label>fly</label>
+			<violent>false</violent>
+			<forceNormalTimeSpeed>false</forceNormalTimeSpeed>
+			<warmupTime>0.5</warmupTime>
+			<range>34.9</range>
+			<requireLineOfSight>true</requireLineOfSight>
+			<soundCast>Longjump_Jump</soundCast>
+			<soundLanding>Longjump_Land</soundLanding>
+			<targetParams Inherit="False">
+				<canTargetLocations>true</canTargetLocations>
+				<canTargetPawns>false</canTargetPawns>
+				<canTargetBuildings>false</canTargetBuildings>
+			</targetParams>
+		</verbProperties>
+		<modExtensions>
+			<li Class="Militarmagier.NoPsytrainerExtension" />
+		</modExtensions>
+	</AbilityDef>
+
+</Defs>

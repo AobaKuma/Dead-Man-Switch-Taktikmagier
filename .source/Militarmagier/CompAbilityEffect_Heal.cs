@@ -32,16 +32,7 @@ namespace Militarmagier
                 return;
             }
 
-            int tended = 0;
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = hediffs.Count - 1; i >= 0; i--)
-            {
-                if ((hediffs[i] is Hediff_Injury || hediffs[i] is Hediff_MissingPart) && hediffs[i].TendableNow())
-                {
-                    hediffs[i].Tended(Props.tendQualityRange.RandomInRange, Props.tendQualityRange.TrueMax, 1);
-                    tended++;
-                }
-            }
+            int tended = TendUtility.TendAllInjuries(pawn, Props.tendQualityRange);
 
             if (pawn.Map == null)
             {

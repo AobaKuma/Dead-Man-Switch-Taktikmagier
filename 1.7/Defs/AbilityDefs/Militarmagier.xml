@@ -524,48 +524,9 @@
 	</AbilityDef>
 
 	<!--
-		Granted by the magier cloak, not by the psycast path.
-
-		Invisibility itself is left at vanilla PsychicInvisibility behaviour, matching the core
-		mod's DMS_Camouflage: firing does NOT reveal the caster; only taking damage, burning,
-		being downed or a disruptor flash forces them visible.
+		The magier cloak's camouflage is not an ability any more: it is the DMS jaeger's passive
+		camouflage, carried by the DMST_MagierCamouflage hediff the cloak gives while worn
+		(HediffDefs/Hediffs.xml).
 	-->
-	<AbilityDef ParentName="DMS_AddHediffSelfBase">
-		<defName>DMST_Camouflage</defName>
-		<label>psychic camouflage</label>
-		<description>Blend into the environment by activating morphic camouflage using psychic power combined with a special weaving cloak. Requires both the magier helmet and the magier cloak to be worn - neither piece can sustain the field on its own.</description>
-		<iconPath>UI/Ability/Camouflage</iconPath>
-		<aiCanUse>true</aiCanUse>
-		<showPsycastEffects Inherit="False">True</showPsycastEffects>
-		<comps>
-			<li Class="CompProperties_AbilityGiveHediff">
-				<compClass>CompAbilityEffect_GiveHediff</compClass>
-				<hediffDef>PsychicInvisibility</hediffDef>
-				<onlyBrain>true</onlyBrain>
-				<onlyApplyToSelf>true</onlyApplyToSelf>
-				<replaceExisting>true</replaceExisting>
-				<psychic>True</psychic>
-			</li>
-			<li Class="CompProperties_AbilityFleckOnTarget">
-				<fleckDef>PsycastPsychicEffect</fleckDef>
-			</li>
-			<!--
-				Enforces the two-piece set the helmet and cloak descriptions both promise.
-				Gates CanCast, not just the gizmo, so AI raiders are held to it as well.
-			-->
-			<li Class="Militarmagier.CompProperties_AbilityRequireApparel">
-				<requiredApparel>
-					<li>DMST_Apparel_MagierHelmet</li>
-					<li>DMST_Apparel_MagierCloak</li>
-				</requiredApparel>
-			</li>
-		</comps>
-		<verbProperties>
-			<verbClass Inherit="False">Verb_CastPsycast</verbClass>
-		</verbProperties>
-		<statBases>
-			<Ability_Duration>45</Ability_Duration>
-		</statBases>
-	</AbilityDef>
 
 </Defs>

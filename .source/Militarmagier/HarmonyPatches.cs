@@ -1,3 +1,4 @@
+using Fortified;
 using HarmonyLib;
 using RimWorld;
 using System;
@@ -20,13 +21,61 @@ namespace Militarmagier
         }
     }
 
-    /// <summary>Applies <see cref="MagierKindExtension"/> to every freshly generated pawn whose kind carries one.</summary>
+    /// <summary>
+    /// A request for a male of a female-only kind (<see cref="FemaleKindExtension"/>) is turned into a
+    /// request for its stand-in kind. Done before world-pawn reuse is considered, so the stand-in is
+    /// what gets looked up there too.
+    /// </summary>
     [HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] { typeof(PawnGenerationRequest) })]
     public static class Patch_PawnGenerator_GeneratePawn
+    {
+        public static void Prefix(ref PawnGenerationRequest request)
+        {
+            if (request.FixedGender != Gender.Male)
+            {
+                return;
+            }
+
+            PawnKindDef standIn = request.KindDef?.GetModExtension<FemaleKindExtension>()?.maleStandInKind;
+            if (standIn != null)
+            {
+                // KindDef reads through PawnKindDefGetter when one is set, so clear it or the swap is ignored.
+                request.PawnKindDefGetter = null;
+                request.KindDef = standIn;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Applies <see cref="MagierKindExtension"/> to freshly generated pawns only.
+    ///
+    /// Not on GeneratePawn: that also hands back existing world pawns it reuses, and applying the kit
+    /// to those again would stack another round of spells and manual rolls on the same magier every
+    /// time she is reused.
+    /// </summary>
+    [HarmonyPatch(typeof(PawnGenerator), "GenerateNewPawnInternal")]
+    public static class Patch_PawnGenerator_GenerateNewPawnInternal
     {
         public static void Postfix(Pawn __result)
         {
             __result?.kindDef?.GetModExtension<MagierKindExtension>()?.Apply(__result);
+        }
+    }
+
+    /// <summary>
+    /// Applies <see cref="FemaleKindExtension.bodyType"/> right after genes are generated: late enough
+    /// that Biotech body genes cannot overwrite it, early enough that gear is chosen for it.
+    /// </summary>
+    [HarmonyPatch(typeof(PawnGenerator), "GenerateGenes")]
+    public static class Patch_PawnGenerator_GenerateGenes
+    {
+        public static void Postfix(Pawn pawn)
+        {
+            BodyTypeDef bodyType = pawn?.kindDef?.GetModExtension<FemaleKindExtension>()?.bodyType;
+            if (bodyType != null && pawn.story != null && !pawn.DevelopmentalStage.Juvenile())
+            {
+                pawn.story.bodyType = bodyType;
+            }
         }
     }
 
@@ -89,7 +138,8 @@ namespace Militarmagier
 
     /// <summary>
     /// No psytrainers for Militärmagier spells (proposal D3): field manuals are the way to learn them.
-    /// Vanilla generates one psytrainer per psycast during def loading.
+    /// Also none for psycasts marked <see cref="NoPsytrainerExtension"/>. Vanilla generates one
+    /// psytrainer per psycast during def loading.
     /// </summary>
     [HarmonyPatch(typeof(ThingDefGenerator_Neurotrainer), nameof(ThingDefGenerator_Neurotrainer.ImpliedThingDefs))]
     public static class Patch_ThingDefGenerator_Neurotrainer_ImpliedThingDefs
@@ -109,12 +159,56 @@ namespace Militarmagier
             {
                 if (def.comps[i] is CompProperties_UseEffect_GainAbility gain
                     && gain.ability != null
-                    && gain.ability.HasModExtension<MagierSpellExtension>())
+                    && (gain.ability.HasModExtension<MagierSpellExtension>() || gain.ability.HasModExtension<NoPsytrainerExtension>()))
                 {
                     return true;
                 }
             }
             return false;
+        }
+    }
+
+    /// <summary>
+    /// The broom's carry rule (<see cref="PsychicLiftExtension"/>): whoever its HeavyEquippableDef
+    /// allows, plus anyone with psychic sensitivity. Patched on the extension so both of FFF's callers,
+    /// its EquipmentUtility.CanEquip postfix and its mech weapon check, see it.
+    /// </summary>
+    [HarmonyPatch(typeof(HeavyEquippableExtension), nameof(HeavyEquippableExtension.CanEquippedBy), new Type[] { typeof(Pawn) })]
+    public static class Patch_HeavyEquippableExtension_CanEquippedBy
+    {
+        public static void Postfix(HeavyEquippableExtension __instance, Pawn pawn, ref bool __result)
+        {
+            if (!__result && pawn != null && __instance is PsychicLiftExtension && PsychicLiftExtension.CanLift(pawn))
+            {
+                __result = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// FFF explains a failed heavy-weapon check with a body size requirement, which is not why the broom
+    /// refuses someone. Runs after FFF's postfix and gives the real reason.
+    /// </summary>
+    [HarmonyPatch(
+        typeof(EquipmentUtility),
+        nameof(EquipmentUtility.CanEquip),
+        new Type[] { typeof(Thing), typeof(Pawn), typeof(string), typeof(bool) },
+        new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Out, ArgumentType.Normal })]
+    public static class Patch_EquipmentUtility_CanEquip
+    {
+        [HarmonyPriority(Priority.Last)]
+        public static void Postfix(Thing __0, Pawn __1, ref string __2, bool __result)
+        {
+            if (__result || __0 == null || __1 == null)
+            {
+                return;
+            }
+            PsychicLiftExtension lift = __0.def.GetModExtension<PsychicLiftExtension>();
+            if (lift != null && !lift.CanEquippedBy(__1))
+            {
+                // No leading space, unlike FFF's reasons: vanilla's float menu writes ": " + cantReason.CapitalizeFirst().
+                __2 = "DMST_PsychicLiftCannotEquip".Translate();
+            }
         }
     }
 }

@@ -16,6 +16,10 @@
 	<!-- 心灵熵上限属性明细中的一行 -->
 	<DMST_SustainedConstructsStat>维持中的构装体</DMST_SustainedConstructsStat>
 
+	<!-- 扫帚。重量与移动惩罚减轻时的属性明细行，以及无法持用时的原因 -->
+	<DMST_PsychicLiftStat>灵能减重</DMST_PsychicLiftStat>
+	<DMST_PsychicLiftCannotEquip>没有心灵敏感度或力量强化，太重而无法持用</DMST_PsychicLiftCannotEquip>
+
 	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort}没有心灵敏感度。</DMST_TargetPsychicallyDeaf>
 
 	<DMST_NothingToRepair>那里没有需要修复的东西。</DMST_NothingToRepair>
@@ -25,5 +29,15 @@
 
 	<!-- 教范效益说明。{SPELL} = 法术，{LEVEL} = 所需心灵连结等级，{HOURS} = 此品质下的阅读时间 -->
 	<DMST_ManualTeaches>教授{SPELL}（需要 {LEVEL} 级心灵连结），约需阅读 {HOURS} 小时。</DMST_ManualTeaches>
+
+	<!-- 军术士印记。{PAWN} = 持有者 -->
+	<DMST_SigilRecalled>{PAWN_labelShort}的军术士印记展开空间折叠场，将其传送回殖民地。</DMST_SigilRecalled>
+	<DMST_SigilEscaped>{PAWN_labelShort}消失了：军术士印记在其周围展开了空间折叠场。</DMST_SigilEscaped>
+	<DMST_SigilCorpseRecalled>{PAWN_labelShort}的军术士印记将其遗体传送回殖民地。</DMST_SigilCorpseRecalled>
+
+	<!-- 敌方军术士的迷彩被识破。{PAWN} = 该军术士 -->
+	<DMST_MagierRevealedLabel>军术士现形</DMST_MagierRevealedLabel>
+	<DMST_MagierRevealedDesc>一名隐身的敌方军术士{PAWN_labelShort}凭空出现了！</DMST_MagierRevealedDesc>
+	<DMST_MagierRevealedMessage>隐身的军术士现形了：{PAWN_labelShort}。</DMST_MagierRevealedMessage>
 
 </LanguageData>

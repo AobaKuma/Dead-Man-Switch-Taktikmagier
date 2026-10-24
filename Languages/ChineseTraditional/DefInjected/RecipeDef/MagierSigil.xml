@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<DMST_InstallMagierSigil.label>安裝軍術士印記</DMST_InstallMagierSigil.label>
+	<DMST_InstallMagierSigil.description>殖民艦隊戰術法師隊用來辨識施法者身份的植入物及識別條碼，通常來說是用來防止艦隊中的成員釀下大錯之後才意識到識別者的特殊身份。除了識別功能外本身還透過超凡力量繫結著施法者潛意識中最安全的地方，使其在失去意識及鄰近死亡時產生一個空間摺疊場來迴避危險，以及避免活著落入敵人手中。</DMST_InstallMagierSigil.description>
+	<DMST_InstallMagierSigil.jobString>正在安裝軍術士印記。</DMST_InstallMagierSigil.jobString>
+
+</LanguageData>

@@ -19,4 +19,11 @@
 	<DMST_KonzentratAftereffect.label>專注安瓿後勁</DMST_KonzentratAftereffect.label>
 	<DMST_KonzentratAftereffect.description>用專注安瓿強行拉回專注的人，心靈敏感度會在之後一段時間內變得遲鈍。</DMST_KonzentratAftereffect.description>
 
+	<DMST_MagierSigil.label>軍術士印記</DMST_MagierSigil.label>
+	<DMST_MagierSigil.labelNoun>軍術士印記</DMST_MagierSigil.labelNoun>
+	<DMST_MagierSigil.description>一種透過超凡力量來驅動的植入物，透過超凡力量繫結著施法者潛意識中最安全的地方，使其在失去意識及鄰近死亡時產生一個空間摺疊場來迴避危險。為了讓伴隨部隊的非施法者成員能識別因此會在身體表面紋上明顯的印記。\n\n&lt;color=#E5E54C&gt;遊戲效果：&lt;/color&gt;持有者倒地時有 80% 機率為其止血包紮並傳送——玩家陣營傳送到殖民地的床邊，其他陣營則離開地圖。持有者死亡時，遺體也會以同樣方式傳送。囚犯、奴隸或麻醉中不會觸發。</DMST_MagierSigil.description>
+
+	<DMST_MagierCamouflage.label>靈能迷彩</DMST_MagierCamouflage.label>
+	<DMST_MagierCamouflage.description>透過軍術士斗篷的編織，以靈能驅動的擬態迷彩。它會一直維持到被敵人發現為止——清醒、夠近且視線無阻的敵人就能識破它，光線越亮越容易——之後需要一段時間才能重新展開。近身戰鬥一定會暴露位置，射擊則有時會。必須同時穿戴軍術士頭盔與軍術士斗篷，任何一件都無法單獨維持迷彩場。</DMST_MagierCamouflage.description>
+
 </LanguageData>

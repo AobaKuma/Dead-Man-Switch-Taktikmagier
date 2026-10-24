@@ -83,6 +83,39 @@
 		</comps>
 	</HediffDef>
 
+	<!--
+		The magier cloak's camouflage: the DMS jaeger's, worn instead of built in. Given by the cloak's
+		CompCauseHediff_Apparel and removed when the cloak comes off (RemoveIfApparelDropped). The
+		invisibility settings are copied from FFF's FFF_Camouflage, which the jaeger uses - including
+		visibleToPlayer false, so a player's own hidden magier fades from view the way a jaeger does.
+		Militarmagier.HediffComp_MagierCamouflage carries the jaeger's detection rules and its toggle.
+	-->
+	<HediffDef>
+		<defName>DMST_MagierCamouflage</defName>
+		<label>psychic camouflage</label>
+		<description>Morphic camouflage driven by psychic power through the weave of the magier cloak. It holds until an enemy spots the wearer - an awake enemy close enough, with a clear line of sight, breaks it, more easily in good light - and then takes a while to settle again. Fighting in melee always gives the wearer away; shooting sometimes does. It needs both the magier helmet and the magier cloak - neither piece can sustain the field on its own.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<isBad>false</isBad>
+		<comps>
+			<li Class="HediffCompProperties_RemoveIfApparelDropped" />
+			<li Class="HediffCompProperties_Invisibility">
+				<visibleToPlayer>false</visibleToPlayer>
+				<fadeDurationTicks>60</fadeDurationTicks>
+				<recoverFromDisruptedTicks>90</recoverFromDisruptedTicks>
+			</li>
+			<li Class="HediffCompProperties_DisappearsOnDeath" />
+			<!-- The jaeger's numbers (DMS_Mech_Jaeger's Fortified.CompProperties_Camouflage). -->
+			<li Class="Militarmagier.HediffCompProperties_MagierCamouflage">
+				<baseDetectRange>10</baseDetectRange>
+				<ticksUntilRecover>1200</ticksUntilRecover>
+				<requiredApparel>
+					<li>DMST_Apparel_MagierHelmet</li>
+					<li>DMST_Apparel_MagierCloak</li>
+				</requiredApparel>
+			</li>
+		</comps>
+	</HediffDef>
+
 	<!-- Konzentrat's after-effect: half a day of dulled psychic sensitivity. -->
 	<HediffDef>
 		<defName>DMST_KonzentratAftereffect</defName>

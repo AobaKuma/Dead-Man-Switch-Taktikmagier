@@ -28,7 +28,7 @@
 			<li>Fabrication</li>
 		</prerequisites>
 		<discoveredLetterTitle>Sealed file II: artificial psychic circuitry</discoveredLetterTitle>
-		<discoveredLetterText>Using the data they have gathered, researchers have finished decoding the sealed technology. It records how the natives of Anima Prime turned thrumbo horn into psylink neuroformers.\n\nPsylink neuroformers can now be made at a fabrication bench from a thrumbo horn and advanced components.\n\nThe fleets sealed this file so that no colonized world would learn what a thrumbo horn is worth. Every neuroformer made this way is paid for with a thrumbo.</discoveredLetterText>
+		<discoveredLetterText>Using the data they have gathered, researchers have finished decoding the sealed technology. It records how the natives of Anima Prime turned thrumbo horn into psylink neuroformers.\n\nPsylink neuroformers can now be made at a fabrication bench from a thrumbo horn and advanced components, and magier sigils from solidified zero-point energy and an advanced component.\n\nThe fleets sealed this file so that no colonized world would learn what a thrumbo horn is worth. Every neuroformer made this way is paid for with a thrumbo.</discoveredLetterText>
 		<descriptionHyperlinks>
 			<ThingDef>PsychicAmplifier</ThingDef>
 			<ThingDef>ThrumboHorn</ThingDef>

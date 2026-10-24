@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<DMST_InstallMagierSigil.label>安装军术士印记</DMST_InstallMagierSigil.label>
+	<DMST_InstallMagierSigil.description>殖民舰队战术法师队用来辨识施法者身份的植入物及识别条码，通常来说是用来防止舰队中的成员酿下大错之后才意识到识别者的特殊身份。除了识别功能外本身还通过超凡力量系结着施法者潜意识中最安全的地方，使其在失去意识及邻近死亡时产生一个空间折叠场来回避危险，以及避免活着落入敌人手中。</DMST_InstallMagierSigil.description>
+	<DMST_InstallMagierSigil.jobString>正在安装军术士印记。</DMST_InstallMagierSigil.jobString>
+
+</LanguageData>

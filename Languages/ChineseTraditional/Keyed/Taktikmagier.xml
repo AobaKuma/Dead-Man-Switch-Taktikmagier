@@ -16,6 +16,10 @@
 	<!-- 心靈熵上限屬性明細中的一行 -->
 	<DMST_SustainedConstructsStat>維持中的構裝體</DMST_SustainedConstructsStat>
 
+	<!-- 掃帚。重量與移動懲罰減輕時的屬性明細行，以及無法持用時的原因 -->
+	<DMST_PsychicLiftStat>靈能減重</DMST_PsychicLiftStat>
+	<DMST_PsychicLiftCannotEquip>沒有心靈敏感度或力量強化，太重而無法持用</DMST_PsychicLiftCannotEquip>
+
 	<DMST_TargetPsychicallyDeaf>{PAWN_labelShort}沒有心靈敏感度。</DMST_TargetPsychicallyDeaf>
 
 	<DMST_NothingToRepair>那裡沒有需要修復的東西。</DMST_NothingToRepair>
@@ -25,5 +29,15 @@
 
 	<!-- 教範效益說明。{SPELL} = 法術，{LEVEL} = 所需心靈連結等級，{HOURS} = 此品質下的閱讀時間 -->
 	<DMST_ManualTeaches>教授{SPELL}（需要 {LEVEL} 級心靈連結），約需閱讀 {HOURS} 小時。</DMST_ManualTeaches>
+
+	<!-- 軍術士印記。{PAWN} = 持有者 -->
+	<DMST_SigilRecalled>{PAWN_labelShort}的軍術士印記展開空間摺疊場，將其傳送回殖民地。</DMST_SigilRecalled>
+	<DMST_SigilEscaped>{PAWN_labelShort}消失了：軍術士印記在其周圍展開了空間摺疊場。</DMST_SigilEscaped>
+	<DMST_SigilCorpseRecalled>{PAWN_labelShort}的軍術士印記將其遺體傳送回殖民地。</DMST_SigilCorpseRecalled>
+
+	<!-- 敵方軍術士的迷彩被識破。{PAWN} = 該軍術士 -->
+	<DMST_MagierRevealedLabel>軍術士現形</DMST_MagierRevealedLabel>
+	<DMST_MagierRevealedDesc>一名隱身的敵方軍術士{PAWN_labelShort}憑空出現了！</DMST_MagierRevealedDesc>
+	<DMST_MagierRevealedMessage>隱身的軍術士現形了：{PAWN_labelShort}。</DMST_MagierRevealedMessage>
 
 </LanguageData>

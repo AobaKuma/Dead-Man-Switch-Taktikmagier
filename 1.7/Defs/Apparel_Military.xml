@@ -121,9 +121,15 @@
 			<defaultOutfitTags>
 				<li>Soldier</li>
 			</defaultOutfitTags>
-			<abilities>
-				<li MayRequire="Ludeon.RimWorld.Royalty">DMST_Camouflage</li>
-			</abilities>
 		</apparel>
+		<comps>
+			<!--
+				The DMS jaeger's camouflage, given as a hediff while the cloak is worn and taken away when it
+				comes off (the hediff's RemoveIfApparelDropped). It only holds with the magier helmet on too.
+			-->
+			<li Class="CompProperties_CauseHediff_Apparel">
+				<hediff>DMST_MagierCamouflage</hediff>
+			</li>
+		</comps>
 	</ThingDef>
 </Defs>

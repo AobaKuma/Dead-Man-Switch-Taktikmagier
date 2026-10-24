@@ -7,7 +7,7 @@ namespace Militarmagier
 {
     /// <summary>
     /// Gives a generated pawn a psylink and a random set of Militärmagier spells. Replaces VPE's
-    /// PawnKindAbilityExtension_Psycasts; applied by <see cref="Patch_PawnGenerator_GeneratePawn"/>.
+    /// PawnKindAbilityExtension_Psycasts; applied by <see cref="Patch_PawnGenerator_GenerateNewPawnInternal"/>.
     /// </summary>
     public class MagierKindExtension : DefModExtension
     {

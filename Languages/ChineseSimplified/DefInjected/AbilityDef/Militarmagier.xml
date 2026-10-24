@@ -46,4 +46,8 @@
 	<DMST_Ward.label>术式护壁</DMST_Ward.label>
 	<DMST_Ward.description>在队友——或施术者自己——身上覆上一层薄薄的灵能薄膜，它会在受到攻击时硬化，吸收子弹与刀刃直到耗尽。它持续不久，而这正是用意：军术士会把它丢给快要倒下的人。</DMST_Ward.description>
 
+	<DMST_BroomFlight.label>扫帚飞行</DMST_BroomFlight.label>
+	<DMST_BroomFlight.description>超载扫帚上的斥力魔纹，让它带着持用者飞越长距离，降落在远处的目标地点。</DMST_BroomFlight.description>
+	<DMST_BroomFlight.verbProperties.label>飞行</DMST_BroomFlight.verbProperties.label>
+
 </LanguageData>

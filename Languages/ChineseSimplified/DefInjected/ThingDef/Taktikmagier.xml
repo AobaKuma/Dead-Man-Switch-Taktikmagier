@@ -21,4 +21,10 @@
 	<DMST_Konzentrat.ingestible.ingestCommandString>注射{0}</DMST_Konzentrat.ingestible.ingestCommandString>
 	<DMST_Konzentrat.ingestible.ingestReportString>正在注射{0}。</DMST_Konzentrat.ingestible.ingestReportString>
 
+	<DMST_MagierSigil.label>军术士印记</DMST_MagierSigil.label>
+	<DMST_MagierSigil.description>殖民舰队战术法师队用来辨识施法者身份的植入物及识别条码，通常来说是用来防止舰队中的成员酿下大错之后才意识到识别者的特殊身份。除了识别功能外本身还通过超凡力量系结着施法者潜意识中最安全的地方，使其在失去意识及邻近死亡时产生一个空间折叠场来回避危险，以及避免活着落入敌人手中。\n\n&lt;color=#E5E54C&gt;游戏效果：&lt;/color&gt;持有者倒地时有 80% 几率为其止血包扎并传送——玩家阵营传送到殖民地的床边，其他阵营则离开地图。持有者死亡时，遗体也会以同样方式传送。囚犯、奴隶或麻醉中不会触发。</DMST_MagierSigil.description>
+
+	<DMST_MagierBroom.label>扫帚</DMST_MagierBroom.label>
+	<DMST_MagierBroom.description>一种由制式机兵半自动步枪改造的反器材步枪，比军术士在训练时所使用的战术扫帚还要实用，但美中不足的是没法用来扫地。这种由钨钢合金与灵质所打造的特制步枪刻有将灵能转换为斥力的精密魔纹，能够被动地使用灵能来降低自己的重量甚至在主动激发时能够带着使用者进行长距离飞行。\n\n&lt;color=#E5E54C&gt;游戏效果：&lt;/color&gt;机兵、具备操作机兵武器条件者（如穿着动力外骨骼）以及任何具有心灵敏感度的人都能持用。其重量与移动惩罚会除以（1 + 持有者的心灵敏感度）。持用者获得不需心灵连结的心灵技能「扫帚飞行」。</DMST_MagierBroom.description>
+
 </LanguageData>
