@@ -86,6 +86,10 @@ namespace Militarmagier
     ///
     /// Otherwise this is vanilla's Hediff_Psylink.TryGiveAbilityOfLevel; keep it in step if that
     /// changes. <see cref="suppress"/> skips it entirely, for <see cref="MagierKindExtension"/>.
+    ///
+    /// Runs last, so a mod that turns the freebie off entirely gets there first and Harmony skips this
+    /// one: VPE's prefix just returns false. We patch in the Mod constructor, before VPE's
+    /// StaticConstructorOnStartup, so at equal priority we would run first and hand it out anyway.
     /// </summary>
     [HarmonyPatch(typeof(Hediff_Psylink), nameof(Hediff_Psylink.TryGiveAbilityOfLevel))]
     public static class Patch_Hediff_Psylink_TryGiveAbilityOfLevel
@@ -94,6 +98,7 @@ namespace Militarmagier
         [ThreadStatic]
         public static bool suppress;
 
+        [HarmonyPriority(Priority.Last)]
         public static bool Prefix(Hediff_Psylink __instance, int abilityLevel, bool sendLetter)
         {
             if (suppress)
