@@ -21,16 +21,17 @@ namespace Militarmagier
     }
 
     /// <summary>
-    /// A request for a male of a female-only kind (<see cref="FemaleKindExtension"/>) is turned into a
-    /// request for its stand-in kind. Done before world-pawn reuse is considered, so the stand-in is
-    /// what gets looked up there too.
+    /// A request for a male, or for a newborn, of a female-only kind (<see cref="FemaleKindExtension"/>)
+    /// is turned into a request for its stand-in kind. Done before world-pawn reuse is considered, so the
+    /// stand-in is what gets looked up there too.
     /// </summary>
     [HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] { typeof(PawnGenerationRequest) })]
     public static class Patch_PawnGenerator_GeneratePawn
     {
         public static void Prefix(ref PawnGenerationRequest request)
         {
-            if (request.FixedGender != Gender.Male)
+            // Newborn() is the flag vanilla itself checks to leave a kind's title, gear and implants off a baby.
+            if (request.FixedGender != Gender.Male && !request.AllowedDevelopmentalStages.Newborn())
             {
                 return;
             }

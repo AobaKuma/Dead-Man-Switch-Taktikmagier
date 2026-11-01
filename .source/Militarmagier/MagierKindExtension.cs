@@ -38,7 +38,9 @@ namespace Militarmagier
 
         public void Apply(Pawn pawn)
         {
-            if (pawn?.abilities == null || pawn.health?.hediffSet?.GetBrain() == null)
+            // Adults only: the kit stands for years of training. A magier's newborn already gets the
+            // stand-in kind (FemaleKindExtension); this covers babies and children generated any other way.
+            if (pawn?.abilities == null || !pawn.DevelopmentalStage.Adult() || pawn.health?.hediffSet?.GetBrain() == null)
             {
                 return;
             }
