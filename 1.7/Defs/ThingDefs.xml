@@ -14,6 +14,11 @@
 		<size>(1,1)</size>
 		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
 		<designationCategory Inherit="false" />
+		<!--
+			Only DMST_ConstructTurret makes this. Without clearing the base's research it shows up as a
+			research unlock, and a copy that isn't summoned has no caster, so CompMagierLink vanishes it.
+		-->
+		<researchPrerequisites Inherit="false" />
 		<fillPercent>0.7</fillPercent>
 		<statBases>
 			<MaxHitPoints>50</MaxHitPoints>

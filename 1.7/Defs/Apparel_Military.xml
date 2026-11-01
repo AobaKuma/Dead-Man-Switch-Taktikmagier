@@ -66,7 +66,17 @@
 		<defName>DMST_Apparel_MagierCloak</defName>
 		<label>Magier cloak</label>
 		<description>An active optical camouflage cloak equipped by magiers. It has an active camouflage ability driven by psychic power, which consumes psychic entropy. requires a magier helmet to be effective.</description>
-		<recipeMaker />
+		<!-- Made where the helmet is: the two only camouflage as a set. -->
+		<recipeMaker>
+			<researchPrerequisite>FlakArmor</researchPrerequisite>
+			<skillRequirements>
+				<Crafting>10</Crafting>
+			</skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>DMS_TableMachinePrinter</li>
+			</recipeUsers>
+			<displayPriority>206</displayPriority>
+		</recipeMaker>
 		<graphicData>
 			<texPath>Things/Apparel/MagierCloak/icon</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
